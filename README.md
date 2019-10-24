@@ -1,31 +1,34 @@
-# CSC2022-Saggezza
-Team project by Team20 at Newcastle University for client Saggezza
-
 # Saggezza Team Project
 Team project by Team20 at Newcastle University for client Saggezza
 
+# Git Workflow
 
-## Development
+__Make sure you have git bash or git GUI installed__
 
-### Forking the Repository
-Click on *fork* on the top right of the Repository, then it will be forked to your own GitHub
+## Setup
 
-### Cloning the Repository 
-This is the process of downloading your repository to your local machine
+1. Fork the main repository. This will create a copy of the repo on your github. **Never push changes to the main repository.** __*Always push any changes to your fork*__
+2. Clone your fork on your local machine wherever you are working on it.
+3. On your local fork add the main repository as upstream (`git remote add upstream [Main repo url]` or in the git GUI `Remote > Add`)
 
-```bash
-$ git clone https://github.com/<your_repo>
-```
-**Note** You must clone your fork of the repository, not this one, otherwise, when you come to push changes you won't have permission to edit this repository.
+## Working On Files
 
-### Updating the main Repository
-```bash
-$ git add <untracked files>
-$ git commit -m "commit message"
-$ git push -u origin master
-```
-Once you have committed your changes and pushed to *your* fork of the Repository
-- Click *new pull request* on the main repository 
-- Write any necessary comments
-- Submit the request
-- Wait for another member to review the code and merge it
+1. Your fork is yours. Do what you want with it. Create new branches, commit changes, delete __*everything*__.
+2. *Generally*, [`git add .`],  [`git commit -m [message]`]. See another guide.
+
+## To Change The Main Repo
+
+1. Make sure all your changes are commited. Your working tree needs to be clean otherwise you wont be able to push anywhere.
+2. Fetch from the upstream branch. (`git fetch upstream` or in the git GUI `Remote > Fetch from upstream`)
+3. Merge your local working copy with the upstream tracking branch. (`git merge upstream\master` or in the git GUI `Merge > Local merge...`)
+4. Only then, push your changes **to your fork**. (`git push origin master` or in the git GUI `Remote > Push`)
+5. Create a pull request for the main repository.
+6. Get someone else to approve your pull request and resolve any conflicts.
+
+This ensures that most conflicting changes with the main repository can be resolved by you. Nobody is able to do anything catastrophic to the main repo if this process is followed.
+
+## *Things Not To Do*
+
+- Push your changes to the main repository.
+- Approve your own pull requests.
+- Never commit any keys or private data to the repository; anything you commit stays in the commit history by nature (git is version control). It is very hard to erase things from a git history.
