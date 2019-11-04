@@ -9,7 +9,7 @@ __Make sure you have git bash or git GUI installed__
 
 1. Fork the main repository. This will create a copy of the repo on your github. **Never push changes to the main repository.** __*Always push any changes to your fork*__
 2. Clone your fork on your local machine wherever you are working on it.
-3. On your local fork add the main repository as upstream (`git remote add upstream [Main repo url]` or in the git GUI `Remote > Add`)
+3. On your local fork add the main repository as upstream (`git remote add upstream [Main repo url]` or in the git GUI `Remote > Add`).
 
 ## Working On Files
 
