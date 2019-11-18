@@ -1,7 +1,7 @@
 {
   "name": "client-app",
   "version": "1.0.0",
-  "description": "A native application built with NativeScript-Vue",
+  "description": "iOS and Android Nativescript-Vue Applications",
   "author": "Oliver Butler <olly@protoncloud.co.uk>",
   "license": "MIT",
   "nativescript": {
@@ -15,9 +15,10 @@
     }
   },
   "dependencies": {
-    "nativescript-theme-core": "^1.0.6",
+    "nativescript-bottom-navigation": "^2.0.5",
     "nativescript-vue": "^2.4.0",
-    "tns-core-modules": "^6.0.0"
+    "tns-core-modules": "^6.0.0",
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

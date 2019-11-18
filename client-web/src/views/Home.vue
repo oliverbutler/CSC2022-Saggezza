@@ -1,7 +1,7 @@
 <template lang="pug">
   .hello
     h1 Hello There!
-    p {{count}}
+    p Count: {{count}}
     button(@click="increment") Increase
     p(v-show='overTen') Over ten!!
 </template>>
@@ -9,9 +9,6 @@
 <script>
 export default {
   name: 'home',
-  props: {
-    msg: String
-  },
   computed: {
     count() {
       return this.$store.state.count;

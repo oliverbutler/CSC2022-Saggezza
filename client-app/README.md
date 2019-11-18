@@ -1,6 +1,6 @@
-# saggezza-expense
+# Saggezza-Expense
 
-> A native application built with NativeScript-Vue
+> iOS and Android Nativescript-Vue Applications
 
 ## Usage
 
