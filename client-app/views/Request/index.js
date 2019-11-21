@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
 
 const DATA = [
   {
@@ -39,36 +39,6 @@ const DATA = [
     'date': '09/11/2019',
     'status': 'denied',
   },
-  {
-    'id': '7',
-    'name': 'Trip to London',
-    'date':  '09/11/2019',
-    'status': 'approved',
-  },
-  {
-    'id': '8 ',
-    'name': 'Trip to Manchester',
-    'date': '09/11/2019',
-    'status': 'denied',
-  },
-  {
-    'id': '9',
-    'name': 'Trip to Sunderland',
-    'date': '12/11/2019',
-    'status': 'pending',
-  },
-  {
-    'id': '10',
-    'name': 'Trip to London',
-    'date': '09/11/2019',
-    'status': 'approved',
-  },
-  {
-    'id': '11',
-    'name': 'Trip to Manchester',
-    'date': '09/11/2019',
-    'status': 'denied',
-  },
 ];
 
 function onSelect(id) {
@@ -85,7 +55,7 @@ function RequestItem({ data, selected }) {
       onPress={() => onSelect(data.id)}
       style={[
         styles.request,
-        { backgroundColor: selected ? '#595959' : '#555555' }
+        { backgroundColor: selected ? '#333333' : '#222222' }
       ]}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -106,36 +76,75 @@ function RequestItem({ data, selected }) {
   )
 }
 
-export default Request = () => (
-  <View style={styles.container}>
-    <View style={{alignSelf: 'center'}}>
-      <Text style={styles.title}>Request Page</Text>
-    </View>
-    <View styles={{alignSelf: 'stretch'}}>
-      <FlatList 
-        data={DATA} 
-        renderItem={({ item }) => (<RequestItem data={item}/>)}
-        keyExtractor={item => item.id}
-      />
-    </View>
-  </View>
-)
+export default class Add extends React.Component {
+  render() {
+    return (
+      <ImageBackground
+        style={styles.backgroundGradient}
+        imageStyle={styles.backgroundGradient_imageStyle}
+        source={require("../../assets/images/Gradient_YHPVqJX.png")}
+      >
+        <View style={styles.container}>
+          <View style={styles.header}> 
+            <Text style={styles.headerTitle}>My Requests</Text>
+          </View>
+          <View style={styles.content}>
+            <FlatList 
+              style={styles.requestList}
+              data={DATA} 
+              renderItem={({ item }) => (<RequestItem data={item}/>)}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        </View>  
+      </ImageBackground>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: 10,
+    marginLeft: 10,
+  },
+  headerTitle: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  content: {
+    margin: 10,
+    alignItems: 'stretch',
+  },
+  text: {
+    color: 'white',
+    fontSize: 15,
+  },
+  backgroundGradient: {
+    left: 0,
+    height: '100%',
+    backgroundColor:
+      "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(31,178,204,0.69)",
+    position: "absolute",
+    right: 0,
+    top: 0
+  },
+  backgroundGradient_imageStyle: {
+    opacity: 0.69
+  },
   request: {  
     padding: 15,
-    margin: 5,
+    margin: 2,
     borderRadius: 10,
   },
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    backgroundColor: '#2F2F2F',
-    paddingTop: 50
-  },
-  title: {
-    color: 'white',
-    fontSize: 20,
+  requestList: {
+    height: '100%',
   },
   text: {
     color: 'white',

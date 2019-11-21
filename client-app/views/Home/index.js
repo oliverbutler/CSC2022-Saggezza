@@ -13,13 +13,7 @@ const routeConfig = {
 
 const routeStyle = {
   defaultNavigationOptions: {
-    headerStyle: {
-      backgroundColor: '#2F2F2F',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+    header: null
   },
 }
 

@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, Button, Image, StyleSheet } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
+import { Image, StyleSheet } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 
 import Request from './views/Request';
 import Home from './views/Home';
 import Add from './views/Add';
+import Login from './views/Login';
 
 const TabConfig = {
   Request: {
@@ -14,7 +15,7 @@ const TabConfig = {
     navigationOptions: {
       tabBarLabel: 'Request',
       tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/list.png')} style={[styles.icon, {tintColor: tintColor}]}/>
+        <EvilIconsIcon name="navicon" style={{fontSize: 30, color: tintColor}} />
       )
     },
   },
@@ -23,7 +24,7 @@ const TabConfig = {
     navigationOptions: {
       tabBarLabel: 'Home',
       tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/dashboard.png')} style={[styles.icon, {tintColor: tintColor}]}/>
+        <EvilIconsIcon name="user" style={{fontSize: 30, color: tintColor}} />
       )
     },
   },
@@ -32,12 +33,11 @@ const TabConfig = {
     navigationOptions: {
       tabBarLabel: 'Add',
       tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/add.png')} style={[styles.icon, {tintColor: tintColor}]}/>
+        <EvilIconsIcon name="plus" style={{fontSize: 30, color: tintColor}} />
       )
     },
   },
 }
-
 const TabStyleConfig = {
   tabBarOptions: {
     activeTintColor: '#91D000',
@@ -45,18 +45,29 @@ const TabStyleConfig = {
     style: {
       backgroundColor: '#2F2F2F',
       borderTopColor: '#707070',
-      borderTopWidth: 4,
+      borderTopWidth: 5,
+    },
+    labelStyle: {
+    },
+    tabStyle: {
+      height: 50,
+      width: 50,
     }
   },
+  initialRouteName: 'Home',
 }
 
 const BottomNavigator = createBottomTabNavigator(TabConfig, TabStyleConfig);
 
-export default createAppContainer(BottomNavigator);
+const SwitchConfig = {
+  Login: {
+    screen: Login,
+  },
+  App: {
+    screen: BottomNavigator,
+  },
+}
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 20,
-    height: 20,
-  }
-})
+const SwitchNavigator = createSwitchNavigator(SwitchConfig);
+
+export default createAppContainer(SwitchNavigator);
