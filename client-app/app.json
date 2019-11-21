@@ -13,7 +13,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/saggezza.png",
     "splash": {
-      "image": "./assets/images/Gradient_YHPVqJX.png",
+      "image": "./assets/images/gradient-green.png",
       "resizeMode": "contain",
       "backgroundColor": "#2F2F2F"
     },
