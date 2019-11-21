@@ -33,7 +33,7 @@ const TabConfig = {
     navigationOptions: {
       tabBarLabel: 'Add',
       tabBarIcon: ({ tintColor }) => (
-        <EvilIconsIcon name="plus" style={{fontSize: 30, color: tintColor}} />
+        <EvilIconsIcon name="gear" style={{fontSize: 30, color: tintColor}} />
       )
     },
   },

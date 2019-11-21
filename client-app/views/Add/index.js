@@ -7,7 +7,7 @@ export default class Add extends React.Component {
       <ImageBackground
         style={styles.backgroundGradient}
         imageStyle={styles.backgroundGradient_imageStyle}
-        source={require("../../assets/images/Gradient_YHPVqJX.png")}
+        source={require("../../assets/images/gradient-green.png")}
       >
         <View style={styles.container}>
           <View style={styles.header}> 

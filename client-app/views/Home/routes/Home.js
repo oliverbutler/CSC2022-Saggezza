@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
+
 
 export default class Home extends React.Component {
   render() {
@@ -8,7 +9,7 @@ export default class Home extends React.Component {
       <ImageBackground
         style={styles.backgroundGradient}
         imageStyle={styles.backgroundGradient_imageStyle}
-        source={require("../../../assets/images/Gradient_YHPVqJX.png")}
+        source={require("../../../assets/images/gradient-green.png")}
       >
         <View style={styles.container}>
           <View style={styles.header}> 

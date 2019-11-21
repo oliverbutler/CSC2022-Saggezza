@@ -38,7 +38,7 @@ class Login extends React.Component {
             <ImageBackground
               style={styles.backgroundGradient}
               imageStyle={styles.backgroundGradient_imageStyle}
-              source={require("../../assets/images/Gradient_YHPVqJX.png")}
+              source={require("../../assets/images/gradient-green.png")}
             >
               <View style={styles.mainComponents}>
                 <View style={styles.form}>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(230, 230, 230,1)"
   },
   Background: {
-    height: 896,
+    height: '100%',
     marginTop: 0
   },
   stackFiller: {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   backgroundGradient: {
     left: 0,
-    height: 896,
+    height: '100%',
     backgroundColor:
       "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(31,178,204,0.69)",
     position: "absolute",
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     color: "rgba(255,255,255,0.5)"
   },
   backgroundGradientStack: {
-    height: 896
+    height: '100%'
   }
 });
 
