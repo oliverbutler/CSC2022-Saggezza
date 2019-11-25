@@ -1,7 +1,14 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+  ActivityIndicator
+} from "react-native";
 import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
-
 
 export default class Home extends React.Component {
   render() {
@@ -12,7 +19,7 @@ export default class Home extends React.Component {
         source={require("../../../assets/images/gradient-green.png")}
       >
         <View style={styles.container}>
-          <View style={styles.header}> 
+          <View style={styles.header}>
             <Text style={styles.headerTitle}>Welcome Oliver...</Text>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Settings")}
@@ -23,13 +30,16 @@ export default class Home extends React.Component {
           <View style={styles.content}>
             <Text style={styles.text}>Heres some lovely content!</Text>
             <Image
-              style={{width: 250, height: 200, margin: 20}}
-              source={{uri: 'https://media.giphy.com/media/yYSSBtDgbbRzq/source.gif'}} />
+              style={{ width: 250, height: 200, margin: 20 }}
+              source={{
+                uri: "https://media.giphy.com/media/yYSSBtDgbbRzq/source.gif"
+              }}
+            />
             <Text style={styles.text}>^ Hey look, a gif</Text>
           </View>
-        </View>  
+        </View>
       </ImageBackground>
-    )
+    );
   }
 }
 
@@ -38,32 +48,32 @@ const styles = StyleSheet.create({
     paddingTop: 50
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginRight: 10,
-    marginLeft: 10,
+    marginLeft: 10
   },
   headerTitle: {
-    color: 'white',
+    color: "white",
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold"
   },
   headerIcon: {
-    color: 'white',
-    fontSize: 30,
+    color: "white",
+    fontSize: 30
   },
   content: {
     margin: 10,
-    alignItems: 'center',
+    alignItems: "center"
   },
   text: {
-    color: 'white',
-    fontSize: 15,
+    color: "white",
+    fontSize: 15
   },
   backgroundGradient: {
     left: 0,
-    height: '100%',
+    height: "100%",
     backgroundColor:
       "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(31,178,204,0.69)",
     position: "absolute",
@@ -72,5 +82,5 @@ const styles = StyleSheet.create({
   },
   backgroundGradient_imageStyle: {
     opacity: 0.69
-  },
+  }
 });
