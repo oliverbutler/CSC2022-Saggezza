@@ -1,12 +1,23 @@
-from flask import Flask, jsonify
+from flask import Blueprint, Flask
+from flask_restful import Api
 
-app = Flask(__name__)
+from routes.user import User
+
+api_bp = Blueprint('api', __name__)
+api = Api(api_bp)
+
+api.add_resource(User, '/user')
 
 
-@app.route("/")
-def hello():
-    return jsonify({"message": "test"})
+def create_app(config_filename):
+    app = Flask(__name__)
+    app.config.from_object(config_filename)
+
+    app.register_blueprint(api_bp)
+
+    return app
 
 
 if __name__ == "__main__":
-    app.run()
+    app = create_app("config")
+    app.run(debug=True)

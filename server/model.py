@@ -16,6 +16,14 @@ from mongoengine import (
 )
 
 
+class Request(EmbeddedDocument):
+    name = StringField(required=True, max_length=64)
+    date_submit = DateTimeField(required=True)
+    status = StringField(required=True, options=[
+                         "approved", "declined", "pending"])
+    category = ListField(StringField)
+
+
 class User(Document):
     first_name = StringField(required=True, max_length=64)
     last_name = StringField(required=True, max_length=64)
@@ -31,14 +39,6 @@ class User(Document):
     employees = ListField(StringField)
     client = StringField(StringField)
     project = StringField(StringField)
-
-
-class Request(EmbeddedDocument):
-    name = StringField(required=True, max_length=64)
-    date_submit = DateTimeField(required=True)
-    status = StringField(required=True, options=[
-                         "approved", "declined", "pending"])
-    category = ListField(StringField)
 
 
 class Category(Document):
