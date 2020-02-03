@@ -14,3 +14,11 @@ def gen_hash(password: str):
     """
     salt = bcrypt.gensalt(rounds=12)
     return bcrypt.hashpw(password.encode('utf8'), salt)
+
+
+def parse(request):
+    if "multipart/form-data" in request.headers['Content-Type']:
+        return request.form
+    if "application/json" in request.headers['Content-Type']:
+        return request.json
+    return "Bad type"
