@@ -1,6 +1,7 @@
 import json
 import bcrypt
 from flask import jsonify
+from mongoengine import QuerySet, connect, DoesNotExist, ValidationError
 
 
 def gen_hash(password: str):
@@ -22,3 +23,18 @@ def parse(request):
     if "application/json" in request.headers['Content-Type']:
         return request.json
     return "Bad type"
+
+
+def res(message: str, type: str, **kwargs):
+    body = {}
+    body['status'] = {
+        'text': message,
+        'type': type
+    }
+    for key, value in kwargs.items():
+        body[key] = value
+    return body
+
+
+def convert_query(querySet: QuerySet) -> QuerySet:
+    return json.loads(querySet.to_json())
