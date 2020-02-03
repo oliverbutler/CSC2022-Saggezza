@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "blank-testing",
-    "slug": "blank-testing",
+    "name": "Saggezza",
+    "slug": "client",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -11,11 +11,11 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/saggezza.png",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/images/gradient-green.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#2F2F2F"
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -12,19 +12,19 @@ import {
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Center } from "@builderx/utils";
-import * as Font from 'expo-font';
+import * as Font from "expo-font";
 
 class Login extends React.Component {
-
   state = {
-    fontLoaded: false,
+    fontLoaded: false
   };
 
-  async componentDidMount() { // Dont load the component until font is mounted
+  async componentDidMount() {
+    // Dont load the component until font is mounted
     await Font.loadAsync({
-      'roboto-regular': require('../../assets/fonts/roboto-regular.ttf'),
-    })
-    this.setState({fontLoaded: true});
+      "roboto-regular": require("../../assets/fonts/roboto-regular.ttf")
+    });
+    this.setState({ fontLoaded: true });
   }
 
   render() {
@@ -32,80 +32,80 @@ class Login extends React.Component {
     return (
       <View style={styles.root}>
         {this.state.fontLoaded ? (
-        <View style={styles.Background}>
-          <View style={styles.stackFiller}></View>
-          <View style={styles.backgroundGradientStack}>
-            <ImageBackground
-              style={styles.backgroundGradient}
-              imageStyle={styles.backgroundGradient_imageStyle}
-              source={require("../../assets/images/gradient-green.png")}
-            >
-              <View style={styles.mainComponents}>
-                <View style={styles.form}>
-                  <View style={styles.signInGoogle}>
-                    <IoniconsIcon
-                      name="logo-google"
-                      style={styles.googleIcon}
-                    ></IoniconsIcon>
-                    <Text style={styles.signInWithGoogle}>
-                      Sign in with Google
-                    </Text>
+          <View style={styles.Background}>
+            <View style={styles.stackFiller}></View>
+            <View style={styles.backgroundGradientStack}>
+              <ImageBackground
+                style={styles.backgroundGradient}
+                imageStyle={styles.backgroundGradient_imageStyle}
+                source={require("../../assets/images/gradient-green.png")}
+              >
+                <View style={styles.mainComponents}>
+                  <View style={styles.form}>
+                    <View style={styles.signInGoogle}>
+                      <IoniconsIcon
+                        name="logo-google"
+                        style={styles.googleIcon}
+                      ></IoniconsIcon>
+                      <Text style={styles.signInWithGoogle}>
+                        Sign in with Google
+                      </Text>
+                    </View>
+                    <Text style={styles.or}>or</Text>
+                    <TouchableOpacity
+                      onPress={() => navigate("App")}
+                      style={styles.signinButton}
+                    >
+                      <Text style={styles.signin}>Sign In</Text>
+                    </TouchableOpacity>
+                    <View style={styles.passwordForm}>
+                      <EvilIconsIcon
+                        name="lock"
+                        style={styles.passwordIcon}
+                      ></EvilIconsIcon>
+                      <TextInput
+                        placeholder="Password"
+                        placeholderTextColor="rgba(255,255,255,1)"
+                        keyboardType="default"
+                        secureTextEntry={true}
+                        style={styles.password}
+                      ></TextInput>
+                    </View>
+                    <View style={styles.emailForm}>
+                      <EvilIconsIcon
+                        name="user"
+                        style={styles.icon2}
+                      ></EvilIconsIcon>
+                      <TextInput
+                        placeholder="Email"
+                        placeholderTextColor="rgba(255,255,255,1)"
+                        keyboardType="email-address"
+                        secureTextEntry={false}
+                        style={styles.emailInput}
+                      ></TextInput>
+                    </View>
                   </View>
-                  <Text style={styles.or}>or</Text>
-                  <TouchableOpacity 
-                    onPress={() => navigate("App")}
-                    style={styles.signinButton}
-                  >
-                    <Text style={styles.signin}>Sign In</Text>
-                  </TouchableOpacity>
-                  <View style={styles.passwordForm}>
-                    <EvilIconsIcon
-                      name="lock"
-                      style={styles.passwordIcon}
-                    ></EvilIconsIcon>
-                    <TextInput
-                      placeholder="Password"
-                      placeholderTextColor="rgba(255,255,255,1)"
-                      keyboardType="default"
-                      secureTextEntry={true}
-                      style={styles.password}
-                    ></TextInput>
-                  </View>
-                  <View style={styles.emailForm}>
-                    <EvilIconsIcon
-                      name="user"
-                      style={styles.icon2}
-                    ></EvilIconsIcon>
-                    <TextInput
-                      placeholder="Email"
-                      placeholderTextColor="rgba(255,255,255,1)"
-                      keyboardType="email-address"
-                      secureTextEntry={false}
-                      style={styles.emailInput}
-                    ></TextInput>
-                  </View>
+                  <Image
+                    source={require("../../assets/images/white.png")}
+                    resizeMode="contain"
+                    style={styles.logo}
+                  ></Image>
                 </View>
-                <Image
-                  source={require("../../assets/images/white.png")}
-                  resizeMode="contain"
-                  style={styles.logo}
-                ></Image>
-              </View>
-            </ImageBackground>
-            <Center horizontal>
-              <View style={styles.footer}>
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("SignUp")}
-                  style={styles.createAccountButton}
-                >
-                  <Text style={styles.CreateAccount}>Create Account</Text>
-                </TouchableOpacity>
-                <Text style={styles.NeedHelp}>Need Help?</Text>
-              </View>
-            </Center>
+              </ImageBackground>
+              <Center horizontal>
+                <View style={styles.footer}>
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("SignUp")}
+                    style={styles.createAccountButton}
+                  >
+                    <Text style={styles.CreateAccount}>Create Account</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.NeedHelp}>Need Help?</Text>
+                </View>
+              </Center>
+            </View>
           </View>
-        </View>
-        ) : null }
+        ) : null}
         <StatusBar
           animated={false}
           barStyle="light-content"
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(230, 230, 230,1)"
   },
   Background: {
-    height: '100%',
+    height: "100%",
     marginTop: 0
   },
   stackFiller: {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   backgroundGradient: {
     left: 0,
-    height: '100%',
+    height: "100%",
     backgroundColor:
       "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(31,178,204,0.69)",
     position: "absolute",
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     color: "rgba(255,255,255,0.5)"
   },
   backgroundGradientStack: {
-    height: '100%'
+    height: "100%"
   }
 });
 
