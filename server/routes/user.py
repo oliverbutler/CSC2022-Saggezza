@@ -19,7 +19,7 @@ class UserAPI(Resource):
             role=req['role'],
         )
         user.save()
-        return "User added"
+        return res('User created', 'success', user=convert_query(user))
 
     def get(self):
         return "GET Done!"
