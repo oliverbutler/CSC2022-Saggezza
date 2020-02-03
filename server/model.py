@@ -37,8 +37,8 @@ class User(Document):
 
     # Manager
     employees = ListField(StringField)
-    client = StringField(StringField)
-    project = StringField(StringField)
+    client = StringField()
+    project = StringField()
 
 
 class Category(Document):

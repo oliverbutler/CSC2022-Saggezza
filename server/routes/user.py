@@ -1,23 +1,31 @@
 from flask import request
 from flask_restful import Resource
 from functions import *
-from model import User, Request, Client, Category, Project
+from mongoengine import *
+
+from model import User
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
 
-class User(Resource):
+class UserAPI(Resource):
     def post(self):
-        req = request
+        # req = request
+        # user = User(
+        #     first_name=req['first_name'],
+        #     last_name=req['last_name'],
+        #     email=req['email'],
+        #     role=req['role'],
+        # )
         user = User(
-            first_name=request['first_name'],
-            last_name=request['last_name'],
-            email=request['email'],
-            role=request['role'],
+            first_name="test",
+            last_name="test",
+            email="test@email.com",
+            role="admin",
         )
         user.save()
         return "User added"
 
     def get(self):
-        return "Hello fucko!"
+        return "GET Done!"
