@@ -26,8 +26,8 @@ class UserListAPI(Resource):
         return res('User created', 'success', user=convert_query(user))
 
     def get(self):
-        # TODO: To be implemented
-        return res('All users returned', 'success')
+        users = User.objects().all()
+        return res('All users returned', 'success', users=convert_query(users))
 
 
 class UserAPI(Resource):
@@ -41,12 +41,18 @@ class UserAPI(Resource):
         return res('User modified', 'success')
 
     def delete(self, id):
-        # TODO: To be implemented
-        return res('User deleted', 'success')
+        try:
+            User.objects(id=id).delete()
+            return res('User deleted 💀', 'success')
+        except:
+            return res("User doesn't exist", 'error'), 400
 
     def get(self, id):
-        # TODO: To be implemented
-        return res('User returned', 'success')
+        try:
+            user = User.objects(id=id)[0]
+            return res('Retrieved Successfully', 'success', user=convert_query(user))
+        except:
+            return res("User doesn't exist", 'error'), 400
 
 
 class UserProfileAPI(Resource):
