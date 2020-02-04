@@ -9,7 +9,11 @@ from model import User
 connect('saggezza_db', host='localhost', port=27017)
 
 
-class UserAPI(Resource):
+class UserListAPI(Resource):
+    # |- /user
+    # |- POST: Create a new user
+    # \- GET: Return all users
+
     def post(self):
         req = parse(request)
         user = User(
@@ -22,4 +26,38 @@ class UserAPI(Resource):
         return res('User created', 'success', user=convert_query(user))
 
     def get(self):
-        return "GET Done!"
+        # TODO: To be implemented
+        return res('All users returned', 'success')
+
+
+class UserAPI(Resource):
+    # |- /user/<id>
+    # |- PUT: Edit user
+    # |- DELETE: Delete user
+    # \- GET: Return user
+
+    def put(self, id):
+        # TODO: To be implemented
+        return res('User modified', 'success')
+
+    def delete(self, id):
+        # TODO: To be implemented
+        return res('User deleted', 'success')
+
+    def get(self, id):
+        # TODO: To be implemented
+        return res('User returned', 'success')
+
+
+class UserProfileAPI(Resource):
+    # |- /user/<id>/profile
+    # |- POST: Upload new profile picture
+    # \- DELETE: Delete profile picture
+
+    def post(self, id):
+        # TODO: To be implemented
+        return res('Profile image added successfully', 'success')
+
+    def delete(self, id):
+        # TODO: To be implemented
+        return res('Profile image deleted', 'success')
