@@ -1,4 +1,4 @@
-.vscode/launch.json
+.vscode/*
 node_modules
 server/__pycache__/config.cpython-37.pyc
 server/__pycache__/functions.cpython-37.pyc
