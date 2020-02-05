@@ -18,6 +18,14 @@ def gen_hash(password: str):
 
 
 def parse(request):
+    """Takes a request, from the client, and parses it into a python dictionary, allows either Multipart form data or JSON
+
+    Arguments:
+        request {[type]} -- [description]
+
+    Returns:
+        [dict] -- The request data
+    """
     if "multipart/form-data" in request.headers['Content-Type']:
         return request.form
     if "application/json" in request.headers['Content-Type']:
@@ -26,6 +34,15 @@ def parse(request):
 
 
 def res(message: str, type: str, **kwargs):
+    """Response from server, ensures the reply from the server is always formatted correctly
+
+    Arguments:
+        message {str} -- Message from the client
+        type {str} -- Either 'success', 'error' or 'warning'
+
+    Returns:
+        [dict] -- Response message
+    """
     body = {}
     body['status'] = {
         'text': message,
