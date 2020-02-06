@@ -1,12 +1,22 @@
 from flask import Blueprint, Flask
 from flask_restful import Api
 
-from routes.user import User
+from routes.user import UserListAPI, UserAPI, UserProfileAPI
+from routes.category import CategoryListAPI, CategoryAPI
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
-api.add_resource(User, '/user')
+# User
+
+api.add_resource(UserListAPI, '/user')
+api.add_resource(UserAPI, '/user/<id>')
+api.add_resource(UserProfileAPI, '/user/<id>/profile')
+
+# Category
+
+api.add_resource(CategoryListAPI, '/category')
+api.add_resource(CategoryAPI, '/category/<id>')
 
 
 def create_app(config_filename):
