@@ -5,6 +5,7 @@ from mongoengine import *
 
 from model import Category
 
+
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
@@ -14,10 +15,21 @@ class CategoryListAPI(Resource):
     # |- POST: Create a new category
     # \- GET: Return all categories
     def post(self):
-        return res('Category created successfully', 'success')
+        req = parse(request)
+        category = Category(
+            name=req['name'],
+            amount=req['amount'],
+            date_expense=req['date_expense'],
+            billable_client=req['billable_client'],
+            payment_method=req['payment_method'],
+            description=req['description']
+        )
+        category.save()
+        return res('Category created successfully', 'success',category=convert_query(category))
 
     def get(self):
-        return res('All categories returned', 'success')
+        categories = Category.objects().all()
+        return res('All categories returned', 'success', categories=convert_query(categories))
 
 
 class CategoryAPI(Resource):
@@ -30,7 +42,16 @@ class CategoryAPI(Resource):
         return res('Modify category', 'success')
 
     def get(self, id):
-        return res('Return category', 'success')
+        try:
+            category = Category.objects(id=id)[0]
+            return res('Retrieved Successfully', 'success', category=convert_query(category))
+        except:
+            return res("Category doesn't exist", 'error'), 400
 
     def delete(self, id):
-        return res('Deleted category', 'success')
+        try:
+            category = Category.objects(id=id)
+            category.delete()
+            return res('Category deleted 💀', 'success', category=convert_query(category))
+        except:
+            return res("Category doesn't exist", 'error'), 400

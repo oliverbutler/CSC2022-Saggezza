@@ -25,6 +25,7 @@ class UserListAPI(Resource):
         user.save()
         return res('User created', 'success', user=convert_query(user))
 
+
     def get(self):
         users = User.objects().all()
         return res('All users returned', 'success', users=convert_query(users))
@@ -42,8 +43,9 @@ class UserAPI(Resource):
 
     def delete(self, id):
         try:
-            User.objects(id=id).delete()
-            return res('User deleted 💀', 'success')
+            user = User.objects(id=id)
+            user.delete()
+            return res('User deleted 💀', 'success', user=convert_query(user))
         except:
             return res("User doesn't exist", 'error'), 400
 
