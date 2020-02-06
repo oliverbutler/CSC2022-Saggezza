@@ -54,4 +54,4 @@ class CategoryAPI(Resource):
             category.delete()
             return res('Category deleted 💀', 'success', category=convert_query(category))
         except:
-            return res("Ctegory doesn't exist", 'error'), 400
+            return res("Category doesn't exist", 'error'), 400
