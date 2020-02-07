@@ -5,6 +5,7 @@ from mongoengine import *
 
 from model import User
 
+
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
@@ -38,8 +39,24 @@ class UserAPI(Resource):
     # \- GET: Return user
 
     def put(self, id):
-        # TODO: To be implemented
-        return res('User modified', 'success')
+
+        try:
+            req = parse(request)
+            user = User.objects(id=id)
+
+            if "first_name" in req:
+                User.objects(id=id).update(first_name=req["first_name"])
+            if "last_name" in req:
+                User.objects(id=id).update(last_name=req["last_name"])
+            if "email" in req:
+                User.objects(id=id).update(email=req["email"])
+            if "role" in req and (req["role"] == "employee" or req["role"] == "manager" or req["role"] == "admin"):
+                User.objects(id=id).update(role=req["role"])
+            return res('User modified', 'success', user=convert_query(user))
+
+        except:
+            return res("User doesn't exist", 'error'), 400
+
 
     def delete(self, id):
         try:
