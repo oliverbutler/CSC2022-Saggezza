@@ -2,11 +2,15 @@ from flask import request
 from flask_restful import Resource
 from functions import *
 from mongoengine import *
+from PIL import Image
 
 from model import User
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
+
+UPLOAD_FOLDER = './static/profile/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 class UserListAPI(Resource):
@@ -62,7 +66,21 @@ class UserProfileAPI(Resource):
 
     def post(self, id):
         # TODO: To be implemented
-        return res('Profile image added successfully', 'success')
+        try:
+            user = User.objects(id=id)[0]
+            if 'file' in request.files:
+                file = request.files["file"]
+                size = 128, 128
+                im = Image.open(file)
+                im.thumbnail(size)
+                im.save(UPLOAD_FOLDER + id +  ".jpg")
+                user['profile_picture'] = "/profile/" + id + ".jpg"
+                return res('Profile image added successfully', 'success')
+            else:
+                return res("No file in the request called file", "error"), 400
+        except:
+            return res("User doesn't exist", 'error'), 400
+        
 
     def delete(self, id):
         # TODO: To be implemented

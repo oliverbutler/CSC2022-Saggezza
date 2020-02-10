@@ -29,7 +29,7 @@ class User(Document):
     last_name = StringField(required=True, max_length=64)
     email = EmailField(required=True, unique=True)
     token = StringField()
-    profile_picture = StringField(default="profile")
+    profile_picture = StringField(default="/default-profile.jpg")
     role = StringField(required=True, options=["employee", "manager", "admin"])
 
     # Employee
