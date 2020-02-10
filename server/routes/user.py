@@ -2,14 +2,11 @@ from flask import request
 from flask_restful import Resource
 from functions import *
 from mongoengine import *
-<<<<<<< HEAD
-from PIL import Image
-=======
 from schema.user import *
 
 from model import User, Request
 import datetime
->>>>>>> 78a52fe33abdf310ad9750fadefb148523ec13e7
+
 
 
 # Connect to mongodb

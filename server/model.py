@@ -29,13 +29,8 @@ class User(Document):
     last_name = StringField(required=True, max_length=64)
     email = EmailField(required=True, unique=True)
     token = StringField()
-<<<<<<< HEAD
     profile_picture = StringField(default="/default-profile.jpg")
     role = StringField(required=True, options=["employee", "manager", "admin"])
-=======
-    profile_picture = StringField(default="profile")
-    role = StringField(required=True, choices=["employee", "manager", "admin"])
->>>>>>> 78a52fe33abdf310ad9750fadefb148523ec13e7
 
     # Employee
     request_list = EmbeddedDocumentListField(Request)
