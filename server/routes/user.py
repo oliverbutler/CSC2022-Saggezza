@@ -2,8 +2,10 @@ from flask import request
 from flask_restful import Resource
 from functions import *
 from mongoengine import *
+from schema.user import *
 
 from model import User
+
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
@@ -15,7 +17,10 @@ class UserListAPI(Resource):
     # \- GET: Return all users
 
     def post(self):
-        req = parse(request)
+        req, errors = UserListSchema().load(parse(request))
+        if errors:
+            return res('Errors in request', 'alert', errors=errors), 400
+
         user = User(
             first_name=req['first_name'],
             last_name=req['last_name'],
@@ -37,15 +42,27 @@ class UserAPI(Resource):
     # \- GET: Return user
 
     def put(self, id):
-        # TODO: To be implemented
-        return res('User modified', 'success')
+        req, errors = UserSchema().load(parse(request))
+        if errors:
+            return res('Errors in request', 'alert', errors=errors), 400
+        try:
+            user = User.objects(id=id)[0]
+        except:
+            return res("User doesn't exist", 'error'), 400
+
+        for i in req:
+            user[i] = req[i]
+
+        return res('User modified', 'success', user=convert_query(user))
 
     def delete(self, id):
         try:
-            User.objects(id=id).delete()
-            return res('User deleted 💀', 'success')
+            user = User.objects(id=id)
         except:
             return res("User doesn't exist", 'error'), 400
+
+        user.delete()
+        return res('User deleted 💀', 'success', user=convert_query(user))
 
     def get(self, id):
         try:
@@ -67,3 +84,51 @@ class UserProfileAPI(Resource):
     def delete(self, id):
         # TODO: To be implemented
         return res('Profile image deleted', 'success')
+
+
+class UserRequestListAPI(Resource):
+    # |- /user/<id>/request NOTE: User must be an employee
+    # |- POST: Add a new request
+    # |- GET: Return all of a users requests
+
+    def post(self, id):
+        return res('Add a new request', 'success')
+
+    def get(self, id):
+        return res('Returned users requests', 'success')
+
+
+class UserRequestAPI(Resource):
+    # |- /user/<id>/request/<rid> NOTE: User must be an employee
+    # |- PUT: Modify request
+    # |- DELETE: Delete request
+    # |- GET: Return request
+
+    def put(self, id, rid):
+        return res('Request modified', 'success')
+
+    def delete(self, id, rid):
+        return res('Deleted request', 'success')
+
+    def get(self, id, rid):
+        return res('Returned request', 'success')
+
+
+class UserEmployeeListAPI(Resource):
+    # |- /user/<id>/employee NOTE: User must be a Manager
+    # |- POST: Add new employee
+    # |- GET: Return all employees
+
+    def put(self, id):
+        return res('Employee Added', 'success')
+
+    def get(self, id):
+        return res('All employees returned', 'success')
+
+
+class UserEmployeeAPI(Resource):
+    # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
+    # |- DELETE: Delete employee
+
+    def delete(self, id, eid):
+        return res('Deleted employee', 'success')
