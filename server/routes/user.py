@@ -4,7 +4,8 @@ from functions import *
 from mongoengine import *
 from schema.user import *
 
-from model import User
+from model import User, Request
+import datetime
 
 
 # Connect to mongodb
@@ -74,7 +75,7 @@ class UserAPI(Resource):
 
 
 class UserProfileAPI(Resource):
-    # |- /user/<id>/profile
+    # |- /user/<id>/profile JENNY
     # |- POST: Upload new profile picture
     # \- DELETE: Delete profile picture
 
@@ -93,10 +94,22 @@ class UserRequestListAPI(Resource):
     # |- GET: Return all of a users requests
 
     def post(self, id):
-        return res('Add a new request', 'success')
+        req = parse(request)
+        try:
+            user = User.objects(id=id)[0]
+        except:
+            return res("User doesn't exist", 'error'), 400
 
-    def get(self, id):
-        return res('Returned users requests', 'success')
+        new_request = Request(
+            name="test",
+            date_submit=datetime.datetime.now(),
+            status="pending"
+        )
+
+        user['request_list'].append(new_request)
+        user.save()
+
+        return res('Add a new request', 'success')
 
 
 class UserRequestAPI(Resource):

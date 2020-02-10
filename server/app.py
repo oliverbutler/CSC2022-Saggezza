@@ -1,8 +1,8 @@
 from flask import Blueprint, Flask
 from flask_restful import Api
 
-from routes.user import UserListAPI, UserAPI, UserProfileAPI
-from routes.category import CategoryListAPI, CategoryAPI
+from routes.user import *
+from routes.category import *
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
@@ -12,6 +12,7 @@ api = Api(api_bp)
 api.add_resource(UserListAPI, '/user')
 api.add_resource(UserAPI, '/user/<id>')
 api.add_resource(UserProfileAPI, '/user/<id>/profile')
+api.add_resource(UserRequestListAPI, '/user/<id>/request')
 
 # Category
 
