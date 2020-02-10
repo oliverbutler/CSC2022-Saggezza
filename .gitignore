@@ -6,3 +6,5 @@ server/__pycache__/model.cpython-37.pyc
 server/routes/__pycache__/user.cpython-37.pyc
 .DS_Store
 server/static/profile/*
+server/routes/__pycache__/category.cpython-37.pyc
+server/schema/__pycache__/user.cpython-37.pyc

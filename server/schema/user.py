@@ -8,3 +8,10 @@ class UserListSchema(Schema):
     first_name = fields.Str(required=True, validate=Length(max=32))
     last_name = fields.Str(required=True, validate=Length(max=32))
     role = fields.Str(required=True)
+
+
+class UserSchema(Schema):
+    email = fields.Email(validate=Length(max=32))
+    first_name = fields.Str(validate=Length(max=32))
+    last_name = fields.Str(validate=Length(max=32))
+    role = fields.Str()
