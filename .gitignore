@@ -8,3 +8,4 @@ server/routes/__pycache__/user.cpython-37.pyc
 server/static/profile/*
 server/routes/__pycache__/category.cpython-37.pyc
 server/schema/__pycache__/user.cpython-37.pyc
+*.pyc
