@@ -17,10 +17,11 @@ class UserListAPI(Resource):
     # \- GET: Return all users
 
     def post(self):
-        req, errors = UserListSchema().load(parse(request))
+        req = parse(request)
+        errors = UserListSchema().validate(req)
         if errors:
             return res('Errors in request', 'alert', errors=errors), 400
-
+        print("yeet")
         user = User(
             first_name=req['first_name'],
             last_name=req['last_name'],
@@ -42,7 +43,8 @@ class UserAPI(Resource):
     # \- GET: Return user
 
     def put(self, id):
-        req, errors = UserSchema().load(parse(request))
+        req = parse(request)
+        errors = UserSchema().validate(req)
         if errors:
             return res('Errors in request', 'alert', errors=errors), 400
         try:
