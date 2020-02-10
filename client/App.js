@@ -1,7 +1,11 @@
-import React from "react";
-//Pull in AppNavigation from the navigation folder
-import AppNavigation from "./navigation/AppNavigation";
+import Navigator from './navigation/DrawerNavigation';
+import React, { Component } from "react";
 
-export default function App() {
-  return <AppNavigation />;
+export default class App extends Component {
+
+  render() {
+    return (
+      <Navigator />
+    )
+  }
 }
