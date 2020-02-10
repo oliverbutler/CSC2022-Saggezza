@@ -21,7 +21,6 @@ class UserListAPI(Resource):
         errors = UserListSchema().validate(req)
         if errors:
             return res('Errors in request', 'alert', errors=errors), 400
-        print("yeet")
         user = User(
             first_name=req['first_name'],
             last_name=req['last_name'],
