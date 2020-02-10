@@ -4,7 +4,8 @@ from flask_restful import Api
 from routes.user import *
 from routes.category import *
 
-api_bp = Blueprint('api', __name__)
+api_bp = Blueprint('api', __name__, static_url_path="/static",
+                   static_folder="static")
 api = Api(api_bp)
 
 # User
