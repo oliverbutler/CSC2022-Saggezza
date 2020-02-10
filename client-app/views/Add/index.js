@@ -21,7 +21,7 @@ export default class Add extends React.Component {
             <Text style={styles.headerTitle}>Add</Text>
           </View>
           <View style={styles.content}>
-            <Text style={styles.text}>Add a new request.</Text>
+            <Text style={styles.text}>request hello .</Text>
           </View>
         </View>
       </ImageBackground>
