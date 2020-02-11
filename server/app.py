@@ -3,6 +3,7 @@ from flask_restful import Api
 
 from routes.user import *
 from routes.category import *
+from routes.client import *
 
 api_bp = Blueprint('api', __name__, static_url_path="/static",
                    static_folder="static")
@@ -20,6 +21,9 @@ api.add_resource(UserRequestListAPI, '/user/<id>/request')
 api.add_resource(CategoryListAPI, '/category')
 api.add_resource(CategoryAPI, '/category/<id>')
 
+# Client
+api.add_resource(ClientListAPI,'/client')
+api.add_resource(ClientAPI, '/client/<id>')
 
 def create_app(config_filename):
     app = Flask(__name__)
