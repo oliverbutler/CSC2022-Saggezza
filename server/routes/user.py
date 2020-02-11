@@ -8,7 +8,6 @@ from model import User, Request
 import datetime
 
 
-
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
@@ -84,7 +83,6 @@ class UserProfileAPI(Resource):
     # \- DELETE: Delete profile picture
 
     def post(self, id):
-        # TODO: To be implemented
         try:
             user = User.objects(id=id)[0]
             if 'file' in request.files:
@@ -92,14 +90,13 @@ class UserProfileAPI(Resource):
                 size = 128, 128
                 im = Image.open(file)
                 im.thumbnail(size)
-                im.save(UPLOAD_FOLDER + id +  ".jpg")
+                im.save(UPLOAD_FOLDER + id + ".jpg")
                 user['profile_picture'] = "/profile/" + id + ".jpg"
                 return res('Profile image added successfully', 'success')
             else:
                 return res("No file in the request called file", "error"), 400
         except:
             return res("User doesn't exist", 'error'), 400
-        
 
     def delete(self, id):
         # TODO: To be implemented
