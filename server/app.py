@@ -15,6 +15,7 @@ api.add_resource(UserListAPI, '/user')
 api.add_resource(UserAPI, '/user/<id>')
 api.add_resource(UserProfileAPI, '/user/<id>/profile')
 api.add_resource(UserRequestListAPI, '/user/<id>/request')
+api.add_resource(UserEmployeeListAPI, '/user/<id>/employee')
 
 # Category
 
