@@ -6,15 +6,13 @@ from schema.user import *
 from PIL import Image
 from model import User, Request
 import datetime
-import os 
-
-user_employee_list_schema = UserEmployeeListSchema()
+import os
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
 UPLOAD_FOLDER = './static/profile/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set(['jpg'])
 
 
 class UserListAPI(Resource):
@@ -80,29 +78,32 @@ class UserAPI(Resource):
 
 
 class UserProfileAPI(Resource):
-    # |- /user/<id>/profile JENNY
+    # |- /user/<id>/profile
     # |- POST: Upload new profile picture
     # \- DELETE: Delete profile picture
 
     def post(self, id):
         try:
             user = User.objects(id=id)[0]
-            if 'file' in request.files:
-                file = request.files["file"]
-                size = 128, 128
-                im = Image.open(file)
-                im.thumbnail(size)
-                im.save(UPLOAD_FOLDER + id + ".jpg")
-                user['profile_picture'] = "/profile/" + id + ".jpg"
-                user.save()
-                return res('Profile image added successfully', 'success')
-            else:
-                return res("No file in the request called file", "error"), 400
         except:
             return res("User doesn't exist", 'error'), 400
+        if 'file' in request.files:
+            file = request.files["file"]
+            size = 256, 256
+            im = Image.open(file)
+            im.thumbnail(size)
+
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+
+            im.save(UPLOAD_FOLDER + id + ".jpg")
+            user['profile_picture'] = "/profile/" + id + ".jpg"
+            user.save()
+            return res('Profile image added successfully', 'success')
+        else:
+            return res("No file in the request called file", "error"), 400
 
     def delete(self, id):
-        # TODO: To be implemented
         try:
             user = User.objects(id=id)[0]
             if os.path.exists(UPLOAD_FOLDER + id + ".jpg"):
@@ -115,45 +116,6 @@ class UserProfileAPI(Resource):
         except:
             return res("User doesn't exist", 'error'), 400
 
-class UserRequestListAPI(Resource):
-    # |- /user/<id>/request NOTE: User must be an employee
-    # |- POST: Add a new request
-    # |- GET: Return all of a users requests
-
-    def post(self, id):
-        req = parse(request)
-        try:
-            user = User.objects(id=id)[0]
-        except:
-            return res("User doesn't exist", 'error'), 400
-
-        new_request = Request(
-            name="test",
-            date_submit=datetime.datetime.now(),
-            status="pending"
-        )
-
-        user['request_list'].append(new_request)
-        user.save()
-
-        return res('Add a new request', 'success')
-
-
-class UserRequestAPI(Resource):
-    # |- /user/<id>/request/<rid> NOTE: User must be an employee
-    # |- PUT: Modify request
-    # |- DELETE: Delete request
-    # |- GET: Return request
-
-    def put(self, id, rid):
-        return res('Request modified', 'success')
-
-    def delete(self, id, rid):
-        return res('Deleted request', 'success')
-
-    def get(self, id, rid):
-        return res('Returned request', 'success')
-
 
 class UserEmployeeListAPI(Resource):
     # |- /user/<id>/employee NOTE: User must be a Manager
@@ -161,7 +123,7 @@ class UserEmployeeListAPI(Resource):
 
     def post(self, id):
         req = parse(request)
-        errors = user_employee_list_schema.validate(req)
+        errors = UserEmployeeListSchema().validate(req)
         if errors:
             return res('Errors in request', 'alert', errors=errors), 400
         try:
@@ -170,12 +132,12 @@ class UserEmployeeListAPI(Resource):
             return res("User doesn't exist", 'error'), 400
         if user["role"] == 'manager':
             try:
-                employee = User.objects(id=req['uuid'])[0]
+                employee = User.objects(id=req['employee'])[0]
+                user['employees'].append(employee)
+                user.save()
+                return res('Employee Added', 'success', user=convert_query(user))
             except:
                 return res("Employee's uuid is not valid", 'error'), 400
-            user['employees'].append(req['uuid'])
-            user.save()
-            return res('Employee Added', 'success', user=convert_query(user))
         else:
             return res('User is not a manager', 'error'), 400
 

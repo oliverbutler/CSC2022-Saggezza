@@ -16,5 +16,6 @@ class UserSchema(Schema):
     last_name = fields.Str(validate=Length(max=32))
     role = fields.Str()
 
+
 class UserEmployeeListSchema(Schema):
-    uuid = fields.Str(required=True, validate=Length(max=32))
+    employee = fields.Str(required=True, validate=Length(max=32))

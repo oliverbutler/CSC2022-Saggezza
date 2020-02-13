@@ -13,42 +13,16 @@ from mongoengine import (
     GeoPointField,
     EmbeddedDocumentListField,
     ListField,
+    ReferenceField,
+    ObjectIdField
 )
+from bson import json_util, ObjectId
 
-
-class Request(EmbeddedDocument):
-    name = StringField(required=True, max_length=64)
-    date_submit = DateTimeField(required=True)
-    status = StringField(required=True, choices=[
-                         "approved", "declined", "pending"])
-    category = ListField(StringField)
-
-
-class User(Document):
-    first_name = StringField(required=True, max_length=64)
-    last_name = StringField(required=True, max_length=64)
-    email = EmailField(required=True, unique=True)
-    token = StringField()
-    profile_picture = StringField(default="/default-profile.jpg")
-    role = StringField(required=True, options=["employee", "manager", "admin"])
-
-    # Employee
-    request_list = EmbeddedDocumentListField(Request)
-
-    # Manager
-    employees = ListField(StringField())
-    client = StringField()
-    project = StringField()
+import datetime
 
 
 class Category(Document):
-    name = StringField(required=True, max_length=64)
-    amount = DecimalField(required=True)
-    date_expense = DateTimeField(required=True)
-    billable_client = BooleanField(required=True)
-    payment_method = StringField(required=True, choices=["corporate", "own"])
-    file_evidence = StringField()
-    description = StringField(max_length=1080)
+    name = StringField(requried=True, max_length=64)
 
 
 class Client(Document):
@@ -58,3 +32,43 @@ class Client(Document):
 
 class Project(Document):
     name = StringField(required=True, max_length=64)
+
+
+class RequestParameter(EmbeddedDocument):
+    _id = ObjectIdField(default=lambda: ObjectId())
+    category = ReferenceField(Category, required=True)
+    name = StringField(required=True, max_length=64)
+    amount = DecimalField(required=True)
+    date_expense = DateTimeField(required=True)
+    billable_client = BooleanField(required=True)
+    payment_method = StringField(required=True, choices=["corporate", "own"])
+    file_evidence = StringField()
+    description = StringField(max_length=1080)
+
+
+class User(Document):
+    first_name = StringField(required=True, max_length=64)
+    last_name = StringField(required=True, max_length=64)
+    email = EmailField(required=True, unique=True)
+    profile_picture = StringField(default="/default-profile.jpg")
+    role = StringField(required=True, options=["employee", "manager", "admin"])
+
+    # Employee
+    request_list = ListField(ReferenceField('Request'))
+
+    # Manager
+    employees = ListField(ReferenceField('self'))
+    client = ReferenceField(Client)
+    project = ReferenceField(Project)
+
+
+class Request(Document):
+    name = StringField(required=True, max_length=64)
+    employee = ReferenceField(User, required=True)
+    date_created = DateTimeField(default=datetime.datetime.now())
+    date_submit = DateTimeField()
+    date_review = DateTimeField()
+    comment = StringField()
+    status = StringField(default="draft", choices=[
+                         "approved", "declined", "pending", "draft"])
+    request_parameter_list = EmbeddedDocumentListField(RequestParameter)

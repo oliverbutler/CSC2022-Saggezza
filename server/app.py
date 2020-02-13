@@ -2,6 +2,7 @@ from flask import Blueprint, Flask
 from flask_restful import Api
 
 from routes.user import *
+from routes.request import *
 from routes.category import *
 from routes.client import *
 
@@ -14,9 +15,15 @@ api = Api(api_bp)
 api.add_resource(UserListAPI, '/user')
 api.add_resource(UserAPI, '/user/<id>')
 api.add_resource(UserProfileAPI, '/user/<id>/profile')
-api.add_resource(UserRequestListAPI, '/user/<id>/request')
 api.add_resource(UserEmployeeListAPI, '/user/<id>/employee')
 api.add_resource(UserEmployeeAPI, '/user/<id>/employee/<eid>')
+
+# Request
+api.add_resource(RequestListAPI, '/request')
+api.add_resource(RequestAPI, '/request/<id>')
+api.add_resource(RequestParameterListAPI, '/request/<id>/parameter')
+api.add_resource(RequestParameterAPI, '/request/<id>/parameter/<pid>')
+
 
 # Category
 
@@ -39,4 +46,4 @@ def create_app(config_filename):
 
 if __name__ == "__main__":
     app = create_app("config")
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True,    host="0.0.0.0")
