@@ -36,7 +36,7 @@ class User(Document):
     request_list = EmbeddedDocumentListField(Request)
 
     # Manager
-    employees = ListField(StringField)
+    employees = ListField(StringField())
     client = StringField()
     project = StringField()
 
