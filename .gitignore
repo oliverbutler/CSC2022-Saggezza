@@ -3,5 +3,7 @@ node_modules
 .DS_Store
 server/static/profile/*
 *.pyc
-__pycache__*
+__pycache__/
 *cpython*
+server/routes/__pycache__/category.cpython-37.pyc
+client/secrets.js

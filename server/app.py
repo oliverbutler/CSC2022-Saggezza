@@ -23,8 +23,9 @@ api.add_resource(CategoryListAPI, '/category')
 api.add_resource(CategoryAPI, '/category/<id>')
 
 # Client
-api.add_resource(ClientListAPI,'/client')
+api.add_resource(ClientListAPI, '/client')
 api.add_resource(ClientAPI, '/client/<id>')
+
 
 def create_app(config_filename):
     app = Flask(__name__)
@@ -37,4 +38,4 @@ def create_app(config_filename):
 
 if __name__ == "__main__":
     app = create_app("config")
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

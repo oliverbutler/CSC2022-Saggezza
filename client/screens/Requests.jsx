@@ -9,13 +9,15 @@ import { Icon, Button, Container, Header, Content, Left } from "native-base";
 import CustomHeader from "../components/CustomHeader";
 import UserPreview from "../components/UserPreview";
 
+import "../secrets.js";
+
 class Requests extends Component {
   state = {
     users: []
   };
 
   componentDidMount() {
-    axios.get(`http://172.20.10.2:5000/user`).then(res => {
+    axios.get(`http://` + ip + `:5000/user`).then(res => {
       const users = res.data.users;
       this.setState({ users });
     });
@@ -34,8 +36,6 @@ class Requests extends Component {
           {this.state.users.map((item, key) => (
             <UserPreview key={key} user={item} />
           ))}
-
-          
         </Content>
       </Container>
     );
