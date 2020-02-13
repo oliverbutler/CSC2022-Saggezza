@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from functions import *
 from mongoengine import *
+from schema.project import *
 
 from model import Project
 
