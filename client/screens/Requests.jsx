@@ -15,7 +15,7 @@ class Requests extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/user`).then(res => {
+    axios.get(`http://172.20.10.2:5000/user`).then(res => {
       const users = res.data.users;
       this.setState({ users });
     });
@@ -34,6 +34,8 @@ class Requests extends Component {
           {this.state.users.map((item, key) => (
             <UserPreview key={key} user={item} />
           ))}
+
+          
         </Content>
       </Container>
     );

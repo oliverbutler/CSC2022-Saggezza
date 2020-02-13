@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Text, View, Image } from 'react-native';
 import { Container, Content} from 'native-base';
+import { SearchBar } from 'react-native-elements';
 
 
 //Import Custom Header to use on screen
@@ -41,8 +42,5 @@ class EmployeeApplicationHomeScreen extends Component {
     );
   }
 }
-
-
-
 
 export default EmployeeApplicationHomeScreen;
