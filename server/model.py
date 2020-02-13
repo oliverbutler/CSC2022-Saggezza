@@ -16,6 +16,8 @@ from mongoengine import (
     ReferenceField
 )
 
+import datetime
+
 
 class Category(Document):
     name = StringField(requried=True)
@@ -31,7 +33,7 @@ class Project(Document):
 
 
 class RequestParameter(EmbeddedDocument):
-    category = ReferenceField(Category)
+    category = ReferenceField(Category, required=True)
     name = StringField(required=True, max_length=64)
     amount = DecimalField(required=True)
     date_expense = DateTimeField(required=True)
@@ -60,9 +62,10 @@ class User(Document):
 class Request(Document):
     name = StringField(required=True, max_length=64)
     employee = ReferenceField(User, required=True)
-    date_submit = DateTimeField(required=True)
+    date_created = DateTimeField(default=datetime.datetime.now())
+    date_submit = DateTimeField()
     date_review = DateTimeField()
     comment = StringField()
-    status = StringField(required=True, choices=[
-                         "approved", "declined", "pending"])
+    status = StringField(default="draft", choices=[
+                         "approved", "declined", "pending", "draft"])
     request_parameter_list = EmbeddedDocumentListField(RequestParameter)
