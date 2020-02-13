@@ -4,7 +4,7 @@ from functions import *
 from mongoengine import *
 # from schema.requeas import *
 from PIL import Image
-from model import User, Request
+from model import *
 import datetime
 import os
 
@@ -14,7 +14,7 @@ connect('saggezza_db', host='localhost', port=27017)
 
 
 class RequestListAPI(Resource):
-    # |- /request NOTE: User must be an employee
+    # |- /request
     # |- POST: Add a new request
     # |- GET: Return all of a users requests
 
@@ -29,10 +29,9 @@ class RequestListAPI(Resource):
 
         new_request = Request(
             name=req['name'],
-            employee=user,
-            date_submit=datetime.datetime.now(),
-            status="pending"
+            employee=user
         )
+
         new_request.save()
 
         user['request_list'].append(new_request)
@@ -49,7 +48,7 @@ class RequestListAPI(Resource):
 
 
 class RequestAPI(Resource):
-    # |- /request/<id> NOTE: User must be an employee
+    # |- /request/<id>
     # |- PUT: Modify request
     # |- DELETE: Delete request
     # |- GET: Return request
@@ -66,3 +65,57 @@ class RequestAPI(Resource):
             return res('Retrieved Successfully', 'success', returned_request=convert_query(returned_request))
         except:
             return res("Request doesn't exist", 'error'), 400
+
+
+class RequestParameterListAPI(Resource):
+    # |- /request/<id>/parameter
+    # |- POST: Add a new Request Parameter
+    # |- GET: Return all Request Parameters
+
+    def post(self, id):
+        req = parse(request)
+
+        # Check user is valid
+        try:
+            returned_request = Request.objects(id=id)[0]
+        except:
+            return res("Request doesn't exist", 'error'), 400
+
+        # Check category is a valid category
+        try:
+            category = Category.objects(id=req['category'])[0]
+        except:
+            return res("Category doesn't exist", 'error'), 400
+
+        request_parameter = RequestParameter(
+            category=category,
+            name=req['name'],
+            amount=req['amount'],
+            date_expense=req['date_expense'],
+            billable_client=req['billable_client'],
+            payment_method=req['payment_method']
+        )
+
+        # TODO: File support
+
+        # Optional field
+        if(req['description']):
+            request_parameter['description'] = req['description']
+
+        returned_request['request_parameter_list'].append(request_parameter)
+        returned_request.save()
+
+        return res('Request Parameter added', 'success')
+
+    def get(self, id):
+        # Check request is valid
+        try:
+            returned_request = Request.objects(id=id)[0]
+        except:
+            return res("Request doesn't exist", 'error'), 400
+
+        return res('Return Parameters Returned', 'success', request_parameters=returned_request['request_parameter_list'])
+
+
+class RequestParameterAPI(Resource):
+    pass

@@ -22,6 +22,8 @@ api.add_resource(UserProfileAPI, '/user/<id>/profile')
 # Request
 api.add_resource(RequestListAPI, '/request')
 api.add_resource(RequestAPI, '/request/<id>')
+api.add_resource(RequestParameterListAPI, '/request/<id>/parameter')
+api.add_resource(RequestParameterAPI, '/request/<id>/parameter/<pid>')
 
 
 # Category
