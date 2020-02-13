@@ -12,11 +12,20 @@ class EmployeeApplicationHomeScreen extends Component {
   static navigationOptions = {drawerIcon: (
       <Image source = {require('../assets/home.png')} style = {{height: 24, width: 24}} ></Image>
   )}
+
+  state = {
+    search: '',
+  };
+
+  updateSearch = search => {
+    this.setState({ search });
+  };
   
   render(){
 
     const {navigate} = this.props;
-    
+    const { search } = this.state;
+
     return (
 
       
@@ -24,7 +33,7 @@ class EmployeeApplicationHomeScreen extends Component {
           <CustomHeader title = "Your Applications" navigation = {this.props.navigation}></CustomHeader>
         
           <Content >
-              <Text></Text>
+              <SearchBar placeholder="Search for an application..." onChangeText={this.updateSearch} value = {search} />
           </Content>
 
       </Container>
