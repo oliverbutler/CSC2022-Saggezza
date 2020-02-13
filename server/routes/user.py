@@ -3,10 +3,12 @@ from flask_restful import Resource
 from functions import *
 from mongoengine import *
 from schema.user import *
-
+from PIL import Image
 from model import User, Request
 import datetime
+import os 
 
+user_employee_list_schema = UserEmployeeListSchema()
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
@@ -92,6 +94,7 @@ class UserProfileAPI(Resource):
                 im.thumbnail(size)
                 im.save(UPLOAD_FOLDER + id + ".jpg")
                 user['profile_picture'] = "/profile/" + id + ".jpg"
+                user.save()
                 return res('Profile image added successfully', 'success')
             else:
                 return res("No file in the request called file", "error"), 400
@@ -100,8 +103,17 @@ class UserProfileAPI(Resource):
 
     def delete(self, id):
         # TODO: To be implemented
-        return res('Profile image deleted', 'success')
-
+        try:
+            user = User.objects(id=id)[0]
+            if os.path.exists(UPLOAD_FOLDER + id + ".jpg"):
+                os.remove(os.path.join(UPLOAD_FOLDER + id + ".jpg"))
+                user['profile_picture'] = "./static/" + "default-profile.jpg"
+                user.save()
+                return res("Profile image deleted", 'success')
+            else:
+                return res("File does not exist", "error"), 400
+        except:
+            return res("User doesn't exist", 'error'), 400
 
 class UserRequestListAPI(Resource):
     # |- /user/<id>/request NOTE: User must be an employee
@@ -146,13 +158,26 @@ class UserRequestAPI(Resource):
 class UserEmployeeListAPI(Resource):
     # |- /user/<id>/employee NOTE: User must be a Manager
     # |- POST: Add new employee
-    # |- GET: Return all employees
 
-    def put(self, id):
-        return res('Employee Added', 'success')
-
-    def get(self, id):
-        return res('All employees returned', 'success')
+    def post(self, id):
+        req = parse(request)
+        errors = user_employee_list_schema.validate(req)
+        if errors:
+            return res('Errors in request', 'alert', errors=errors), 400
+        try:
+            user = User.objects(id=id)[0]
+        except:
+            return res("User doesn't exist", 'error'), 400
+        if user["role"] == 'manager':
+            try:
+                employee = User.objects(id=req['uuid'])[0]
+            except:
+                return res("Employee's uuid is not valid", 'error'), 400
+            user['employees'].append(req['uuid'])
+            user.save()
+            return res('Employee Added', 'success', user=convert_query(user))
+        else:
+            return res('User is not a manager', 'error'), 400
 
 
 class UserEmployeeAPI(Resource):
@@ -160,4 +185,5 @@ class UserEmployeeAPI(Resource):
     # |- DELETE: Delete employee
 
     def delete(self, id, eid):
+        
         return res('Deleted employee', 'success')
