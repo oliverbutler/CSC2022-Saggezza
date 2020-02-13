@@ -20,7 +20,7 @@ import datetime
 
 
 class Category(Document):
-    name = StringField(requried=True)
+    name = StringField(requried=True, max_length=64)
 
 
 class Client(Document):
