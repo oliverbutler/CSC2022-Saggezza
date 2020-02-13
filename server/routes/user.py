@@ -6,9 +6,7 @@ from schema.user import *
 from PIL import Image
 from model import User, Request
 import datetime
-import os 
-
-user_employee_list_schema = UserEmployeeListSchema()
+import os
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
@@ -115,84 +113,61 @@ class UserProfileAPI(Resource):
         except:
             return res("User doesn't exist", 'error'), 400
 
-class UserRequestListAPI(Resource):
-    # |- /user/<id>/request NOTE: User must be an employee
-    # |- POST: Add a new request
-    # |- GET: Return all of a users requests
 
-    def post(self, id):
-        req = parse(request)
-        try:
-            user = User.objects(id=id)[0]
-        except:
-            return res("User doesn't exist", 'error'), 400
+# class UserRequestAPI(Resource):
+#     # |- /user/<id>/request/<rid> NOTE: User must be an employee
+#     # |- PUT: Modify request
+#     # |- DELETE: Delete request
+#     # |- GET: Return request
 
-        new_request = Request(
-            name="test",
-            date_submit=datetime.datetime.now(),
-            status="pending"
-        )
+#     def put(self, id, rid):
+#         return res('Request modified', 'success')
 
-        user['request_list'].append(new_request)
-        user.save()
+#     def delete(self, id, rid):
+#         return res('Deleted request', 'success')
 
-        return res('Add a new request', 'success')
+#     def get(self, id, rid):
+#         return res('Returned request', 'success')
 
 
-class UserRequestAPI(Resource):
-    # |- /user/<id>/request/<rid> NOTE: User must be an employee
-    # |- PUT: Modify request
-    # |- DELETE: Delete request
-    # |- GET: Return request
+# class UserEmployeeListAPI(Resource):
+#     # |- /user/<id>/employee NOTE: User must be a Manager
+#     # |- POST: Add new employee
 
-    def put(self, id, rid):
-        return res('Request modified', 'success')
-
-    def delete(self, id, rid):
-        return res('Deleted request', 'success')
-
-    def get(self, id, rid):
-        return res('Returned request', 'success')
-
-
-class UserEmployeeListAPI(Resource):
-    # |- /user/<id>/employee NOTE: User must be a Manager
-    # |- POST: Add new employee
-
-    def post(self, id):
-        req = parse(request)
-        errors = user_employee_list_schema.validate(req)
-        if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
-        try:
-            user = User.objects(id=id)[0]
-        except:
-            return res("User doesn't exist", 'error'), 400
-        if user["role"] == 'manager':
-            try:
-                employee = User.objects(id=req['uuid'])[0]
-            except:
-                return res("Employee's uuid is not valid", 'error'), 400
-            user['employees'].append(req['uuid'])
-            user.save()
-            return res('Employee Added', 'success', user=convert_query(user))
-        else:
-            return res('User is not a manager', 'error'), 400
+#     def post(self, id):
+#         req = parse(request)
+#         errors = user_employee_list_schema.validate(req)
+#         if errors:
+#             return res('Errors in request', 'alert', errors=errors), 400
+#         try:
+#             user = User.objects(id=id)[0]
+#         except:
+#             return res("User doesn't exist", 'error'), 400
+#         if user["role"] == 'manager':
+#             try:
+#                 employee = User.objects(id=req['uuid'])[0]
+#             except:
+#                 return res("Employee's uuid is not valid", 'error'), 400
+#             user['employees'].append(req['uuid'])
+#             user.save()
+#             return res('Employee Added', 'success', user=convert_query(user))
+#         else:
+#             return res('User is not a manager', 'error'), 400
 
 
-class UserEmployeeAPI(Resource):
-    # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
-    # |- DELETE: Delete employee
+# class UserEmployeeAPI(Resource):
+#     # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
+#     # |- DELETE: Delete employee
 
-    def delete(self, id, eid):
-        try:
-            user = User.objects(id=id)[0]
-        except:
-            return res("User doesn't exist", 'error'), 400
-        if user["role"] == "manager":
-            try:
-                user['employees'].remove(eid)
-                user.save()
-                return res('Employee deleted', 'success', user=convert_query(user))
-            except:
-                return res("Employee not found", "error"), 400
+#     def delete(self, id, eid):
+#         try:
+#             user = User.objects(id=id)[0]
+#         except:
+#             return res("User doesn't exist", 'error'), 400
+#         if user["role"] == "manager":
+#             try:
+#                 user['employees'].remove(eid)
+#                 user.save()
+#                 return res('Employee deleted', 'success', user=convert_query(user))
+#             except:
+#                 return res("Employee not found", "error"), 400
