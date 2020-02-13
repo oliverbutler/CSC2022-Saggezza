@@ -24,16 +24,19 @@ class ClientListAPI(Resource):
             return res('Errors in request', 'alert', errors=errors), 400
 
         client = Client(
-            name = req['name'],
-            email = req['email'],
+            name=req['name'],
         )
+
+        if 'email' in req:
+            client['email'] = req['email'],
+
         client.save()
 
         return res('Added a new client', 'success')
 
     def get(self):
         clients = Client.objects().all()
-        return res('Returned list of clients', 'success', clients = convert_query(clients))
+        return res('Returned list of clients', 'success', clients=convert_query(clients))
 
 
 class ClientAPI(Resource):
@@ -56,7 +59,6 @@ class ClientAPI(Resource):
             client[i] = req[i]
 
         return res('Modified client', 'success', client=convert_query(client))
-
 
     def delete(self, id):
         try:

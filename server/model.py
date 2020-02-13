@@ -13,9 +13,11 @@ from mongoengine import (
     GeoPointField,
     EmbeddedDocumentListField,
     ListField,
-    ReferenceField
+    ReferenceField,
+    ObjectIdField
 )
-from bson import json_util
+from bson import json_util, ObjectId
+
 import datetime
 
 
@@ -33,6 +35,7 @@ class Project(Document):
 
 
 class RequestParameter(EmbeddedDocument):
+    _id = ObjectIdField(default=lambda: ObjectId())
     category = ReferenceField(Category, required=True)
     name = StringField(required=True, max_length=64)
     amount = DecimalField(required=True)

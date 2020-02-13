@@ -17,6 +17,9 @@ class ProjectListAPI(Resource):
     # \- GET: Return all projects
     def post(self):
         req = parse(request)
+        errors = ProjectListSchema().validate(req)
+        if errors:
+            return res('Errors in request', 'alert', errors=errors), 400
         project = Project(
             name=req['name']
         )
@@ -37,6 +40,9 @@ class ProjectAPI(Resource):
     def put(self, id):
         try:
             req = parse(request)
+            errors = ProjectSchema().validate(req)
+            if errors:
+                return res('Errors in request', 'alert', errors=errors), 400
             project = Project.objects(id=id)
 
             for i in req:

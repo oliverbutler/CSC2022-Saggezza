@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from functions import *
 from mongoengine import *
-
+from schema.category import *
 from model import Category
 
 
@@ -16,6 +16,9 @@ class CategoryListAPI(Resource):
     # \- GET: Return all categories
     def post(self):
         req = parse(request)
+        errors = CategorySchema().validate(req)
+        if errors:
+            return res('Errors in request', 'alert', errors=errors), 400
         category = Category(
             name=req['name']
         )
