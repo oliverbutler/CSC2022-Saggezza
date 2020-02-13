@@ -85,19 +85,23 @@ class UserProfileAPI(Resource):
     def post(self, id):
         try:
             user = User.objects(id=id)[0]
-            if 'file' in request.files:
-                file = request.files["file"]
-                size = 128, 128
-                im = Image.open(file)
-                im.thumbnail(size)
-                im.save(UPLOAD_FOLDER + id + ".jpg")
-                user['profile_picture'] = "/profile/" + id + ".jpg"
-                user.save()
-                return res('Profile image added successfully', 'success')
-            else:
-                return res("No file in the request called file", "error"), 400
         except:
             return res("User doesn't exist", 'error'), 400
+        if 'file' in request.files:
+            file = request.files["file"]
+            size = 256, 256
+            im = Image.open(file)
+            im.thumbnail(size)
+
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+
+            im.save(UPLOAD_FOLDER + id + ".jpg")
+            user['profile_picture'] = "/profile/" + id + ".jpg"
+            user.save()
+            return res('Profile image added successfully', 'success')
+        else:
+            return res("No file in the request called file", "error"), 400
 
     def delete(self, id):
         try:
