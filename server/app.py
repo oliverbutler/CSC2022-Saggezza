@@ -15,9 +15,8 @@ api = Api(api_bp)
 api.add_resource(UserListAPI, '/user')
 api.add_resource(UserAPI, '/user/<id>')
 api.add_resource(UserProfileAPI, '/user/<id>/profile')
-
-# api.add_resource(UserEmployeeListAPI, '/user/<id>/employee')
-# api.add_resource(UserEmployeeAPI, '/user/<id>/employee/<eid>')
+api.add_resource(UserEmployeeListAPI, '/user/<id>/employee')
+api.add_resource(UserEmployeeAPI, '/user/<id>/employee/<eid>')
 
 # Request
 api.add_resource(RequestListAPI, '/request')
