@@ -185,5 +185,14 @@ class UserEmployeeAPI(Resource):
     # |- DELETE: Delete employee
 
     def delete(self, id, eid):
-        
-        return res('Deleted employee', 'success')
+        try:
+            user = User.objects(id=id)[0]
+        except:
+            return res("User doesn't exist", 'error'), 400
+        if user["role"] == "manager":
+            try:
+                user['employees'].remove(eid)
+                user.save()
+                return res('Employee deleted', 'success', user=convert_query(user))
+            except:
+                return res("Employee not found", "error"), 400
