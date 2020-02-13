@@ -59,7 +59,7 @@ class User(Document):
 
 class Request(Document):
     name = StringField(required=True, max_length=64)
-    employee = ReferenceField(User)
+    employee = ReferenceField(User, required=True)
     date_submit = DateTimeField(required=True)
     date_review = DateTimeField()
     comment = StringField()
