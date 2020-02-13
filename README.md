@@ -10,7 +10,7 @@ Please follow this guide to setup your Repository correctly, any issues please t
 
 - [Git](https://git-scm.com/downloads) or Git-bash for Windows
 - [VS-Code](https://code.visualstudio.com/download) Ideally
-- [Git-flow](https://github.com/nvie/gitflow/wiki/Installation) To help with the Git Workflow
+- [Git-flow](https://github.com/nvie/gitflow/wiki/Installation) To help with the Git Workflow (this is installed with Git for Windows by default)
 
 ## Setup
 
