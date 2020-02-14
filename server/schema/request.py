@@ -5,8 +5,6 @@ from functions import *
 
 class RequestListSchema(Schema):
     name = fields.Str(required=True, validate=Length(max=32))
-    role = fields.Str(required=True, validate=Length(
-        max=32))  # TODO: Add selections for role
     employee = fields.Str(required=True, validate=Length(equal=24))
 
 
