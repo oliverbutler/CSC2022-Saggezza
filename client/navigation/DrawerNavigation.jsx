@@ -5,6 +5,7 @@ import ApplicationStack from "./ApplicationsStack";
 import RequestsStack from "./RequestsStack";
 import SettingsStack from "./SettingsStack";
 import Requests from "../screens/Requests";
+import UserStack from "./UserStack";
 
 import { Container, Header, Content, Body } from "native-base";
 import { StyleSheet, View, Text, Image } from "react-native";
@@ -39,10 +40,13 @@ const RootDrawerNavigator = createDrawerNavigator(
     },
     Requests: {
       screen: Requests
+    },
+    Users: {
+      screen: UserStack
     }
   },
   {
-    initialRouteName: "Applications",
+    initialRouteName: "Users",
     drawerPosition: "left",
     contentComponent: CustomDrawerContentComponent,
     drawerOpenRoute: "DrawerOpen",

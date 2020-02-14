@@ -7,22 +7,8 @@ import { Icon, Button, Container, Header, Content, Left } from "native-base";
 
 //Custom Component Imports
 import CustomHeader from "../components/CustomHeader";
-import UserPreview from "../components/UserPreview";
-
-import "../secrets.js";
 
 class Requests extends Component {
-  state = {
-    users: []
-  };
-
-  componentDidMount() {
-    axios.get(`http://` + ip + `:5000/user`).then(res => {
-      const users = res.data.users;
-      this.setState({ users });
-    });
-  }
-
   render() {
     const { navigate } = this.props;
     return (
@@ -33,9 +19,7 @@ class Requests extends Component {
         ></CustomHeader>
 
         <Content>
-          {this.state.users.map((item, key) => (
-            <UserPreview key={key} user={item} />
-          ))}
+          <Text>Request Page</Text>
         </Content>
       </Container>
     );
