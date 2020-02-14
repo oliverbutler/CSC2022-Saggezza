@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, ActivityIndicator, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
+import Role from "../components/Role";
 
 import "../secrets";
 
@@ -33,7 +34,7 @@ export class UserPreview extends Component {
             Name: {this.props.user.first_name} {this.props.user.last_name}
           </Text>
           <Text>Email: {this.props.user.email}</Text>
-          <Text>[{this.props.user.role}]</Text>
+          <Role role={this.props.user.role} />
         </View>
       </TouchableOpacity>
     );
