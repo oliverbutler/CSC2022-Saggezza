@@ -86,10 +86,18 @@ class RequestAPI(Resource):
 
     def get(self, id):
         try:
+            user = User.objects(id=id)[0]
+            returned_requests = Request.objects(employee=id)
+            return res('Users request returned successfully', 'success', returned_reuqests=convert_query(returned_requests))
+        except:
+            pass
+
+        try:
             returned_request = Request.objects(id=id)[0]
         except:
             return res("Request doesn't exist", 'error'), 400
-        return res('Retrieved Successfully', 'success', returned_request=convert_query(returned_request))
+
+        return res('Request returned successfully', 'success', returned_request=convert_query(returned_request))
 
 
 class RequestParameterListAPI(Resource):
