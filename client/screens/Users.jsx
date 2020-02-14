@@ -3,10 +3,10 @@ import axios from "axios";
 
 //Libary Imports
 import { StyleSheet, Text, View, Image } from "react-native";
-import { Icon, Button, Container, Header, Content, Left } from "native-base";
+import { Icon, Button, Container, Content, Left } from "native-base";
 
 //Custom Component Imports
-import CustomHeader from "../components/CustomHeader";
+import Header from "../components/Header";
 import UserPreview from "../components/UserPreview";
 
 import "../secrets.js";
@@ -29,21 +29,22 @@ class User extends Component {
       this.setState({ users });
     });
   }
-  leftFunction = () => {};
+
   render() {
     const { search } = this.state;
     return (
       <Container>
-        <CustomHeader
-          title="Users"
-          leftFunction={this.props.navigation.openDrawer}
+        <Header
+          title="All Users"
+          leftFunction={() => this.props.navigation.openDrawer()}
           leftIcon="ios-menu"
-        ></CustomHeader>
+        ></Header>
         <Content>
           <SearchBar
             placeholder="Search for an application..."
             onChangeText={this.updateSearch}
             value={search}
+            lightTheme={true}
           />
           {this.state.users.map((item, key) => (
             <UserPreview

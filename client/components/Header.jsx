@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
-  Container,
-  Header,
+  Header as NativeHeader,
   Left,
   Body,
   Right,
@@ -9,22 +8,22 @@ import {
   Icon,
   Title
 } from "native-base";
-export default class HeaderIconExample extends Component {
+export default class Header extends Component {
   render() {
     return (
-      <Header>
+      <NativeHeader>
         <Left>
           {this.props.leftIcon && (
-            <Button transparent onPress={() => this.props.leftFunction()}>
+            <Button transparent onPress={this.props.leftFunction}>
               <Icon name={this.props.leftIcon} />
             </Button>
           )}
         </Left>
-        <Body>
+        <Body style={{ flex: 3 }}>
           <Title>{this.props.title}</Title>
         </Body>
-        <Right>{this.props.children}</Right>
-      </Header>
+        <Right>{this.props.right}</Right>
+      </NativeHeader>
     );
   }
 }

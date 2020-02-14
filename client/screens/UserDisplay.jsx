@@ -1,20 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
-
+import { Image } from "react-native-elements";
 //Libary Imports
-import { StyleSheet, Text, View, Image } from "react-native";
-import {
-  Icon,
-  Button,
-  Container,
-  Header,
-  Content,
-  Left,
-  Right
-} from "native-base";
+import { StyleSheet, Text, View } from "react-native";
+import { Icon, Button, Container, Content, Left, Right } from "native-base";
 
 //Custom Component Imports
-import CustomHeader from "../components/CustomHeader";
+import Header from "../components/Header";
 
 import "../secrets.js";
 
@@ -23,18 +15,21 @@ class UserDisplay extends Component {
     const { user } = this.props.navigation.state.params;
     return (
       <Container>
-        <CustomHeader
-          title={user.first_name}
+        <Header
+          title={user.first_name + " " + user.last_name}
           leftFunction={this.props.navigation.goBack}
           leftIcon="ios-arrow-dropleft"
-        >
-          <Button transparent>
-            <Icon name="ios-trash" />
-          </Button>
-          <Button transparent>
-            <Icon name="md-build" />
-          </Button>
-        </CustomHeader>
+          right={
+            <>
+              <Button transparent>
+                <Icon name="ios-trash" />
+              </Button>
+              <Button transparent>
+                <Icon name="md-build" />
+              </Button>
+            </>
+          }
+        />
         <Content>
           <Text>
             {user.first_name} {user.last_name}
