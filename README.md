@@ -115,6 +115,47 @@ With Git-flow:
 $ git flow release finish '0.1.0'
 ```
 
+## Hotfix Branches
+
+![Hotfix Diagram](<https://wac-cdn.atlassian.com/dam/jcr:61ccc620-5249-4338-be66-94d563f2843c/05%20(2).svg?cdnVersion=813>)
+
+Maintenance or `hotfix` branches are used to quickly patch production releases. Hotfix branches are a lot like release branches and feature branches except they're based on `master` instead of `develop`. This is the only branch that should fork directly off of `master`. As soon as the fix is complete, it should be merged into both `master` and `develop` (or the current release branch), and `master` should be tagged with an updated version number.
+
+Having a dedicated line of development for bug fixes lets your team address issues without interrupting the rest of the workflow or waiting for the next release cycle. You can think of maintenance branches as ad hoc release branches that work directly with `master`.
+
+A `hotfix` branch can be created using the following methods:
+
+Without Git-flow:
+
+```shell
+$ git checkout master
+$ git checkout -b hotfix_branch
+```
+
+With Git-flow:
+
+```shell
+$ git flow hotfix start hotfix_branch
+```
+
+Similar to finishing a release branch, a hotfix branch gets merged into both master and develop.
+
+Without Git-flow:
+
+```shell
+$ git checkout master
+$ git merge hotfix_branch
+$ git checkout develop
+$ git merge hotfix_branch
+$ git branch -D hotfix_branch
+```
+
+With Git-flow:
+
+```shell
+$ git flow hotfix finish hotfix_branch
+```
+
 ## The Overall Flow
 
 1. A `develop` branch is created from `master`
