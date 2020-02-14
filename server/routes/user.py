@@ -58,6 +58,8 @@ class UserAPI(Resource):
         for i in req:
             user[i] = req[i]
 
+        user.save()
+
         return res('User modified', 'success', user=convert_query(user))
 
     def delete(self, id):
