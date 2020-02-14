@@ -33,30 +33,30 @@ class User extends Component {
   render() {
     const { search } = this.state;
     return (
-      <Container>
+      <View>
         <Header
           title="All Users"
           leftFunction={() => this.props.navigation.openDrawer()}
           leftIcon="ios-menu"
         ></Header>
-        <Content>
-          <SearchBar
-            placeholder="Search for an application..."
-            onChangeText={this.updateSearch}
-            value={search}
-            lightTheme={true}
+        {/* <Content> */}
+        <SearchBar
+          placeholder="Search for an application..."
+          onChangeText={this.updateSearch}
+          value={search}
+          lightTheme={true}
+        />
+        {this.state.users.map((item, key) => (
+          <UserPreview
+            onPress={() =>
+              this.props.navigation.navigate("UserDisplay", { user: item })
+            }
+            key={key}
+            user={item}
           />
-          {this.state.users.map((item, key) => (
-            <UserPreview
-              onPress={() =>
-                this.props.navigation.navigate("UserDisplay", { user: item })
-              }
-              key={key}
-              user={item}
-            />
-          ))}
-        </Content>
-      </Container>
+        ))}
+      </View>
+      // </Container>
     );
   }
 }
