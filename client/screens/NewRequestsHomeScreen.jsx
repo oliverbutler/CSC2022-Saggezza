@@ -3,7 +3,7 @@ import { Text, Image } from "react-native";
 import { Container, Content } from "native-base";
 
 //Import Custom Header to use on screen
-import CustomHeader from "../components/CustomHeader";
+import Header from "../components/Header";
 
 class NewRequestsHomeScreen extends Component {
   //Drawer Icon image
@@ -21,10 +21,10 @@ class NewRequestsHomeScreen extends Component {
 
     return (
       <Container style={{ backgroundColor: "#707070" }}>
-        <CustomHeader
+        <Header
           title="New Requests"
           navigation={this.props.navigation}
-        ></CustomHeader>
+        ></Header>
         <Content>
           <Text></Text>
         </Content>

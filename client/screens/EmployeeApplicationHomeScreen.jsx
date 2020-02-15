@@ -4,7 +4,7 @@ import { Container, Content } from "native-base";
 import { SearchBar } from "react-native-elements";
 
 //Import Custom Header to use on screen
-import CustomHeader from "../components/CustomHeader";
+import Header from "../components/Header";
 
 class EmployeeApplicationHomeScreen extends Component {
   //Drawer Icon image
@@ -31,10 +31,10 @@ class EmployeeApplicationHomeScreen extends Component {
 
     return (
       <Container style={{ backgroundColor: "#707070" }}>
-        <CustomHeader
+        <Header
           title="Your Applications"
           navigation={this.props.navigation}
-        ></CustomHeader>
+        ></Header>
 
         <Content>
           <SearchBar

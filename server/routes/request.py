@@ -88,7 +88,7 @@ class RequestAPI(Resource):
         try:
             user = User.objects(id=id)[0]
             returned_requests = Request.objects(employee=id)
-            return res('Users request returned successfully', 'success', returned_reuqests=convert_query(returned_requests))
+            return res('Users request returned successfully', 'success', returned_requests=convert_query(returned_requests))
         except:
             pass
 
