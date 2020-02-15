@@ -91,7 +91,7 @@ class UserDisplay extends Component {
                 padding: 10,
                 borderRadius: 5,
                 marginBottom: 10,
-                marginTop: 10
+                marginTop: 15
               }}
               key={key}
             >
