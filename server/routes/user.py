@@ -7,6 +7,7 @@ from PIL import Image
 from model import User, Request
 import datetime
 import os
+import uuid
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
@@ -98,8 +99,10 @@ class UserProfileAPI(Resource):
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
 
-            im.save(UPLOAD_FOLDER + id + ".jpg")
-            user['profile_picture'] = "/profile/" + id + ".jpg"
+            name = uuid.uuid4().hex
+
+            im.save(UPLOAD_FOLDER + name + ".jpg")
+            user['profile_picture'] = "/profile/" + name + ".jpg"
             user.save()
             return res('Profile image added successfully', 'success')
         else:
@@ -108,9 +111,10 @@ class UserProfileAPI(Resource):
     def delete(self, id):
         try:
             user = User.objects(id=id)[0]
-            if os.path.exists(UPLOAD_FOLDER + id + ".jpg"):
-                os.remove(os.path.join(UPLOAD_FOLDER + id + ".jpg"))
-                user['profile_picture'] = "./static/" + "default-profile.jpg"
+            if os.path.exists('./static' + user['profile_picture']):
+                os.remove(os.path.join(
+                    './static' + user['profile_picture']))
+                user['profile_picture'] = "./static/default-profile.jpg"
                 user.save()
                 return res("Profile image deleted", 'success')
             else:
