@@ -5,6 +5,7 @@ import { Alert, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { Icon, Button, Container, Content, Left, Right } from "native-base";
 import { Image } from "react-native-elements";
 import Role from "../components/Role";
+import Label from "../components/Label";
 
 //Custom Component Imports
 import Header from "../components/Header";
@@ -78,24 +79,35 @@ class UserDisplay extends Component {
           </View>
 
           <Role role={this.state.user.role} />
-          <Text>First Name: {this.state.user.first_name}</Text>
-          <Text>Last Name: {this.state.user.last_name}</Text>
-          <Text>Email: {this.state.user.email}</Text>
+          <Label label="Name">
+            {this.state.user.first_name} {this.state.user.last_name}
+          </Label>
+          <Label label="Email">{this.state.user.email}</Label>
 
           {this.state.requests.map((request, key) => (
-            <View style={{ padding: 10 }} key={key}>
-              <Text>Name: {request.name}</Text>
-              <Text>Status: {request.status}</Text>
+            <View
+              style={{
+                backgroundColor: "#f5f5f5",
+                padding: 10,
+                borderRadius: 5,
+                marginBottom: 10,
+                marginTop: 10
+              }}
+              key={key}
+            >
+              <Label label="Name">{request.name}</Label>
+              <Role role={request.status}></Role>
               {request.request_parameter_list.map((parameter, key) => (
                 <View style={{ padding: 10 }} key={key}>
-                  <Text>Name: {parameter.name}</Text>
-                  <Text>Category: {parameter.category.$oid}</Text>
-                  <Text>Amount: {parameter.amount}</Text>
-                  <Text>
-                    Billable to Client:{" "}
+                  <Label label="Name">{parameter.name}</Label>
+                  <Label label="Category">{parameter.category.$oid}</Label>
+                  <Label label="Amount">{parameter.amount}</Label>
+                  <Label label="Billable">
                     {parameter.billable_client ? "True" : "False"}
-                  </Text>
-                  <Text>Description: {parameter.description}</Text>
+                  </Label>
+                  <Label label="Description">
+                    Description: {parameter.description}
+                  </Label>
                 </View>
               ))}
             </View>

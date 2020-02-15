@@ -3,6 +3,7 @@ import { View, ActivityIndicator, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
 import Role from "../components/Role";
+import Label from "../components/Label";
 
 import "../secrets";
 
@@ -30,10 +31,10 @@ export class UserPreview extends Component {
           PlaceholderContent={<ActivityIndicator />}
         />
         <View>
-          <Text>
-            Name: {this.props.user.first_name} {this.props.user.last_name}
-          </Text>
-          <Text>Email: {this.props.user.email}</Text>
+          <Label label="Name">
+            {this.props.user.first_name} {this.props.user.last_name}
+          </Label>
+          <Label label="Email">{this.props.user.email}</Label>
           <Role role={this.props.user.role} />
         </View>
       </TouchableOpacity>

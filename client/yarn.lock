@@ -1093,6 +1093,14 @@
     hoist-non-react-statics "^3.3.2"
     react-native-safe-area-view "^0.14.8"
 
+"@react-navigation/stack@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-5.0.4.tgz#19f0373b2fc9a5e315870820362001c17fa31a4a"
+  integrity sha512-B2CWlRjCbw7XuDUp1aBKSIf89xUEfcOs8YK57tCF0S12rZG59919dORf2m7zPOq3VBJ84TR08psnDzU4pVUJ0g==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+
 "@types/fbemitter@^2.0.32":
   version "2.0.32"
   resolved "https://registry.yarnpkg.com/@types/fbemitter/-/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
