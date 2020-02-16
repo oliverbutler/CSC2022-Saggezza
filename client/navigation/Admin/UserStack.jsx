@@ -18,7 +18,7 @@ function UserStack() {
         options={{
           headerLeft: () => (
             <Icon
-              size="35"
+              size={35}
               name="ios-menu"
               type="ionicon"
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}

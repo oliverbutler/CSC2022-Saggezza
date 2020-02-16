@@ -4,33 +4,21 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Requests from "../screens/Admin/Requests";
 import UserStack from "./Admin/UserStack";
 
-// import Drawer from "../components/Drawer";
+import Drawer from "../components/Drawer";
 
-// const screens = {
-//   Users: {
-//     screen: UserStack
-//   },
-//   Requests: {
-//     screen: Requests
-//   }
-// };
-
-// const config = {
-//   initialRouteName: "Users",
-//   contentComponent: Drawer,
-//   drawerOpenRoute: "DrawerOpen",
-//   drawerCloseRoute: "DrawerClose",
-//   drawerToggleRoute: "DrawerToggle"
-// };
-
-const Drawer = createDrawerNavigator();
+const DrawerNav = createDrawerNavigator();
 
 function DrawerNavigator() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Requests" component={Requests} />
-      <Drawer.Screen name="UserStack" component={UserStack} />
-    </Drawer.Navigator>
+    <DrawerNav.Navigator
+      drawerContent={Drawer}
+      drawerContentOptions={{
+        activeTintColor: "rgb(159,205,54)"
+      }}
+    >
+      <DrawerNav.Screen name="Requests" component={Requests} />
+      <DrawerNav.Screen name="Users" component={UserStack} />
+    </DrawerNav.Navigator>
   );
 }
 
