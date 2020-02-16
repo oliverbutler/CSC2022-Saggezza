@@ -10,6 +10,7 @@ function DrawerNavigator() {
   return (
     <DrawerNav.Navigator
       drawerContent={Drawer}
+      initialRouteName="Users"
       drawerContentOptions={{
         activeTintColor: "black"
       }}

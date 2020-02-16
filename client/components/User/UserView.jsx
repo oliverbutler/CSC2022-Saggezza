@@ -1,24 +1,20 @@
 // Libary Imports
 import React, { Component } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  SafeAreaView
-} from "react-native";
-import { Image } from "react-native-elements";
+import { View, ScrollView } from "react-native";
+import { Avatar, Text } from "react-native-elements";
 import axios from "axios";
 
-import { useNavigation } from "@react-navigation/native";
-
 // Custom Component Imports
-import Role from "./Role";
 import Label from "../Label";
 
 // Config Imports
 import "../../secrets.js";
+
+const getProfile = user => {
+  if (user.profile_picture != "") {
+    return "http://" + ip + ":5000/static" + user.profile_picture;
+  } else return "none";
+};
 
 class UserView extends Component {
   state = {
@@ -42,60 +38,27 @@ class UserView extends Component {
 
   render() {
     return (
-      <SafeAreaView>
-        <View style={{ alignSelf: "center" }}>
-          <Image
+      <ScrollView>
+        <View style={{ alignSelf: "center", paddingTop: 15, padding: 10 }}>
+          <Avatar
+            rounded
+            size="xlarge"
+            title={
+              this.state.user.first_name.charAt(0) +
+              this.state.user.last_name.charAt(0)
+            }
             source={{
-              uri:
-                "http://" +
-                ip +
-                ":5000/static" +
-                this.state.user.profile_picture
+              uri: getProfile(this.state.user)
             }}
-            style={{
-              width: 150,
-              height: 150,
-              marginRight: 10
-            }}
-            PlaceholderContent={<ActivityIndicator />}
           />
         </View>
-
-        <Role role={this.state.user.role} />
-        <Label label="Name">
-          {this.state.user.first_name} {this.state.user.last_name}
-        </Label>
-        <Label label="Email">{this.state.user.email}</Label>
-
-        {this.state.requests.map((request, key) => (
-          <View
-            style={{
-              backgroundColor: "#f5f5f5",
-              padding: 10,
-              borderRadius: 5,
-              marginBottom: 10,
-              marginTop: 15
-            }}
-            key={key}
-          >
-            <Label label="Name">{request.name}</Label>
-            <Role role={request.status}></Role>
-            {request.request_parameter_list.map((parameter, key) => (
-              <View style={{ padding: 10 }} key={key}>
-                <Label label="Name">{parameter.name}</Label>
-                <Label label="Category">{parameter.category.$oid}</Label>
-                <Label label="Amount">{parameter.amount}</Label>
-                <Label label="Billable">
-                  {parameter.billable_client ? "True" : "False"}
-                </Label>
-                <Label label="Description">
-                  Description: {parameter.description}
-                </Label>
-              </View>
-            ))}
-          </View>
-        ))}
-      </SafeAreaView>
+        <View style={{ alignItems: "center" }}>
+          <Text h2>
+            {this.state.user.first_name + " " + this.state.user.last_name}
+          </Text>
+          <Text>{this.state.user.email}</Text>
+        </View>
+      </ScrollView>
     );
   }
 }

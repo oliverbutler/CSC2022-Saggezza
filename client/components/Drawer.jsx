@@ -4,7 +4,14 @@ import {
   DrawerContentScrollView,
   DrawerItemList
 } from "@react-navigation/drawer";
-import { SafeAreaView, Image, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView
+} from "react-native";
 
 function CustomDrawerContent(props) {
   return (
@@ -26,7 +33,9 @@ function CustomDrawerContent(props) {
           {"Thomas Pal"}
         </Text>
       </View>
-      <DrawerItemList {...props} />
+      <ScrollView>
+        <DrawerItemList {...props} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
