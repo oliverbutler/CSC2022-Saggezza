@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import Requests from "../screens/Admin/Requests";
+import RequestStack from "./Admin/RequestStack";
 import UserStack from "./Admin/UserStack";
 
 import Drawer from "../components/Drawer";
@@ -16,7 +16,7 @@ function DrawerNavigator() {
         activeTintColor: "rgb(159,205,54)"
       }}
     >
-      <DrawerNav.Screen name="Requests" component={Requests} />
+      <DrawerNav.Screen name="Requests" component={RequestStack} />
       <DrawerNav.Screen name="Users" component={UserStack} />
     </DrawerNav.Navigator>
   );
