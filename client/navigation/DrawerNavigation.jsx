@@ -46,7 +46,7 @@ const RootDrawerNavigator = createDrawerNavigator(
     }
   },
   {
-    initialRouteName: "Users",
+    initialRouteName: "Applications",
     drawerPosition: "left",
     contentComponent: CustomDrawerContentComponent,
     drawerOpenRoute: "DrawerOpen",
