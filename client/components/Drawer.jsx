@@ -26,7 +26,6 @@ function CustomDrawerContent(props) {
           {"Thomas Pal"}
         </Text>
       </View>
-
       <DrawerItemList {...props} />
     </SafeAreaView>
   );
