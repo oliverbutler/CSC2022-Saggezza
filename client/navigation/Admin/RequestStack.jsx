@@ -32,9 +32,7 @@ function RequestStack() {
         name="RequestView"
         component={RequestView}
         options={({ route }) => ({
-          title:
-            route.params.request.name
-            
+          title: route.params.request.name
         })}
       />
     </Stack.Navigator>

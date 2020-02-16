@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { SearchBar, ListItem } from "react-native-elements";
 //Import Custom Header to use on screen
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
@@ -42,9 +42,12 @@ class EmployeeApplicationHomeScreen extends Component {
         <FlatList
           data={this.state.requests}
           renderItem={({ item }) => (
-            <RequestListView onPress={() =>
-              this.props.navigation.navigate("RequestView", { request: item })
-            } request={item} />
+            <RequestListView
+              onPress={() =>
+                this.props.navigation.navigate("RequestView", { request: item })
+              }
+              request={item}
+            />
           )}
           keyExtractor={item => item._id.$oid}
           refreshControl={
