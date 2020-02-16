@@ -1,74 +1,37 @@
-import React from "react";
-import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
-import { createAppContainer } from "react-navigation";
-import ApplicationStack from "./ApplicationsStack";
-import RequestsStack from "./RequestsStack";
-import SettingsStack from "./SettingsStack";
-import Requests from "../screens/Requests";
-import UserStack from "./UserStack";
+import React, { Component } from "react";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { Container, Header, Content, Body } from "native-base";
-import { StyleSheet, View, Text, Image } from "react-native";
+import Requests from "../screens/Admin/Requests";
+import UserStack from "./Admin/UserStack";
 
-const CustomDrawerContentComponent = props => (
-  <Container style={{ backgroundColor: "#91D000" }}>
-    <Header style={{ height: 200, backgroundColor: "#707070" }}>
-      <Body>
-        <Image
-          style={styles.drawerImage}
-          source={require("../assets/saggezza.png")}
-        />
-      </Body>
-    </Header>
+// import Drawer from "../components/Drawer";
 
-    <Content>
-      <DrawerItems {...props} />
-    </Content>
-  </Container>
-);
+// const screens = {
+//   Users: {
+//     screen: UserStack
+//   },
+//   Requests: {
+//     screen: Requests
+//   }
+// };
 
-const RootDrawerNavigator = createDrawerNavigator(
-  {
-    Applications: {
-      screen: ApplicationStack
-    },
-    NewRequests: {
-      screen: RequestsStack
-    },
-    Settings: {
-      screen: SettingsStack
-    },
-    Requests: {
-      screen: Requests
-    },
-    Users: {
-      screen: UserStack
-    }
-  },
-  {
-    initialRouteName: "Users",
-    drawerPosition: "left",
-    contentComponent: CustomDrawerContentComponent,
-    drawerOpenRoute: "DrawerOpen",
-    drawerCloseRoute: "DrawerClose",
-    drawerToggleRoute: "DrawerToggle",
-    drawerBackgroundColor: "#91D000"
-  }
-);
+// const config = {
+//   initialRouteName: "Users",
+//   contentComponent: Drawer,
+//   drawerOpenRoute: "DrawerOpen",
+//   drawerCloseRoute: "DrawerClose",
+//   drawerToggleRoute: "DrawerToggle"
+// };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  },
+const Drawer = createDrawerNavigator();
 
-  drawerImage: {
-    height: 150,
-    width: 150,
-    borderRadius: 75
-  }
-});
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Requests" component={Requests} />
+      <Drawer.Screen name="UserStack" component={UserStack} />
+    </Drawer.Navigator>
+  );
+}
 
-export default createAppContainer(RootDrawerNavigator);
+export default DrawerNavigator;

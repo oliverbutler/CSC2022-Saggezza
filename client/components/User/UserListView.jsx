@@ -1,13 +1,17 @@
+// Library Imports
 import React, { Component } from "react";
 import { View, ActivityIndicator, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
-import Role from "../components/Role";
-import Label from "../components/Label";
 
-import "../secrets";
+// Custom Component Imports
+import Role from "./Role";
+import Label from "../Label";
 
-export class UserPreview extends Component {
+// Config Imports
+import "../../secrets.js";
+
+export class UserListView extends Component {
   render() {
     return (
       <TouchableOpacity
@@ -42,4 +46,4 @@ export class UserPreview extends Component {
   }
 }
 
-export default UserPreview;
+export default UserListView;

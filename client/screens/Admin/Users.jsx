@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-//Libary Imports
+// Libary Imports
 import { RefreshControl, SafeAreaView, View } from "react-native";
-
-//Custom Component Imports
-import Header from "../components/Header";
-import UserPreview from "../components/UserPreview";
-
-import "../secrets.js";
 import { FlatList } from "react-native-gesture-handler";
+
+// Custom Component Imports
+import Header from "../../components/Header";
+import UserPreview from "../../components/User/UserListView";
+
+// Config Import
+import "../../secrets.js";
 
 class User extends Component {
   constructor(props) {
@@ -37,18 +38,13 @@ class User extends Component {
   render() {
     return (
       <View>
-        <Header
-          title="All Users"
-          leftFunction={() => this.props.navigation.openDrawer()}
-          leftIcon="ios-menu"
-        ></Header>
         <SafeAreaView style={{ height: "100%" }}>
           <FlatList
             data={this.state.users}
             renderItem={({ item }) => (
               <UserPreview
                 onPress={() =>
-                  this.props.navigation.navigate("UserDisplay", { user: item })
+                  this.props.navigation.navigate("UserView", { user: item })
                 }
                 user={item}
               />
