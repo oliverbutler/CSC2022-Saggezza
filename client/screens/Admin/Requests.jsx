@@ -2,9 +2,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-// Custom Component Imports
-import Header from "../../components/Header";
-
 // Config Import
 import "../../secrets.js";
 

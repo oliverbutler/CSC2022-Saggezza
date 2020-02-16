@@ -6,7 +6,6 @@ import { RefreshControl, SafeAreaView, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 // Custom Component Imports
-import Header from "../../components/Header";
 import UserPreview from "../../components/User/UserListView";
 
 // Config Import
