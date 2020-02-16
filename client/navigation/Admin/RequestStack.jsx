@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
 import Requests from "../../screens/Admin/Requests";
+import RequestView from "../../components/Request/RequestView";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,15 @@ function RequestStack() {
           headerLeftContainerStyle: { paddingLeft: 10 },
           title: "All Requests"
         }}
+      />
+      <Stack.Screen
+        name="RequestView"
+        component={RequestView}
+        options={({ route }) => ({
+          title:
+            route.params.request.name
+            
+        })}
       />
     </Stack.Navigator>
   );
