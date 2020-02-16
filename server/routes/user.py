@@ -114,7 +114,7 @@ class UserProfileAPI(Resource):
             if os.path.exists('./static' + user['profile_picture']):
                 os.remove(os.path.join(
                     './static' + user['profile_picture']))
-                user['profile_picture'] = "./static/default-profile.jpg"
+                user['profile_picture'] = "/default-profile.jpg"
                 user.save()
                 return res("Profile image deleted", 'success')
             else:

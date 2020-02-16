@@ -31,7 +31,7 @@ function colour(status) {
   if (status == "draft") {
     return "#ffb9b0";
   }
-  
+  return "#b9ffb0";
 }
 
 export default ApplicationStatus;

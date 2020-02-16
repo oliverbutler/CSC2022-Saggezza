@@ -1,22 +1,26 @@
+// Libary Imports
 import React, { Component } from "react";
-import axios from "axios";
-//Libary Imports
 import { Alert, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { Icon, Button, Container, Content, Left, Right } from "native-base";
 import { Image } from "react-native-elements";
-import Role from "../components/Role";
-import Label from "../components/Label";
+import axios from "axios";
 
-//Custom Component Imports
-import Header from "../components/Header";
+import { useNavigation } from "@react-navigation/native";
 
-import "../secrets.js";
+// Custom Component Imports
+import Role from "./Role";
+import Label from "../Label";
+import Header from "../Label";
 
-class UserDisplay extends Component {
+// Config Imports
+import "../../secrets.js";
+
+class UserView extends Component {
   state = {
     requests: [],
-    user: this.props.navigation.state.params.user
+    user: this.props.route.params.user
   };
+
   componentDidMount() {
     axios
       .get(`http://` + ip + `:5000/request/` + this.state.user._id.$oid)
@@ -32,33 +36,11 @@ class UserDisplay extends Component {
   };
 
   render() {
+    // this.props.navigation.setOptions({
+    //   title: this.state.user.first_name + " " + this.state.user.last_name
+    // });
     return (
       <Container>
-        <Header
-          title={this.state.user.first_name + " " + this.state.user.last_name}
-          leftFunction={() => this.props.navigation.goBack()}
-          leftIcon="ios-arrow-dropleft"
-          right={
-            <>
-              <Button
-                transparent
-                onPress={() =>
-                  console.log("Delete Pressed " + this.state.user._id.$oid)
-                }
-              >
-                <Icon name="ios-trash" />
-              </Button>
-              <Button transparent>
-                <Icon
-                  name="md-build"
-                  onPress={() =>
-                    console.log("Modify Pressed " + this.state.user._id.$oid)
-                  }
-                />
-              </Button>
-            </>
-          }
-        />
         <Content>
           <View style={{ alignSelf: "center" }}>
             <Image
@@ -117,4 +99,4 @@ class UserDisplay extends Component {
     );
   }
 }
-export default UserDisplay;
+export default UserView;

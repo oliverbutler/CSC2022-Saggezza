@@ -1,13 +1,12 @@
-
 import React, { Component } from "react";
 import { View, ActivityIndicator, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
 
-import Label from "../components/Label"; 
-import ApplicationStatus from "../components/ApplicationStatus";
+import Label from "../Label";
+import RequestStatus from "./RequestStatus";
 
-import "../secrets";
+import "../../secrets";
 
 export class ApplicationsPreview extends Component {
   render() {
@@ -24,26 +23,16 @@ export class ApplicationsPreview extends Component {
           flexDirection: "row"
         }}
       >
-       
         <View>
-          <Label label="Name">
-            {this.props.request.name}
-          </Label>
-          <Label label="Employee ID">
-            {this.props.request.employee.$oid}
-          </Label>
+          <Label label="Name">{this.props.request.name}</Label>
+          <Label label="Employee ID">{this.props.request.employee.$oid}</Label>
 
           <Label label="Date Created">
-            {this.props.request.date_created.$date}
+            {/* {this.props.request.date_created.$date} */}
           </Label>
-         
-          <ApplicationStatus status={this.props.request.status} />
 
-          
-
-         
+          <RequestStatus status={this.props.request.status} />
         </View>
-        
       </TouchableOpacity>
     );
   }
