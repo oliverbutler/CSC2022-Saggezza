@@ -1,66 +1,70 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
 import { SearchBar, ListItem } from "react-native-elements";
+
+import { useNavigation } from "@react-navigation/native";
 //Import Custom Header to use on screen
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
-class EmployeeApplicationHomeScreen extends Component {
-  state = {
-    requests: [],
-    refreshing: true,
-    search: ""
-  };
 
-  componentDidMount() {
-    this.userRefresh();
-  }
+const Request = () => {
+  // state = {
+  //   requests: [],
+  //   refreshing: true,
+  //   // search: ""
+  // };
 
-  userRefresh() {
-    this.setState({ refreshing: true });
+  const [requests, setRequests] = useState([]);
+  const [refreshing, setRefreshing] = useState(true);
+
+  useEffect(() => {
+    userRefresh();
+  }, []);
+
+  const userRefresh = () => {
+    setRefreshing(true);
     axios.get(`http://` + ip + `:5000/request`).then(res => {
       const requests = res.data.requests;
-      this.setState({ requests });
-      this.setState({ refreshing: false });
+      setRequests(requests);
+      setRefreshing(false);
     });
-  }
-
-  updateSearch = search => {
-    this.setState({ search });
   };
 
-  render() {
-    const { navigate } = this.props;
-    const { search } = this.state;
-    return (
-      <SafeAreaView style={{ height: "100%" }}>
-        <SearchBar
-          placeholder="Search for an application..."
-          onChangeText={this.updateSearch}
-          value={search}
-          lightTheme={true}
-        />
-        <FlatList
-          data={this.state.requests}
-          renderItem={({ item }) => (
-            <RequestListView
-              onPress={() =>
-                this.props.navigation.navigate("RequestView", { request: item })
-              }
-              request={item}
-            />
-          )}
-          keyExtractor={item => item._id.$oid}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={() => this.userRefresh()}
-            />
-          }
-        />
-      </SafeAreaView>
-    );
-  }
-}
+  // updateSearch = search => {
+  //   this.setState({ search });
+  // };
 
-export default EmployeeApplicationHomeScreen;
+  const navigation = useNavigation();
+
+  return (
+    <SafeAreaView style={{ height: "100%" }}>
+      {/* <SearchBar
+        placeholder="Search for an application..."
+        onChangeText={updateSearch(search)}
+        value={search}
+        lightTheme={true}
+      /> */}
+      <FlatList
+        data={requests}
+        renderItem={({ item }) => (
+          <RequestListView
+            onPress={() =>
+              navigation.navigate("RequestView", { request: item })
+            }
+            request={item}
+          />
+        )}
+        keyExtractor={item => item._id.$oid}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => userRefresh()}
+          />
+        }
+      />
+    </SafeAreaView>
+  );
+};
+
+export default Request;
