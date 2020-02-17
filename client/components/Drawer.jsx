@@ -1,9 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 
-import {
-  DrawerContentScrollView,
-  DrawerItemList
-} from "@react-navigation/drawer";
+import { DrawerItemList } from "@react-navigation/drawer";
 import {
   SafeAreaView,
   Image,
@@ -13,7 +10,9 @@ import {
   ScrollView
 } from "react-native";
 
-function CustomDrawerContent(props) {
+import AppContext from "../context/AppContext";
+
+const CustomDrawerContent = props => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ backgroundColor: "#8a8a8a" }}>
@@ -29,16 +28,14 @@ function CustomDrawerContent(props) {
             textAlign: "center",
             color: "white"
           }}
-        >
-          {"Thomas Pal"}
-        </Text>
+        ></Text>
       </View>
       <ScrollView>
         <DrawerItemList {...props} />
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

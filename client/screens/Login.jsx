@@ -8,7 +8,7 @@ export class Login extends Component {
         <Text>Login Page</Text>
         <Button
           title="Sign In"
-          onPress={() => this.props.navigation.navigate("DrawerNavigation")}
+          onPress={() => this.props.navigation.navigate("Drawer")}
         />
       </View>
     );

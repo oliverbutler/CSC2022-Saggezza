@@ -3,6 +3,7 @@ import axios from "axios";
 
 // Libary Imports
 import { RefreshControl, SafeAreaView, View } from "react-native";
+import { SearchBar } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
 
 // Custom Component Imports
@@ -25,19 +26,31 @@ class User extends Component {
     this.userRefresh();
   }
 
-  userRefresh() {
+  updateSearch = search => {
+    this.setState({ search });
+  };
+
+  userRefresh = () => {
     this.setState({ refreshing: true });
     axios.get(`http://` + ip + `:5000/user`).then(res => {
       const users = res.data.users;
       this.setState({ users });
       this.setState({ refreshing: false });
     });
-  }
+  };
 
   render() {
+    const { search } = this.state;
     return (
       <View>
         <SafeAreaView style={{ height: "100%" }}>
+          <SearchBar
+            round={true}
+            lightTheme={true}
+            placeholder="Search Users..."
+            onChangeText={this.updateSearch}
+            value={search}
+          />
           <FlatList
             data={this.state.users}
             renderItem={({ item }) => (
