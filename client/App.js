@@ -5,21 +5,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import AppContext from "./context/AppContext";
 
 const initialState = {
-  user: "Oliver",
-  number: 20
+  user: {},
+  signedIn: false
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "updateNumber":
+    case "signIn":
       return {
-        ...state,
-        number: action.payload
+        user: action.payload,
+        signedIn: true
       };
-    case "updateUser":
+    case "signOut":
       return {
-        ...state,
-        user: action.payload
+        user: {},
+        signedIn: false
       };
     default:
       return state;

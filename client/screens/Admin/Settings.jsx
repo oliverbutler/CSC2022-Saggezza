@@ -6,11 +6,18 @@ import { Button, Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
 // Custom Component Import
+import AppContext from "../../context/AppContext";
 
 // Config Import
 import "../../secrets.js";
 
+const signOut = (navigation, dispatch) => {
+  dispatch({ type: "signOut" });
+  navigation.navigate("Login");
+};
+
 const Settings = () => {
+  const { state, dispatch } = React.useContext(AppContext);
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -25,7 +32,7 @@ const Settings = () => {
           />
         }
         buttonStyle={{ width: 150 }}
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => signOut(navigation, dispatch)}
       />
     </View>
   );
