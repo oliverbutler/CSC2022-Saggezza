@@ -3,18 +3,14 @@ import { ListItem } from "react-native-elements";
 
 import "../../secrets";
 
-export class ApplicationsPreview extends Component {
-  render() {
-    return (
-      <ListItem
-        title={this.props.request.name}
-        subtitle={this.props.request.status}
-        bottomDivider
-        chevron
-        onPress={this.props.onPress}
-      ></ListItem>
-    );
-  }
-}
+const RequestListView = props => {
+  return (
+    <ListItem
+      title={props.request.name}
+      subtitle={props.request.status}
+      onPress={props.onPress}
+    ></ListItem>
+  );
+};
 
-export default ApplicationsPreview;
+export default RequestListView;

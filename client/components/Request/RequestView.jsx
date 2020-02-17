@@ -11,17 +11,20 @@ import Label from "../Label";
 // Config Imports
 import "../../secrets.js";
 
-class RequestView extends Component {
-  state = {
-    request: this.props.route.params.request
-  };
+const dateConvert = date => {
+  var unixTimestamp = date;
+  date = new Date(unixTimestamp * 1000);
+  return date.toString();
+};
 
-  render() {
-    return (
-      <View>
-        <Label label="Name">{this.state.request.name}</Label>
-      </View>
-    );
-  }
-}
+const RequestView = props => {
+  const date = dateConvert(props.route.params.request.date_created.$date);
+  return (
+    <View>
+      <Label label="Name">{props.route.params.request.name}</Label>
+      <Label label="Date Created">{date}</Label>
+    </View>
+  );
+};
+
 export default RequestView;
