@@ -21,7 +21,7 @@ const signIn = async (navigation, dispatch) => {
     });
     if (result.type == "success") {
       dispatch({ type: "signIn", payload: result.user });
-
+      console.log(result);
       SecureStore.setItemAsync("user", JSON.stringify(result.user));
 
       navigation.navigate("Drawer");
