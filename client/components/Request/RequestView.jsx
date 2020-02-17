@@ -23,6 +23,7 @@ const RequestView = props => {
     <View>
       <Label label="Name">{props.route.params.request.name}</Label>
       <Label label="Date Created">{date}</Label>
+      <Label label=""></Label>
     </View>
   );
 };
