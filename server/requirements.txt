@@ -4,4 +4,4 @@ marshmallow==3.4.0
 bcrypt==3.1.7
 mongoengine==0.19.1
 bson==0.5.9
-
+pillow==2.2.2

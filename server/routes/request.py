@@ -106,10 +106,13 @@ class RequestParameterListAPI(Resource):
     # |- GET: Return all Request Parameters
 
     def post(self, id):
+        print('request')
         req = parse(request)
         errors = RequestParameterListSchema().validate(req)
         if errors:
             return res('Errors in request', 'alert', errors=errors), 400
+
+        print('check user')
         # Check user is valid
         try:
             returned_request = Request.objects(id=id)[0]
@@ -132,7 +135,6 @@ class RequestParameterListAPI(Resource):
         )
 
         # TODO: File support
-
         # Optional field
         if(req['description']):
             request_parameter['description'] = req['description']

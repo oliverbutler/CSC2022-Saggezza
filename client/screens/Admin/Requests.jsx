@@ -9,12 +9,6 @@ import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
 
 const Request = () => {
-  // state = {
-  //   requests: [],
-  //   refreshing: true,
-  //   // search: ""
-  // };
-
   const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
 
@@ -30,10 +24,6 @@ const Request = () => {
       setRefreshing(false);
     });
   };
-
-  // updateSearch = search => {
-  //   this.setState({ search });
-  // };
 
   const navigation = useNavigation();
 
