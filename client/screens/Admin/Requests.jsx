@@ -38,6 +38,7 @@ class EmployeeApplicationHomeScreen extends Component {
           placeholder="Search for an application..."
           onChangeText={this.updateSearch}
           value={search}
+          lightTheme={true}
         />
         <FlatList
           data={this.state.requests}
