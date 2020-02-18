@@ -70,8 +70,8 @@ const authToken = (dispatch, navigation) => {
       console.log(token);
       axios
         .post("http://" + ip + ":5000/auth", { token: token })
-        .then(res => {
-          token = parseJWT(res.data.token);
+        .then(() => {
+          token = parseJWT(token);
           if (token.role == "pending") {
             alert("Account not activated");
             deleteToken();
