@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { decode } from "base-64";
 import * as Google from "expo-google-app-auth";
 import AppContext from "../context/AppContext";
 import * as SecureStore from "expo-secure-store";
@@ -32,7 +33,7 @@ const parseJWT = token => {
   var base64Url = token.split(".")[1];
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   var jsonPayload = decodeURIComponent(
-    atob(base64)
+    decode(base64)
       .split("")
       .map(function(c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
@@ -48,11 +49,12 @@ const authGoogle = (idToken, dispatch, navigation) => {
     .post("http://" + ip + ":5000/auth/google", { idToken: idToken })
     .then(res => {
       token = parseJWT(res.data.token);
+      console.log(token);
       if (token.role == "pending") {
         alert("Account not activated");
       } else {
-        SecureStore.setItemAsync("token", token);
-        dispatch({ type: "signIn", payload: res.data.user });
+        SecureStore.setItemAsync("token", res.data.token);
+        dispatch({ type: "signIn", payload: token });
         navigation.navigate("Drawer");
       }
     })
@@ -65,6 +67,7 @@ const authToken = (dispatch, navigation) => {
   SecureStore.getItemAsync("token").then(token => {
     if (token != null) {
       console.log("Stored token found");
+      console.log(token);
       axios
         .post("http://" + ip + ":5000/auth", { token: token })
         .then(res => {
@@ -73,7 +76,7 @@ const authToken = (dispatch, navigation) => {
             alert("Account not activated");
             deleteToken();
           } else {
-            dispatch({ type: "signIn", payload: res.data.user });
+            dispatch({ type: "signIn", payload: token });
             navigation.navigate("Drawer");
           }
         })

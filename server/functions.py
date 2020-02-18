@@ -14,8 +14,7 @@ def gen_secret(length: int):
 
 
 def sign_token(payload, secret: str):
-    # return jwt.encode(payload, secret, algorithm="HS512")
-    token = jwt.encode(payload, 'secret', algorithm="HS256")
+    token = jwt.encode(payload, 'secret', algorithm="HS512")
     print(token)
     return token
 
@@ -31,7 +30,7 @@ def decode_token(token, google=False):
         if google_res.status_code != 200:
             return ValueError('idToken invalid')
         else:
-            return jwt.decode(token, verify=False)
+            return jwt.decode(token, verify=False, algorithms=["HS512"])
     else:
         print('Not Google auth')
         # If its a local JWT, verify it against its claimed user ID

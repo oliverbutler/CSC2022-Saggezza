@@ -65,12 +65,12 @@ class UserAPI(Resource):
 
     def delete(self, id):
         try:
-            user = User.objects(id=id)
+            user = User.objects(id=id)[0]
         except:
             return res("User doesn't exist", 'error'), 400
 
         user.delete()
-        return res('User deleted 💀', 'success', user=convert_query(user))
+        return res('User deleted 💀', 'success')
 
     def get(self, id):
         try:
