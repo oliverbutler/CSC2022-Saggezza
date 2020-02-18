@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import { ListItem } from "react-native-elements";
 import Status from "./Status";
-import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
+import {
+  RefreshControl,
+  SafeAreaView,
+  View,
+  Text,
+  Image,
+  StyleSheet
+} from "react-native";
 
 import "../../secrets";
 
@@ -20,7 +27,12 @@ const RequestListView = props => {
       title={props.request.name}
       subtitle={dateCreated}
       onPress={props.onPress}
-      rightTitle={<Status status={status}></Status>}
+      rightElement={
+        <Status
+          style={({ display: "flex" }, { alignItems: "flex-end" })}
+          status={status}
+        ></Status>
+      }
     ></ListItem>
   );
 };
