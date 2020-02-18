@@ -4,9 +4,6 @@ import { View, ScrollView } from "react-native";
 import { Avatar, Text } from "react-native-elements";
 import axios from "axios";
 
-// Custom Component Imports
-import Label from "../Label";
-
 // Config Imports
 import "../../secrets.js";
 
