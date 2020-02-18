@@ -1,54 +1,56 @@
 import React, { Component, useContext } from "react";
 
-import { StyleSheet, View, Button, SafeAreaView } from "react-native";
-import { Text } from "react-native-elements";
+import { StyleSheet, View, SafeAreaView, Image } from "react-native";
+import { Text, Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-import * as Google from "expo-google-app-auth";
-
 import * as SecureStore from "expo-secure-store";
-
 import AppContext from "../context/AppContext";
+import axios from "axios";
 
-const signIn = async (navigation, dispatch) => {
-  console.log("Started async");
-  try {
-    const result = await Google.logInAsync({
-      // androidClientId: "YOUR_CLIENT_ID_HERE",
-      iosClientId:
-        "1040363071237-qtj1ukjm4vrod5fc9bm78vq2qmnhjcf0.apps.googleusercontent.com",
-      scopes: ["profile", "email"]
-    });
-    if (result.type == "success") {
-      dispatch({ type: "signIn", payload: result.user });
-      console.log(result);
-      SecureStore.setItemAsync("user", JSON.stringify(result.user));
+import "../secrets";
 
-      navigation.navigate("Drawer");
-    }
-  } catch (e) {
-    console.log("error", e);
-  }
-  console.log("done");
-};
+import { oauth, tryAuth, deleteToken } from "../helpers/Auth";
 
 const Login = () => {
   const navigation = useNavigation();
   const { state, dispatch } = useContext(AppContext);
 
+  React.useEffect(() => {
+    tryAuth(dispatch, navigation);
+  }, []);
+
   return (
-    <SafeAreaView style={style.container}>
-      <Text h2>Login Page</Text>
-      <View style={style.content}>
-        <Text>{JSON.stringify(state)}</Text>
-        <Button title="Skip" onPress={() => navigation.navigate("Drawer")} />
-        <Button title="Sign In" onPress={() => signIn(navigation, dispatch)} />
+    <SafeAreaView style={styles.container}>
+      <Text h2 h2Style={{ marginHorizontal: 30, marginVertical: 100 }}>
+        Login with Google
+      </Text>
+      <View style={styles.content}>
+        <Button
+          title="Sign in With Google"
+          titleStyle={{
+            color: "black",
+            fontFamily: "Arial",
+            paddingLeft: 20,
+            paddingRight: 20
+          }}
+          buttonStyle={styles.button}
+          onPress={() => oauth(dispatch, navigation)}
+          icon={
+            <Image
+              style={{ height: 35, width: 35 }}
+              source={require("../assets/Google_G.png")}
+            />
+          }
+        />
+        {/* <Button title="Sign In" onPress={() => oauth(dispatch, navigation)} />
+        <Button title="Purge Storage" onPress={() => deleteToken()} /> */}
       </View>
     </SafeAreaView>
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -56,6 +58,11 @@ const style = StyleSheet.create({
   },
   content: {
     paddingTop: 20
+  },
+  button: {
+    backgroundColor: "#FFFFFF",
+    padding: 15,
+    borderRadius: 5
   }
 });
 

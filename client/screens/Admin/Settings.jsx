@@ -7,14 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 
 // Custom Component Import
 import AppContext from "../../context/AppContext";
+import { signOut } from "../../helpers/Auth";
 
 // Config Import
 import "../../secrets.js";
-
-const signOut = (navigation, dispatch) => {
-  dispatch({ type: "signOut" });
-  navigation.navigate("Login");
-};
 
 const Settings = () => {
   const { state, dispatch } = React.useContext(AppContext);
@@ -32,7 +28,7 @@ const Settings = () => {
           />
         }
         buttonStyle={{ width: 150 }}
-        onPress={() => signOut(navigation, dispatch)}
+        onPress={() => signOut(dispatch, navigation)}
       />
     </View>
   );

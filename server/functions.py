@@ -1,7 +1,9 @@
 import json
 import bcrypt
+import jwt
 from flask import jsonify
 from mongoengine import QuerySet, connect, DoesNotExist, ValidationError
+from authlib.jose import JsonWebToken
 
 
 def gen_hash(password: str):
@@ -55,3 +57,8 @@ def res(message: str, type: str, **kwargs):
 
 def convert_query(querySet: QuerySet) -> QuerySet:
     return json.loads(querySet.to_json())
+
+
+def parseJWT(inputJWT: str):
+    # return JsonWebToken.decode(jwt, key="")
+    return jwt.decode(inputJWT, verify=False)

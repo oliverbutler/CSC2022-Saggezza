@@ -50,8 +50,13 @@ class User(Document):
     first_name = StringField(required=True, max_length=64)
     last_name = StringField(required=True, max_length=64)
     email = EmailField(required=True, unique=True)
-    profile_picture = StringField(default="/default-profile.jpg")
-    role = StringField(required=True, options=["employee", "manager", "admin"])
+    profile_picture = StringField(default="")
+    role = StringField(required=True, options=[
+                       "pending", "employee", "manager", "admin"])
+
+    # Google
+    google_id = StringField(max_length=64)
+    google_profile_picture = StringField()
 
     # Employee
     request_list = ListField(ReferenceField('Request'))

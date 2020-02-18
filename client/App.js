@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 
 import AppContext from "./context/AppContext";
+import * as SecureStore from "expo-secure-store";
 
 const initialState = {
   user: {},

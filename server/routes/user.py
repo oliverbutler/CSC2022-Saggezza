@@ -80,15 +80,6 @@ class UserAPI(Resource):
             return res("User doesn't exist", 'error'), 400
 
 
-class UserTokenAPI(Resource):
-    # |- /user/<id>/token
-    # |- POST: Verify token
-
-    def post(self, id):
-
-        return res("Valid", "success")
-
-
 class UserProfileAPI(Resource):
     # |- /user/<id>/profile
     # |- POST: Upload new profile picture

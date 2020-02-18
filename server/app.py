@@ -2,6 +2,7 @@ from flask import Blueprint, Flask
 from flask_restful import Api
 
 from routes.user import *
+from routes.auth import *
 from routes.request import *
 from routes.category import *
 from routes.client import *
@@ -17,6 +18,10 @@ api.add_resource(UserAPI, '/user/<id>')
 api.add_resource(UserProfileAPI, '/user/<id>/profile')
 api.add_resource(UserEmployeeListAPI, '/user/<id>/employee')
 api.add_resource(UserEmployeeAPI, '/user/<id>/employee/<eid>')
+
+# Auth
+
+api.add_resource(AuthAPI, '/auth')
 
 # Request
 api.add_resource(RequestListAPI, '/request')

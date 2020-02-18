@@ -16,9 +16,9 @@ const Home = () => {
   const { state, dispatch } = useContext(AppContext);
 
   return (
-    <View style={{ alignSelf: "center" }}>
-      <Text h2>Welcome {state.user.name}</Text>
-      <Text>{JSON.stringify(state)}</Text>
+    <View style={{ alignItems: "center" }}>
+      <Text h2>Welcome {state.user.first_name}</Text>
+      <Text>{state.user.email}</Text>
     </View>
   );
 };
