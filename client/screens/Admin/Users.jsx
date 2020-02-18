@@ -5,6 +5,7 @@ import axios from "axios";
 import { RefreshControl, SafeAreaView, View } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 // Custom Component Imports
 import UserPreview from "../../components/User/UserListView";
@@ -12,66 +13,51 @@ import UserPreview from "../../components/User/UserListView";
 // Config Import
 import "../../secrets.js";
 
-class User extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [],
-      search: "",
-      refreshing: true
-    };
-  }
+const User = () => {
+  const navigation = useNavigation();
 
-  componentDidMount() {
-    this.userRefresh();
-  }
+  const [users, setUsers] = React.useState([]);
+  const [search, setSearch] = React.useState("");
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
+  React.useEffect(() => {
+    userRefresh();
+  }, []);
 
-  userRefresh = () => {
-    this.setState({ refreshing: true });
+  const userRefresh = () => {
+    setRefreshing(true);
     axios.get(`http://` + ip + `:5000/user`).then(res => {
-      const users = res.data.users;
-      this.setState({ users });
-      this.setState({ refreshing: false });
+      setUsers(res.data.users);
+      setRefreshing(false);
     });
   };
 
-  render() {
-    const { search } = this.state;
-    return (
-      <View>
-        <SafeAreaView style={{ height: "100%" }}>
-          <SearchBar
-            round={true}
-            lightTheme={true}
-            placeholder="Search Users..."
-            onChangeText={this.updateSearch}
-            value={search}
-          />
-          <FlatList
-            data={this.state.users}
-            renderItem={({ item }) => (
-              <UserPreview
-                onPress={() =>
-                  this.props.navigation.navigate("UserView", { user: item })
-                }
-                user={item}
-              />
-            )}
-            keyExtractor={item => item._id.$oid}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={() => this.userRefresh()}
-              />
-            }
-          />
-        </SafeAreaView>
-      </View>
-    );
-  }
-}
+  return (
+    <View>
+      <SafeAreaView style={{ height: "100%" }}>
+        <SearchBar
+          round={true}
+          lightTheme={true}
+          placeholder="Search Users..."
+          onChangeText={setSearch}
+          value={search}
+        />
+        <FlatList
+          data={users}
+          renderItem={({ item }) => (
+            <UserPreview
+              onPress={() => navigation.navigate("UserView", { user: item })}
+              user={item}
+            />
+          )}
+          keyExtractor={item => item._id.$oid}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
+          }
+        />
+      </SafeAreaView>
+    </View>
+  );
+};
+
 export default User;
