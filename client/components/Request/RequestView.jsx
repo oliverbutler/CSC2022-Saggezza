@@ -14,7 +14,7 @@ import Label from "../Label";
 import "../../secrets.js";
 
 const dateConvert = date => {
-  var newDate = new Date(date * 1000);
+  var newDate = new Date(date);
   return newDate.toLocaleString();
 };
 
