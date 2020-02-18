@@ -54,6 +54,9 @@ class User(Document):
     role = StringField(required=True, options=[
                        "pending", "employee", "manager", "admin"])
 
+    # Auth
+    secret = StringField(min_length=32)
+
     # Google
     google_id = StringField(max_length=64)
     google_profile_picture = StringField()

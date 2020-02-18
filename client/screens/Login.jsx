@@ -43,8 +43,7 @@ const Login = () => {
             />
           }
         />
-        {/* <Button title="Sign In" onPress={() => oauth(dispatch, navigation)} />
-        <Button title="Purge Storage" onPress={() => deleteToken()} /> */}
+        <Button title="Purge Storage" onPress={() => deleteToken()} />
       </View>
     </SafeAreaView>
   );

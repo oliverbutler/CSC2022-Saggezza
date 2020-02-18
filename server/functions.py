@@ -1,22 +1,44 @@
 import json
-import bcrypt
 import jwt
+import secrets
+import requests
 from flask import jsonify
 from mongoengine import QuerySet, connect, DoesNotExist, ValidationError
-from authlib.jose import JsonWebToken
+from model import User, Request
+
+connect('saggezza_db', host='localhost', port=27017)
 
 
-def gen_hash(password: str):
-    """Takes a string and generates the hash using bcrypt
+def gen_secret(length: int):
+    return secrets.token_hex(length)
 
-    Arguments:
-        password {str} -- Input plaintext password
 
-    Returns:
-        hash [type] -- The hashed password
-    """
-    salt = bcrypt.gensalt(rounds=12)
-    return bcrypt.hashpw(password.encode('utf8'), salt)
+def sign_token(payload, secret: str):
+    # return jwt.encode(payload, secret, algorithm="HS512")
+    token = jwt.encode(payload, 'secret', algorithm="HS256")
+    print(token)
+    return token
+
+
+def decode_token(token, google=False):
+    if(google):
+        print('Google auth')
+        google_res = requests.get(
+            "https://oauth2.googleapis.com/tokeninfo?id_token=" + token)
+        print(google_res)
+        print('done')
+        print(google_res.status_code)
+        if google_res.status_code != 200:
+            return ValueError('idToken invalid')
+        else:
+            return jwt.decode(token, verify=False)
+    else:
+        print('Not Google auth')
+        # If its a local JWT, verify it against its claimed user ID
+        decoded = jwt.decode(jwt, verify=False)
+        console.log(decoded['_id'])
+        user = User.objects(id=decoded['_id'])[0]
+        return jwt.decode(jwt, user['secret'])
 
 
 def parse(request):
@@ -55,10 +77,7 @@ def res(message: str, type: str, **kwargs):
     return body
 
 
-def convert_query(querySet: QuerySet) -> QuerySet:
+def convert_query(querySet: QuerySet, sanitize=False) -> QuerySet:
+    if(sanitize):
+        querySet['secret'] = None
     return json.loads(querySet.to_json())
-
-
-def parseJWT(inputJWT: str):
-    # return JsonWebToken.decode(jwt, key="")
-    return jwt.decode(inputJWT, verify=False)

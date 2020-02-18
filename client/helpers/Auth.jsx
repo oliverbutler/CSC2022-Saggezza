@@ -21,22 +21,55 @@ const oauth = async (dispatch, navigation) => {
       scopes: ["profile", "email"]
     });
     if (result.type == "success") {
-      SecureStore.setItemAsync("idToken", result.idToken);
-      tryAuth(dispatch, navigation);
+      authGoogle(result.idToken, dispatch, navigation);
     }
   } catch (e) {
     console.log("error", e);
   }
 };
 
-const tryAuth = (dispatch, navigation) => {
-  SecureStore.getItemAsync("idToken").then(token => {
+const parseJWT = token => {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map(function(c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+
+  return JSON.parse(jsonPayload);
+};
+
+const authGoogle = (idToken, dispatch, navigation) => {
+  axios
+    .post("http://" + ip + ":5000/auth/google", { idToken: idToken })
+    .then(res => {
+      token = parseJWT(res.data.token);
+      if (token.role == "pending") {
+        alert("Account not activated");
+      } else {
+        SecureStore.setItemAsync("token", token);
+        dispatch({ type: "signIn", payload: res.data.user });
+        navigation.navigate("Drawer");
+      }
+    })
+    .catch(err => {
+      console.log("error", err);
+    });
+};
+
+const authToken = (dispatch, navigation) => {
+  SecureStore.getItemAsync("token").then(token => {
     if (token != null) {
-      console.log("Stored 'idToken' found");
+      console.log("Stored token found");
       axios
-        .post("http://" + ip + ":5000/auth", { idToken: token })
+        .post("http://" + ip + ":5000/auth", { token: token })
         .then(res => {
-          if (res.data.user.role == "pending") {
+          token = parseJWT(res.data.token);
+          if (token.role == "pending") {
             alert("Account not activated");
             deleteToken();
           } else {
@@ -48,13 +81,13 @@ const tryAuth = (dispatch, navigation) => {
           console.log("error", err);
         });
     } else {
-      console.log("Stored idToken not found");
+      console.log("Stored token not found");
     }
   });
 };
 
 const deleteToken = () => {
-  SecureStore.deleteItemAsync("idToken");
+  SecureStore.deleteItemAsync("token");
 };
 
-export { signOut, oauth, tryAuth, deleteToken };
+export { signOut, oauth, authToken as tryAuth, deleteToken };

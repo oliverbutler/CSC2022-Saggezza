@@ -22,6 +22,7 @@ api.add_resource(UserEmployeeAPI, '/user/<id>/employee/<eid>')
 # Auth
 
 api.add_resource(AuthAPI, '/auth')
+api.add_resource(AuthGoogleAPI, '/auth/google')
 
 # Request
 api.add_resource(RequestListAPI, '/request')
