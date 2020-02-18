@@ -22,6 +22,7 @@ const oauth = async (dispatch, navigation) => {
       scopes: ["profile", "email"]
     });
     if (result.type == "success") {
+      console.log(result.idToken);
       authGoogle(result.idToken, dispatch, navigation);
     }
   } catch (e) {
@@ -68,21 +69,21 @@ const authToken = (dispatch, navigation) => {
     if (token != null) {
       console.log("Stored token found");
       console.log(token);
-      axios
-        .post("http://" + ip + ":5000/auth", { token: token })
-        .then(() => {
-          token = parseJWT(token);
-          if (token.role == "pending") {
-            alert("Account not activated");
-            deleteToken();
-          } else {
-            dispatch({ type: "signIn", payload: token });
-            navigation.navigate("Drawer");
-          }
-        })
-        .catch(err => {
-          console.log("error", err);
-        });
+      const instance = axios.create({
+        baseURL: `http://${ip}:5000/`,
+        timeout: 1000,
+        headers: { Authorization: "Bearer " + token }
+      });
+      instance.get("/auth").then(() => {
+        token = parseJWT(token);
+        if (token.role == "pending") {
+          alert("Account not activated");
+          deleteToken();
+        } else {
+          dispatch({ type: "signIn", payload: token });
+          navigation.navigate("Drawer");
+        }
+      });
     } else {
       console.log("Stored token not found");
     }

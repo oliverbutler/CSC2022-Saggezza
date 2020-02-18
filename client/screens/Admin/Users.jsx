@@ -6,15 +6,18 @@ import { RefreshControl, SafeAreaView, View } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 // Custom Component Imports
 import UserPreview from "../../components/User/UserListView";
+import AppContext from "../../context/AppContext";
 
 // Config Import
 import "../../secrets.js";
 
 const User = () => {
   const navigation = useNavigation();
+  const { state, dispatch } = React.useContext(AppContext);
 
   const [users, setUsers] = React.useState([]);
   const [search, setSearch] = React.useState("");
@@ -25,10 +28,17 @@ const User = () => {
   }, []);
 
   const userRefresh = () => {
-    setRefreshing(true);
-    axios.get(`http://` + ip + `:5000/user`).then(res => {
-      setUsers(res.data.users);
-      setRefreshing(false);
+    SecureStore.getItemAsync("token").then(token => {
+      setRefreshing(true);
+      const instance = axios.create({
+        baseURL: `http://${ip}:5000/`,
+        timeout: 1000,
+        headers: { Authorization: "Bearer " + token }
+      });
+      instance.get("/user").then(res => {
+        setUsers(res.data.users);
+        setRefreshing(false);
+      });
     });
   };
 
