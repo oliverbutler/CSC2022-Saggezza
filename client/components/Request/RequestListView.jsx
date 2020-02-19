@@ -1,20 +1,28 @@
 import React, { Component } from "react";
 import { ListItem } from "react-native-elements";
+import Status from "./Status";
+import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
 
 import "../../secrets";
 
-export class ApplicationsPreview extends Component {
-  render() {
-    return (
-      <ListItem
-        title={this.props.request.name}
-        subtitle={this.props.request.status}
-        bottomDivider
-        chevron
-        onPress={this.props.onPress}
-      ></ListItem>
-    );
-  }
-}
+const RequestListView = props => {
+  const status = props.request.status;
 
-export default ApplicationsPreview;
+  const dateConvert = date => {
+    var newDate = new Date(date);
+    return newDate.toLocaleString();
+  };
+
+  const dateCreated = dateConvert(props.request.date_created.$date);
+
+  return (
+    <ListItem
+      title={props.request.name}
+      subtitle={dateCreated}
+      onPress={props.onPress}
+      rightTitle={<Status status={status}></Status>}
+    ></ListItem>
+  );
+};
+
+export default RequestListView;

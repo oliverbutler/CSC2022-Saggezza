@@ -8,7 +8,7 @@ import Settings from "../../screens/Admin/Settings";
 
 const Stack = createStackNavigator();
 
-function HomeStack() {
+const HomeStack = () => {
   const navigation = useNavigation();
   return (
     <Stack.Navigator>
@@ -40,6 +40,6 @@ function HomeStack() {
       <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
-}
+};
 
 export default HomeStack;
