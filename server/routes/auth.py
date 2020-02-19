@@ -106,7 +106,7 @@ class AuthGoogleAPI(Resource):
 
         # If they are still pending, return them back early with a warning
         if user["role"] == "pending":
-            return res("Account pending ⏳", "warning"), 401
+            return res("Account pending ⏳", "warning")
 
         # Lets make a secret key for each user and save it for them.
 

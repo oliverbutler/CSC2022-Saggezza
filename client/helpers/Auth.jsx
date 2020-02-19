@@ -25,8 +25,12 @@ const showGoogleAuth = async dispatch => {
         baseURL: `http://${ip}:5000/`
       });
       instance.post("/auth/google", { idToken: result.idToken }).then(res => {
-        SecureStore.setItemAsync("token", res.data.token);
-        dispatch({ type: "SIGN_IN", user: res.data.user });
+        if (res.data.status.type == "success") {
+          SecureStore.setItemAsync("token", res.data.token);
+          dispatch({ type: "SIGN_IN", user: res.data.user });
+        } else {
+          alert(res.data.status.text);
+        }
       });
     }
   } catch (e) {
