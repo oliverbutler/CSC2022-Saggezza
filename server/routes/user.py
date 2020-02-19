@@ -27,7 +27,7 @@ class UserListAPI(Resource):
     def post(self):
         caller = get_bearer_header(request)
         if caller["role"] != "admin":
-            return res("⛔️ Must be an admin to create a user", "error"), 400
+            return res("⛔️ Must be an admin to create a user", "error"), 401
 
         req = parse(request)
         errors = UserListSchema().validate(req)
@@ -46,11 +46,14 @@ class UserListAPI(Resource):
     @auth.login_required
     def get(self):
         caller = get_bearer_header(request)
-        if caller["role"] != "admin":
-            return res("⛔️ Must be an admin to return all users", "error"), 401
+        if caller["role"] == "admin":
+            users = User.objects().all()
+            return res("All users returned", "success", users=convert_query(users))
+        elif caller["role"] == "manager":
+            users = User.objects()  # TODO: Needs to find all their employees
+            return res("Your employees returned", "success")
 
-        users = User.objects().all()
-        return res("All users returned", "success", users=convert_query(users))
+        return res("⛔️Not Authorized", "error"), 401
 
 
 class UserAPI(Resource):

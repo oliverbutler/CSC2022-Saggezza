@@ -25,7 +25,8 @@ const reducer = (prevState, action) => {
       return {
         ...prevState,
         user: action.user,
-        isLoading: false
+        isLoading: false,
+        isSignIn: true
       };
     case "NO_TOKEN":
       return {
@@ -59,6 +60,7 @@ const App = () => {
       SecureStore.getItemAsync("token").then(token => {
         // If token is null, its not found
         if (token != null) {
+          console.log(token);
           console.log("Token Found ✅");
 
           // Lets try verify this against the /auth route
