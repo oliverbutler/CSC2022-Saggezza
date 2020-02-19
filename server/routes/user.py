@@ -41,17 +41,25 @@ class UserListAPI(Resource):
             role=req["role"],
         )
         user.save()
-        return res("User created", "success", user=convert_query(user))
+        return res("User created", "success", user=convert_query(user, sanitize=True))
 
     @auth.login_required
     def get(self):
         caller = get_bearer_header(request)
-        if caller["role"] == "admin":
+        user = User.objects().get(id=caller["_id"]["$oid"])
+        if user["role"] == "admin":
             users = User.objects().all()
-            return res("All users returned", "success", users=convert_query(users))
-        elif caller["role"] == "manager":
-            users = User.objects()  # TODO: Needs to find all their employees
-            return res("Your employees returned", "success")
+            return res(
+                "All users returned",
+                "success",
+                users=convert_query(users, sanitize=True),
+            )
+        elif user["role"] == "manager":
+            employees = user["employees"]
+            converted = []  # TODO: Figure out how to return a querySet correctly
+            for i in employees:
+                converted.append(convert_query(i, sanitize=True))
+            return res("Your employees returned", "success", employees=converted)
 
         return res("⛔️Not Authorized", "error"), 401
 

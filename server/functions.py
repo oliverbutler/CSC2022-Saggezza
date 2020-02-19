@@ -50,6 +50,7 @@ def res(message: str, type: str, **kwargs):
 
 
 def convert_query(querySet: QuerySet, sanitize=False) -> QuerySet:
+    # TODO: Add support for converting a list of query sets
     if sanitize:
         querySet["secret"] = None
     return json.loads(querySet.to_json())
