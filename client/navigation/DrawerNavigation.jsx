@@ -8,6 +8,9 @@ import HomeStack from "./Admin/HomeStack";
 import RequestStack from "./Admin/RequestStack";
 import UserStack from "./Admin/UserStack";
 
+//Test Purpose to be moved into Manager and Employee when navigationsorted
+import NewRequestStack from "./Admin/NewRequestStack";
+
 const DrawerNav = createDrawerNavigator();
 
 function DrawerNavigator() {
@@ -21,6 +24,7 @@ function DrawerNavigator() {
       <DrawerNav.Screen name="Home" component={HomeStack} />
       <DrawerNav.Screen name="Requests" component={RequestStack} />
       <DrawerNav.Screen name="Users" component={UserStack} />
+      <DrawerNav.Screen name="New Request" component={NewRequestStack} />
     </DrawerNav.Navigator>
   );
 }
