@@ -37,8 +37,8 @@ class NewRequest extends Component {
           mode="date" //The enum of date, datetime and time
           placeholder="select date"
           format="DD-MM-YYYY"
-          minDate="01-01-2016"
-          maxDate="01-01-2019"
+          minDate="01-01-2019"
+          maxDate="01-01-2022"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
