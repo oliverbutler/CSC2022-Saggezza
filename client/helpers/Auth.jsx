@@ -14,7 +14,8 @@ const signOut = dispatch => {
 const showGoogleAuth = async dispatch => {
   try {
     const result = await Google.logInAsync({
-      // androidClientId: "YOUR_CLIENT_ID_HERE",
+      androidClientId:
+        "1040363071237-i276na9d415sc6uvgoj0129p0fot4lut.apps.googleusercontent.com",
       iosClientId:
         "1040363071237-qtj1ukjm4vrod5fc9bm78vq2qmnhjcf0.apps.googleusercontent.com",
       scopes: ["profile", "email"]
