@@ -22,29 +22,31 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text h2 h2Style={{ marginHorizontal: 30, marginVertical: 100 }}>
+      <Text h2 h2Style={{ margin: 30 }}>
         Login with Google
       </Text>
-      <View style={styles.content}>
-        <Button
-          title="Sign in With Google"
-          titleStyle={{
-            color: "black",
-            fontFamily: "Arial",
-            paddingLeft: 20,
-            paddingRight: 20
-          }}
-          buttonStyle={styles.button}
-          onPress={() => oauth(dispatch, navigation)}
-          icon={
-            <Image
-              style={{ height: 35, width: 35 }}
-              source={require("../assets/Google_G.png")}
-            />
-          }
-        />
-        <Button title="Purge Storage" onPress={() => deleteToken()} />
-      </View>
+      <Button
+        title="Sign in With Google"
+        titleStyle={{
+          color: "black",
+          fontFamily: "Arial",
+          paddingLeft: 20,
+          paddingRight: 20
+        }}
+        buttonStyle={styles.button}
+        onPress={() => oauth(dispatch, navigation)}
+        icon={
+          <Image
+            style={{ height: 35, width: 35 }}
+            source={require("../assets/Google_G.png")}
+          />
+        }
+      />
+      <Button
+        title="Purge Storage"
+        type="clear"
+        onPress={() => deleteToken()}
+      />
     </SafeAreaView>
   );
 };
@@ -54,9 +56,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
-  },
-  content: {
-    paddingTop: 20
   },
   button: {
     backgroundColor: "#FFFFFF",

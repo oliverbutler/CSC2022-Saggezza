@@ -22,7 +22,6 @@ const oauth = async (dispatch, navigation) => {
       scopes: ["profile", "email"]
     });
     if (result.type == "success") {
-      console.log(result.idToken);
       authGoogle(result.idToken, dispatch, navigation);
     }
   } catch (e) {
@@ -50,7 +49,7 @@ const authGoogle = (idToken, dispatch, navigation) => {
     .post("http://" + ip + ":5000/auth/google", { idToken: idToken })
     .then(res => {
       token = parseJWT(res.data.token);
-      console.log(token);
+      console.log(res.data.token);
       if (token.role == "pending") {
         alert("Account not activated");
       } else {
@@ -68,7 +67,6 @@ const authToken = (dispatch, navigation) => {
   SecureStore.getItemAsync("token").then(token => {
     if (token != null) {
       console.log("Stored token found");
-      console.log(token);
       const instance = axios.create({
         baseURL: `http://${ip}:5000/`,
         timeout: 1000,

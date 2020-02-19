@@ -49,7 +49,7 @@ def verify_token(token):
 
 @auth.error_handler
 def auth_error():
-    return res("⛔️ Unauthorized Access", "error"), 400
+    return res("⛔️ Unauthorized Access", "error"), 401
 
 
 class AuthAPI(Resource):
@@ -105,7 +105,7 @@ class AuthGoogleAPI(Resource):
 
         # Lets make a secret key for each user and save it for them.
 
-        secret = secrets.token_hex(32)
+        secret = secrets.token_hex(64)
         user["secret"] = secret
         user.save()
 
@@ -113,7 +113,7 @@ class AuthGoogleAPI(Resource):
 
         payload = convert_query(user, sanitize=True)
 
-        encoded = jwt.encode(payload, secret)
+        encoded = jwt.encode(payload, secret, algorithm="HS512")
 
         # encoded is in Bytes so convert to utf-8 for sending
 
