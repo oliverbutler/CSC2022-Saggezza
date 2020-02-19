@@ -5,7 +5,7 @@ import { SearchBar, ListItem } from "react-native-elements";
 //Import Custom Header to use on screen
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
-class EmployeeApplicationHomeScreen extends Component {
+class AdminRequests extends Component {
   state = {
     requests: [],
     refreshing: true,
@@ -63,4 +63,4 @@ class EmployeeApplicationHomeScreen extends Component {
   }
 }
 
-export default EmployeeApplicationHomeScreen;
+export default AdminRequests;
