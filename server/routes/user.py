@@ -47,7 +47,7 @@ class UserListAPI(Resource):
     def get(self):
         caller = get_bearer_header(request)
         if caller["role"] != "admin":
-            return res("⛔️ Must be an admin to return all users", "error"), 400
+            return res("⛔️ Must be an admin to return all users", "error"), 401
 
         users = User.objects().all()
         return res("All users returned", "success", users=convert_query(users))

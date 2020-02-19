@@ -35,10 +35,13 @@ const User = () => {
         timeout: 1000,
         headers: { Authorization: "Bearer " + token }
       });
-      instance.get("/user").then(res => {
-        setUsers(res.data.users);
-        setRefreshing(false);
-      });
+      instance
+        .get("/user")
+        .then(res => {
+          setUsers(res.data.users);
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
     });
   };
 
