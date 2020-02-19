@@ -4,17 +4,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
 import Home from "../../screens/Admin/Home";
-import Settings from "../../screens/Admin/Settings";
+import Users from "../../screens/Admin/Users";
+import UserView from "../../components/User/UserView";
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const EmployeeStack = () => {
   const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Employees"
+        component={Users}
         options={{
           headerLeft: () => (
             <Icon
@@ -24,22 +25,20 @@ const HomeStack = () => {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
-          headerRight: () => (
-            <Icon
-              size={35}
-              name="ios-settings"
-              type="ionicon"
-              onPress={() => navigation.navigate("Settings")}
-            />
-          ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: "Admin Home"
+          title: "Employee List"
         }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen
+        name="UserView"
+        component={UserView}
+        options={({ route }) => ({
+          title:
+            route.params.user.first_name + " " + route.params.user.last_name
+        })}
+      />
     </Stack.Navigator>
   );
 };
 
-export default HomeStack;
+export default EmployeeStack;

@@ -3,8 +3,8 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../../screens/Admin/Home";
-import Settings from "../../screens/Admin/Settings";
+import Home from "../../screens/Employee/Home";
+import Settings from "../../screens/Employee/Settings";
 
 const Stack = createStackNavigator();
 
@@ -34,7 +34,7 @@ const HomeStack = () => {
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           headerRightContainerStyle: { paddingRight: 10 },
-          title: "Admin Home"
+          title: "Employee Home"
         }}
       />
       <Stack.Screen name="Settings" component={Settings} />

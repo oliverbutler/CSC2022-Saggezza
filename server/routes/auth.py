@@ -29,7 +29,10 @@ def verify_token(token):
 
     # Decode token to access the google_id
 
-    decode = jwt.decode(token, verify=False)
+    try:
+        decode = jwt.decode(token, verify=False)
+    except:
+        return False
 
     # Now find the appropriate user
     try:
@@ -58,7 +61,9 @@ class AuthAPI(Resource):
 
     @auth.login_required
     def get(self):
-        return res("Reached AuthAPI 🎉", "success")
+        caller = get_bearer_header(request)
+
+        return res("Reached AuthAPI 🎉", "success", user=caller)
 
 
 class AuthGoogleAPI(Resource):
@@ -101,7 +106,7 @@ class AuthGoogleAPI(Resource):
 
         # If they are still pending, return them back early with a warning
         if user["role"] == "pending":
-            return res("Account pending ⏳", "warning")
+            return res("Account pending ⏳", "warning"), 401
 
         # Lets make a secret key for each user and save it for them.
 
@@ -117,5 +122,10 @@ class AuthGoogleAPI(Resource):
 
         # encoded is in Bytes so convert to utf-8 for sending
 
-        return res("Created JWT 🎉", "success", token=encoded.decode("utf-8"))
+        return res(
+            "Created JWT 🎉",
+            "success",
+            token=encoded.decode("utf-8"),
+            user=convert_query(user, sanitize=True),
+        )
 

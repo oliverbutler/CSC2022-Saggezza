@@ -4,21 +4,14 @@ import { StyleSheet, View, SafeAreaView, Image } from "react-native";
 import { Text, Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-import * as SecureStore from "expo-secure-store";
 import AppContext from "../context/AppContext";
-import axios from "axios";
 
 import "../secrets";
 
-import { oauth, tryAuth, deleteToken } from "../helpers/Auth";
+import { showGoogleAuth } from "../helpers/Auth";
 
 const Login = () => {
-  const navigation = useNavigation();
   const { state, dispatch } = useContext(AppContext);
-
-  React.useEffect(() => {
-    tryAuth(dispatch, navigation);
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,18 +27,13 @@ const Login = () => {
           paddingRight: 20
         }}
         buttonStyle={styles.button}
-        onPress={() => oauth(dispatch, navigation)}
+        onPress={() => showGoogleAuth(dispatch)}
         icon={
           <Image
             style={{ height: 35, width: 35 }}
             source={require("../assets/Google_G.png")}
           />
         }
-      />
-      <Button
-        title="Purge Storage"
-        type="clear"
-        onPress={() => deleteToken()}
       />
     </SafeAreaView>
   );
