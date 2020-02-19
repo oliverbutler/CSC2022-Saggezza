@@ -3,8 +3,8 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../../screens/Admin/Home";
-import Users from "../../screens/Admin/Users";
+import Home from "../../screens/Manager/Home";
+import Employees from "../../screens/Manager/Employees";
 import UserView from "../../components/User/UserView";
 
 const Stack = createStackNavigator();
@@ -15,7 +15,7 @@ const EmployeeStack = () => {
     <Stack.Navigator>
       <Stack.Screen
         name="Employees"
-        component={Users}
+        component={Employees}
         options={{
           headerLeft: () => (
             <Icon

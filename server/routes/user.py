@@ -49,11 +49,7 @@ class UserListAPI(Resource):
         user = User.objects().get(id=caller["_id"]["$oid"])
         if user["role"] == "admin":
             users = User.objects().all()
-            return res(
-                "All users returned",
-                "success",
-                users=convert_query(users, sanitize=True),
-            )
+            return res("All users returned", "success", users=convert_query(users),)
         elif user["role"] == "manager":
             employees = user["employees"]
             converted = []  # TODO: Figure out how to return a querySet correctly
