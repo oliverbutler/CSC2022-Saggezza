@@ -45,7 +45,7 @@ class UserListAPI(Resource):
 
     @auth.login_required
     def get(self):
-        caller = get_caller(request)
+        caller = get_bearer(request)
         if caller["role"] == "admin":
             users = User.objects().all()
             return res("All users returned", "success", users=convert_query(users))
@@ -85,13 +85,22 @@ class UserAPI(Resource):
             return res("User doesn't exist", "error"), 400
 
         for i in req:
-            user[i] = req[i]
+            if i == 'role' and caller["role"] != "admin":
+                return res("⛔️ Cannot change your own role", "error"), 400
+            else:
+                user[i] = req[i]
 
         user.save()
 
         return res("User modified", "success", user=convert_query(user))
 
+    @auth.login_required
     def delete(self, id):
+
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to delete another user", "error"), 400
+
         try:
             user = User.objects(id=id)[0]
         except:
@@ -100,7 +109,12 @@ class UserAPI(Resource):
         user.delete()
         return res("User deleted 💀", "success")
 
-    def get(self, id):
+        @auth.login_required
+        def get(self, id):
+            caller = get_bearer(request)
+            if caller["role"] != "admin":
+                return res("⛔️ Must be an admin to delete another user", "error"), 400
+
         try:
             user = User.objects(id=id)[0]
             return res("Retrieved Successfully", "success", user=convert_query(user))
@@ -153,8 +167,14 @@ class UserProfileAPI(Resource):
 class UserEmployeeListAPI(Resource):
     # |- /user/<id>/employee NOTE: User must be a Manager
     # |- POST: Add new employee
+    # |- GET: Get all employes of a manager NOTE: User must be an admin
 
+    @auth.login_required
     def post(self, id):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to add an employee to a manager", "error"), 400
+
         req = parse(request)
         errors = UserEmployeeListSchema().validate(req)
         if errors:
@@ -163,6 +183,7 @@ class UserEmployeeListAPI(Resource):
             user = User.objects(id=id)[0]
         except:
             return res("User doesn't exist", "error"), 400
+
         if user["role"] == "manager":
             try:
                 employee = User.objects(id=req["employee"])[0]
@@ -174,12 +195,30 @@ class UserEmployeeListAPI(Resource):
         else:
             return res("User is not a manager", "error"), 400
 
+    @auth.login_required
+    def get(self):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to see a list of manager's employees", "error"), 400
+
+        employees = user["employees"]
+        return res(
+            "Managers employees returned",
+            "success",
+            employees=convert_query(employees),
+        )
+
 
 class UserEmployeeAPI(Resource):
     # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
     # |- DELETE: Delete employee
 
+    @auth.login_required
     def delete(self, id, eid):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to add an employee to a manager", "error"), 400
+
         try:
             user = User.objects(id=id)[0]
         except:

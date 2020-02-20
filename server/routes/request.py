@@ -7,7 +7,8 @@ from PIL import Image
 from model import *
 import datetime
 import os
-from routes.auth import auth
+
+from routes.auth import auth\
 
 # Connect to mongodb
 connect("saggezza_db", host="localhost", port=27017)
@@ -17,8 +18,12 @@ class RequestListAPI(Resource):
     # |- /request
     # |- POST: Add a new request
     # |- GET: Return all of a users requests
-
+    @auth.login_required
     def post(self):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an employee to submit a request", "error"), 401
+
         req = parse(request)
 
         errors = RequestListSchema().validate(req)
@@ -71,8 +76,10 @@ class RequestAPI(Resource):
     # |- PUT: Modify request
     # |- DELETE: Delete request
     # |- GET: Return request
-
+    @auth.login_required
     def put(self, id):
+        caller = get_caller(request)
+
         req = parse(request)
         errors = RequestSchema().validate(req)
         if errors:
@@ -83,12 +90,26 @@ class RequestAPI(Resource):
         except:
             return res("Request doesn't exist", "error"), 400
 
-        for i in req:
-            returned_request[i] = req[i]
+        if caller["role"] == "manager":
+            returned_request["status"] = req["status"]
+        elif caller["role"] == "admin":
+            for i in req:
+                returned_request[i] = req[i]
+        else:
+            for i in req:
+                if i == "status":
+                    return res("Cannot change a request status", "error"), 400
+                else:
+                    returned_request[i] = req[i]
 
         return res("Request modified", "success")
 
+    @auth.login_required
     def delete(self, id):
+        caller = get_bearer(request)
+        if caller["role"] != "employee":
+            return res("⛔️ Must be an employee to delete a request", "error"), 401
+
         try:
             returned_request = Request.objects(id=id)[0]
         except:
@@ -98,6 +119,7 @@ class RequestAPI(Resource):
 
         return res("Deleted request", "success")
 
+    @auth.login_required
     def get(self, id):
         try:
             user = User.objects(id=id)[0]
@@ -126,15 +148,17 @@ class RequestParameterListAPI(Resource):
     # |- /request/<id>/parameter
     # |- POST: Add a new Request Parameter
     # |- GET: Return all Request Parameters
-
+    @auth.login_required
     def post(self, id):
-        print("request")
+        caller = get_caller(request)
+        if caller["role"] != "employee":
+            return res("⛔️ Must be an employee to change a request parameter", "error"), 401
+
         req = parse(request)
         errors = RequestParameterListSchema().validate(req)
         if errors:
             return res("Errors in request", "alert", errors=errors), 400
 
-        print("check user")
         # Check user is valid
         try:
             returned_request = Request.objects(id=id)[0]
@@ -156,8 +180,6 @@ class RequestParameterListAPI(Resource):
             payment_method=req["payment_method"],
         )
 
-        # TODO: File support
-        # Optional field
         try:
             request_parameter["description"] = req["description"]
         except:
@@ -172,8 +194,8 @@ class RequestParameterListAPI(Resource):
             request=convert_query(returned_request),
         )
 
+    @auth.login_required
     def get(self, id):
-        # Check request is valid
         try:
             returned_request = Request.objects(id=id)[0]
         except:
@@ -193,8 +215,12 @@ class RequestParameterAPI(Resource):
     # |- PUT: Modify request parameter
     # |- DELETE: Delete request parameter
     # |- GET: Return request parameter
-
+    @auth.login_required
     def put(self, id, pid):
+        caller = get_caller(request)
+        if caller["role"] != "employee":
+            return res("⛔️ Must be an employee to change a request parameter", "error"), 401
+
         req = parse(request)
         errors = RequestParameterSchema().validate(req)
         if errors:
@@ -224,7 +250,12 @@ class RequestParameterAPI(Resource):
             request_parameter=convert_query(returned_request),
         )
 
+    @auth.login_required
     def delete(self, id, pid):
+        caller = get_caller(request)
+        if caller["role"] != "employee":
+            return res("⛔️ Must be an employee to delete a request parameter", "error"), 401
+
         try:
             returned_request = Request.objects(id=id)[0]
         except:
@@ -248,6 +279,7 @@ class RequestParameterAPI(Resource):
             request_parameter=convert_query(returned_request),
         )
 
+    @auth.login_required
     def get(self, id, pid):
         try:
             returned_request = Request.objects(id=id)[0]
@@ -257,10 +289,9 @@ class RequestParameterAPI(Resource):
         for parameter in returned_request["request_parameter_list"]:
             if str(parameter["_id"]) == pid:
                 return res(
-                    "Request Parameter Updated 🎉",
+                    "Request Parameter Returned 🎉",
                     "success",
                     request_parameter=convert_query(parameter),
                 )
 
         return res("Request Parameter doesn't exist", "error"), 400
-
