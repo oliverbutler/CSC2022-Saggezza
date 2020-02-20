@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { View, SafeAreaView } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  SafeAreaView,
+  FlatList,
+  Text
+} from "react-native";
 
-import { Divider } from "react-native-elements";
-
-import axios from "axios";
-
-import { useNavigation } from "@react-navigation/native";
+import { Divider, ListItem } from "react-native-elements";
 
 // Custom Component Imports
 import Label from "../Label";
@@ -19,32 +21,44 @@ const dateConvert = date => {
 };
 
 const RequestView = props => {
-  const dateCreated = dateConvert(
-    props.route.params.request.date_created.$date
-  );
-  const dateExpense = dateConvert(
-    props.route.params.request.request_parameter_list[0].date_expense.$date
-  );
-  return (
-    <View>
-      <Label label="Name">{props.route.params.request.name}</Label>
+  const request = props.route.params.request;
+  const [refreshing, setRefreshing] = React.useState(false);
 
-      <Label label="Date Created">{dateCreated}</Label>
-      <Divider style={{ backgroundColor: "blue" }} />
-      <Label label="Amount">
-        {props.route.params.request.request_parameter_list[0].amount}
+  const userRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  return (
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
+      }
+    >
+      <Label label="Name">{request.name}</Label>
+
+      <Label label="Date Created">
+        {dateConvert(request.date_created.$date)}
       </Label>
-      <Label label="Date Expense">{dateExpense}</Label>
+
+      <Divider />
+
+      <Label label="Amount">£{request.request_parameter_list[0].amount}</Label>
+      <Label label="Date Expense">
+        {dateConvert(request.request_parameter_list[0].date_expense.$date)}
+      </Label>
       <Label label="Billable">
-        {props.route.params.request.request_parameter_list[0].billable_client.toString()}
+        {request.request_parameter_list[0].billable_client.toString()}
       </Label>
       <Label label="Payment Method">
-        {props.route.params.request.request_parameter_list[0].payment_method}
+        {request.request_parameter_list[0].payment_method}
       </Label>
       <Label label="Description">
-        {props.route.params.request.request_parameter_list[0].description}
+        {request.request_parameter_list[0].description}
       </Label>
-    </View>
+    </ScrollView>
   );
 };
 

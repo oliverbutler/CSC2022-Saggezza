@@ -34,7 +34,7 @@ function colour(status) {
   if (status == "Pending") {
     return "#fff6b0";
   }
-  return "#b1ffb0";
+  return "#bbbbbb";
 }
 
 export default Status;

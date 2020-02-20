@@ -3,18 +3,19 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Requests from "../../screens/Admin/Requests";
-import RequestView from "../../components/Request/RequestView";
+import Home from "../../screens/Manager/Home";
+import Employees from "../../screens/Manager/Employees";
+import UserView from "../../components/User/UserView";
 
 const Stack = createStackNavigator();
 
-function RequestStack() {
+const EmployeeStack = () => {
   const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Requests"
-        component={Requests}
+        name="Employees"
+        component={Employees}
         options={{
           headerLeft: () => (
             <Icon
@@ -25,27 +26,19 @@ function RequestStack() {
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: "All Requests"
+          title: "Employee List"
         }}
       />
       <Stack.Screen
-        name="RequestView"
-        component={RequestView}
+        name="UserView"
+        component={UserView}
         options={({ route }) => ({
-          title: route.params.request.name,
-          headerRight: () => (
-            <Icon
-              size={30}
-              name="ios-create"
-              type="ionicon"
-              onPress={() => alert("Edit Request")}
-            />
-          ),
-          headerRightContainerStyle: { paddingRight: 10 }
+          title:
+            route.params.user.first_name + " " + route.params.user.last_name
         })}
       />
     </Stack.Navigator>
   );
-}
+};
 
-export default RequestStack;
+export default EmployeeStack;

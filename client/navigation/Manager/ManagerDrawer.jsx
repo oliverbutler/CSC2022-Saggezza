@@ -1,16 +1,15 @@
 import React, { Component } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Drawer from "../components/Drawer";
-import { SafeAreaView } from "react-native";
+import Drawer from "../../components/Drawer";
 
 // Routes
-import HomeStack from "./Admin/HomeStack";
-import RequestStack from "./Admin/RequestStack";
-import UserStack from "./Admin/UserStack";
+import HomeStack from "./HomeStack";
+import RequestStack from "./RequestStack";
+import EmployeeStack from "./EmployeeStack";
 
 const DrawerNav = createDrawerNavigator();
 
-function DrawerNavigator() {
+const ManagerDrawer = () => {
   return (
     <DrawerNav.Navigator
       drawerContent={Drawer}
@@ -19,10 +18,10 @@ function DrawerNavigator() {
       }}
     >
       <DrawerNav.Screen name="Home" component={HomeStack} />
+      <DrawerNav.Screen name="Employees" component={EmployeeStack} />
       <DrawerNav.Screen name="Requests" component={RequestStack} />
-      <DrawerNav.Screen name="Users" component={UserStack} />
     </DrawerNav.Navigator>
   );
-}
+};
 
-export default DrawerNavigator;
+export default ManagerDrawer;

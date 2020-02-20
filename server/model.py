@@ -14,7 +14,7 @@ from mongoengine import (
     EmbeddedDocumentListField,
     ListField,
     ReferenceField,
-    ObjectIdField
+    ObjectIdField,
 )
 from bson import json_util, ObjectId
 
@@ -48,16 +48,25 @@ class RequestParameter(EmbeddedDocument):
 
 class User(Document):
     first_name = StringField(required=True, max_length=64)
-    last_name = StringField(required=True, max_length=64)
+    last_name = StringField(default="", max_length=64)
     email = EmailField(required=True, unique=True)
-    profile_picture = StringField(default="/default-profile.jpg")
-    role = StringField(required=True, options=["employee", "manager", "admin"])
+    profile_picture = StringField(default="")
+    role = StringField(
+        default="pending", options=["pending", "employee", "manager", "admin"]
+    )
+
+    # Auth
+    secret = StringField(min_length=32)
+
+    # Google
+    google_id = StringField(max_length=64)
+    google_picture = StringField()
 
     # Employee
-    request_list = ListField(ReferenceField('Request'))
+    request_list = ListField(ReferenceField("Request"))
 
     # Manager
-    employees = ListField(ReferenceField('self'))
+    employees = ListField(ReferenceField("self"))
     client = ReferenceField(Client)
     project = ReferenceField(Project)
 
@@ -69,6 +78,7 @@ class Request(Document):
     date_submit = DateTimeField()
     date_review = DateTimeField()
     comment = StringField()
-    status = StringField(default="draft", choices=[
-                         "approved", "declined", "pending", "draft"])
+    status = StringField(
+        default="draft", choices=["approved", "declined", "pending", "draft"]
+    )
     request_parameter_list = EmbeddedDocumentListField(RequestParameter)
