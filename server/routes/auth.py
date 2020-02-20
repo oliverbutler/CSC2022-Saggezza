@@ -98,11 +98,16 @@ class AuthGoogleAPI(Resource):
         except User.DoesNotExist:
             user = User(
                 first_name=decode["given_name"],
-                last_name=decode["family_name"],
                 email=decode["email"],
                 google_id=decode["sub"],
                 google_picture=decode["picture"],
             )
+            try:
+                user["first_name"] = decode["family_name"]
+            except:
+                pass
+
+        user.save()
 
         # If they are still pending, return them back early with a warning
         if user["role"] == "pending":

@@ -143,8 +143,10 @@ class RequestParameterListAPI(Resource):
 
         # TODO: File support
         # Optional field
-        if req["description"]:
+        try:
             request_parameter["description"] = req["description"]
+        except:
+            pass
 
         returned_request["request_parameter_list"].append(request_parameter)
         returned_request.save()

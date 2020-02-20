@@ -48,7 +48,7 @@ class RequestParameter(EmbeddedDocument):
 
 class User(Document):
     first_name = StringField(required=True, max_length=64)
-    last_name = StringField(required=True, max_length=64)
+    last_name = StringField(default="", max_length=64)
     email = EmailField(required=True, unique=True)
     profile_picture = StringField(default="")
     role = StringField(

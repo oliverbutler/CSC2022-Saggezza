@@ -32,7 +32,16 @@ function RequestStack() {
         name="RequestView"
         component={RequestView}
         options={({ route }) => ({
-          title: route.params.request.name
+          title: route.params.request.name,
+          headerRight: () => (
+            <Icon
+              size={30}
+              name="ios-create"
+              type="ionicon"
+              onPress={() => alert("Edit Request")}
+            />
+          ),
+          headerRightContainerStyle: { paddingRight: 10 }
         })}
       />
     </Stack.Navigator>
