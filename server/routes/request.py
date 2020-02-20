@@ -8,10 +8,7 @@ from model import *
 import datetime
 import os
 
-<<<<<<< HEAD
-from routes.auth import auth
-=======
->>>>>>> 425d15ea64c03d8a1c4c6ecb11709b229a971561
+from routes.auth import auth\
 
 # Connect to mongodb
 connect("saggezza_db", host="localhost", port=27017)
