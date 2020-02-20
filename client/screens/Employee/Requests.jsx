@@ -2,30 +2,41 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
 import { SearchBar, ListItem } from "react-native-elements";
+import * as SecureStore from "expo-secure-store";
 
 import { useNavigation } from "@react-navigation/native";
 //Import Custom Header to use on screen
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
-
+import AppContext from "../../context/AppContext";
 const Requests = () => {
-  const [requests, setRequests] = useState([]);
-  const [refreshing, setRefreshing] = useState(true);
+  const navigation = useNavigation();
+  const { state, dispatch } = React.useContext(AppContext);
+  const [requests, setRequests] = React.useState([]);
+  const [search, setSearch] = React.useState("");
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     userRefresh();
   }, []);
 
   const userRefresh = () => {
-    setRefreshing(true);
-    axios.get(`http://` + ip + `:5000/request`).then(res => {
-      const requests = res.data.requests;
-      setRequests(requests);
-      setRefreshing(false);
+    SecureStore.getItemAsync("token").then(token => {
+      setRefreshing(true);
+      const instance = axios.create({
+        baseURL: `http://${ip}:5000/`,
+        timeout: 1000,
+        headers: { Authorization: "Bearer " + token }
+      });
+      instance
+        .get("/request")
+        .then(res => {
+          setRequests(res.data.requests);
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
     });
   };
-
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{ height: "100%" }}>
