@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Drawer from "../components/Drawer";
-import { SafeAreaView } from "react-native";
+import Drawer from "../../components/Drawer";
 
 // Routes
-import HomeStack from "./Admin/HomeStack";
-import RequestStack from "./Admin/RequestStack";
-import UserStack from "./Admin/UserStack";
+import HomeStack from "./HomeStack";
+import RequestStack from "./RequestStack";
+import UserStack from "./UserStack";
 
 //Test Purpose to be moved into Manager and Employee when navigationsorted
 import NewRequestStack from "./Admin/NewRequestStack";
 
 const DrawerNav = createDrawerNavigator();
 
-function DrawerNavigator() {
+const AdminDrawer = () => {
   return (
     <DrawerNav.Navigator
       drawerContent={Drawer}
@@ -27,6 +26,6 @@ function DrawerNavigator() {
       <DrawerNav.Screen name="New Request" component={NewRequestStack} />
     </DrawerNav.Navigator>
   );
-}
+};
 
-export default DrawerNavigator;
+export default AdminDrawer;

@@ -34,7 +34,7 @@ const HomeStack = () => {
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           headerRightContainerStyle: { paddingRight: 10 },
-          title: "Home"
+          title: "Admin Home"
         }}
       />
       <Stack.Screen name="Settings" component={Settings} />

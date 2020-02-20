@@ -3,18 +3,18 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Requests from "../../screens/Admin/Requests";
-import RequestView from "../../components/Request/RequestView";
+import Home from "../../screens/Manager/Home";
+import Settings from "../../screens/Manager/Settings";
 
 const Stack = createStackNavigator();
 
-function RequestStack() {
+const HomeStack = () => {
   const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Requests"
-        component={Requests}
+        name="Home"
+        component={Home}
         options={{
           headerLeft: () => (
             <Icon
@@ -24,28 +24,22 @@ function RequestStack() {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
-          headerLeftContainerStyle: { paddingLeft: 10 },
-          title: "All Requests"
-        }}
-      />
-      <Stack.Screen
-        name="RequestView"
-        component={RequestView}
-        options={({ route }) => ({
-          title: route.params.request.name,
           headerRight: () => (
             <Icon
-              size={30}
-              name="ios-create"
+              size={35}
+              name="ios-settings"
               type="ionicon"
-              onPress={() => alert("Edit Request")}
+              onPress={() => navigation.navigate("Settings")}
             />
           ),
-          headerRightContainerStyle: { paddingRight: 10 }
-        })}
+          headerLeftContainerStyle: { paddingLeft: 10 },
+          headerRightContainerStyle: { paddingRight: 10 },
+          title: "Manager Home"
+        }}
       />
+      <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
-}
+};
 
-export default RequestStack;
+export default HomeStack;

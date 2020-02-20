@@ -1,20 +1,24 @@
 import json
-import bcrypt
+import jwt
+import secrets
+import requests
 from flask import jsonify
 from mongoengine import QuerySet, connect, DoesNotExist, ValidationError
+from model import User, Request
+
+connect("saggezza_db", host="localhost", port=27017)
 
 
-def gen_hash(password: str):
-    """Takes a string and generates the hash using bcrypt
+def get_bearer(request):
+    bearer_header = request.headers.environ["HTTP_AUTHORIZATION"]
+    bearer_header = bearer_header.replace("Bearer ", "")
+    return jwt.decode(bearer_header, verify=False)
 
-    Arguments:
-        password {str} -- Input plaintext password
 
-    Returns:
-        hash [type] -- The hashed password
-    """
-    salt = bcrypt.gensalt(rounds=12)
-    return bcrypt.hashpw(password.encode('utf8'), salt)
+def get_caller(request):
+    bearer = get_bearer(request)
+
+    return User.objects().get(id=bearer["id"])
 
 
 def parse(request):
@@ -26,9 +30,9 @@ def parse(request):
     Returns:
         [dict] -- The request data
     """
-    if "multipart/form-data" in request.headers['Content-Type']:
+    if "multipart/form-data" in request.headers["Content-Type"]:
         return request.form
-    if "application/json" in request.headers['Content-Type']:
+    if "application/json" in request.headers["Content-Type"]:
         return request.json
     return "Bad type"
 
@@ -44,14 +48,21 @@ def res(message: str, type: str, **kwargs):
         [dict] -- Response message
     """
     body = {}
-    body['status'] = {
-        'text': message,
-        'type': type
-    }
+    body["status"] = {"text": message, "type": type}
     for key, value in kwargs.items():
         body[key] = value
     return body
 
 
-def convert_query(querySet: QuerySet) -> QuerySet:
+def convert_query(querySet, sanitize=False):
+    if isinstance(querySet, list):
+        converted = []
+        for item in querySet:
+            if sanitize:
+                item["secret"] = None
+            converted.append(json.loads(item.to_json()))
+        return converted
+
+    if sanitize:
+        querySet["secret"] = None
     return json.loads(querySet.to_json())

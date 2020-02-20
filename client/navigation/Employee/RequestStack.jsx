@@ -3,7 +3,7 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Requests from "../../screens/Admin/Requests";
+import Requests from "../../screens/Employee/Requests";
 import RequestView from "../../components/Request/RequestView";
 
 const Stack = createStackNavigator();
@@ -32,16 +32,7 @@ function RequestStack() {
         name="RequestView"
         component={RequestView}
         options={({ route }) => ({
-          title: route.params.request.name,
-          headerRight: () => (
-            <Icon
-              size={30}
-              name="ios-create"
-              type="ionicon"
-              onPress={() => alert("Edit Request")}
-            />
-          ),
-          headerRightContainerStyle: { paddingRight: 10 }
+          title: route.params.request.name
         })}
       />
     </Stack.Navigator>

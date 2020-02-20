@@ -9,11 +9,13 @@ import datetime
 import os
 import uuid
 
-# Connect to mongodb
-connect('saggezza_db', host='localhost', port=27017)
+from routes.auth import auth
 
-UPLOAD_FOLDER = './static/profile/'
-ALLOWED_EXTENSIONS = set(['jpg'])
+# Connect to mongodb
+connect("saggezza_db", host="localhost", port=27017)
+
+UPLOAD_FOLDER = "./static/profile/"
+ALLOWED_EXTENSIONS = set(["jpg"])
 
 
 class UserListAPI(Resource):
@@ -21,23 +23,41 @@ class UserListAPI(Resource):
     # |- POST: Create a new user
     # \- GET: Return all users
 
+    @auth.login_required
     def post(self):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to create a user", "error"), 401
+
         req = parse(request)
         errors = UserListSchema().validate(req)
         if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
+            return res("Errors in request", "alert", errors=errors), 400
+
         user = User(
-            first_name=req['first_name'],
-            last_name=req['last_name'],
-            email=req['email'],
-            role=req['role'],
+            first_name=req["first_name"],
+            last_name=req["last_name"],
+            email=req["email"],
+            role=req["role"],
         )
         user.save()
-        return res('User created', 'success', user=convert_query(user))
+        return res("User created", "success", user=convert_query(user, sanitize=True))
 
+    @auth.login_required
     def get(self):
-        users = User.objects().all()
-        return res('All users returned', 'success', users=convert_query(users))
+        caller = get_caller(request)
+        if caller["role"] == "admin":
+            users = User.objects().all()
+            return res("All users returned", "success", users=convert_query(users),)
+        elif caller["role"] == "manager":
+            employees = user["employees"]
+            return res(
+                "Your employees returned",
+                "success",
+                employees=convert_query(employees, verify=False),
+            )
+
+        return res("⛔️Not Authorized", "error"), 401
 
 
 class UserAPI(Resource):
@@ -46,38 +66,46 @@ class UserAPI(Resource):
     # |- DELETE: Delete user
     # \- GET: Return user
 
+    @auth.login_required
     def put(self, id):
+        caller = get_caller(request)
+        if caller["id"] == id:
+            pass
+        elif caller["role"] != "admin":
+            return res("⛔️ Must be an admin to edit another user", "error"), 400
+
         req = parse(request)
         errors = UserSchema().validate(req)
         if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
+            return res("Errors in request", "alert", errors=errors), 400
+
         try:
             user = User.objects(id=id)[0]
         except:
-            return res("User doesn't exist", 'error'), 400
+            return res("User doesn't exist", "error"), 400
 
         for i in req:
             user[i] = req[i]
 
         user.save()
 
-        return res('User modified', 'success', user=convert_query(user))
+        return res("User modified", "success", user=convert_query(user))
 
     def delete(self, id):
         try:
-            user = User.objects(id=id)
+            user = User.objects(id=id)[0]
         except:
-            return res("User doesn't exist", 'error'), 400
+            return res("User doesn't exist", "error"), 400
 
         user.delete()
-        return res('User deleted 💀', 'success', user=convert_query(user))
+        return res("User deleted 💀", "success")
 
     def get(self, id):
         try:
             user = User.objects(id=id)[0]
-            return res('Retrieved Successfully', 'success', user=convert_query(user))
+            return res("Retrieved Successfully", "success", user=convert_query(user))
         except:
-            return res("User doesn't exist", 'error'), 400
+            return res("User doesn't exist", "error"), 400
 
 
 class UserProfileAPI(Resource):
@@ -89,8 +117,8 @@ class UserProfileAPI(Resource):
         try:
             user = User.objects(id=id)[0]
         except:
-            return res("User doesn't exist", 'error'), 400
-        if 'file' in request.files:
+            return res("User doesn't exist", "error"), 400
+        if "file" in request.files:
             file = request.files["file"]
             size = 256, 256
             im = Image.open(file)
@@ -102,25 +130,24 @@ class UserProfileAPI(Resource):
             name = uuid.uuid4().hex
 
             im.save(UPLOAD_FOLDER + name + ".jpg")
-            user['profile_picture'] = "/profile/" + name + ".jpg"
+            user["profile_picture"] = "/profile/" + name + ".jpg"
             user.save()
-            return res('Profile image added successfully', 'success')
+            return res("Profile image added successfully", "success")
         else:
             return res("No file in the request called file", "error"), 400
 
     def delete(self, id):
         try:
             user = User.objects(id=id)[0]
-            if os.path.exists('./static' + user['profile_picture']):
-                os.remove(os.path.join(
-                    './static' + user['profile_picture']))
-                user['profile_picture'] = "/default-profile.jpg"
+            if os.path.exists("./static" + user["profile_picture"]):
+                os.remove(os.path.join("./static" + user["profile_picture"]))
+                user["profile_picture"] = "/default-profile.jpg"
                 user.save()
-                return res("Profile image deleted", 'success')
+                return res("Profile image deleted", "success")
             else:
                 return res("File does not exist", "error"), 400
         except:
-            return res("User doesn't exist", 'error'), 400
+            return res("User doesn't exist", "error"), 400
 
 
 class UserEmployeeListAPI(Resource):
@@ -131,21 +158,21 @@ class UserEmployeeListAPI(Resource):
         req = parse(request)
         errors = UserEmployeeListSchema().validate(req)
         if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
+            return res("Errors in request", "alert", errors=errors), 400
         try:
             user = User.objects(id=id)[0]
         except:
-            return res("User doesn't exist", 'error'), 400
-        if user["role"] == 'manager':
+            return res("User doesn't exist", "error"), 400
+        if user["role"] == "manager":
             try:
-                employee = User.objects(id=req['employee'])[0]
-                user['employees'].append(employee)
+                employee = User.objects(id=req["employee"])[0]
+                user["employees"].append(employee)
                 user.save()
-                return res('Employee Added', 'success', user=convert_query(user))
+                return res("Employee Added", "success", user=convert_query(user))
             except:
-                return res("Employee's uuid is not valid", 'error'), 400
+                return res("Employee's uuid is not valid", "error"), 400
         else:
-            return res('User is not a manager', 'error'), 400
+            return res("User is not a manager", "error"), 400
 
 
 class UserEmployeeAPI(Resource):
@@ -156,11 +183,11 @@ class UserEmployeeAPI(Resource):
         try:
             user = User.objects(id=id)[0]
         except:
-            return res("User doesn't exist", 'error'), 400
+            return res("User doesn't exist", "error"), 400
         if user["role"] == "manager":
             try:
-                user['employees'].remove(eid)
+                user["employees"].remove(eid)
                 user.save()
-                return res('Employee deleted', 'success', user=convert_query(user))
+                return res("Employee deleted", "success", user=convert_query(user))
             except:
                 return res("Employee not found", "error"), 400
