@@ -20,7 +20,6 @@ const AdminDrawer = () => {
       <DrawerNav.Screen name="Home" component={HomeStack} />
       <DrawerNav.Screen name="Requests" component={RequestStack} />
       <DrawerNav.Screen name="Users" component={UserStack} />
-      <DrawerNav.Screen name="New Request" component={NewRequestStack} />
     </DrawerNav.Navigator>
   );
 };

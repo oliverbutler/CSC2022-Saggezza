@@ -30,7 +30,7 @@ const CustomDrawerContent = props => {
             color: "white"
           }}
         >
-          Peter Pan
+          {props.name}
         </Text>
       </View>
       <Divider style={{ backgroundColor: "#91D000", height: 5 }} />
