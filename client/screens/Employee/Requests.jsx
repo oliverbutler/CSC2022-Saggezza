@@ -70,7 +70,10 @@ const Requests = () => {
         }
       />
 
-      <Button title="Show" onPress={() => navigation.navigate("RequestNew")} />
+      <Button
+        title="Add Request"
+        onPress={() => navigation.navigate("RequestNew")}
+      />
     </SafeAreaView>
   );
 };
