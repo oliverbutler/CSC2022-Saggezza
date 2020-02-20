@@ -30,20 +30,20 @@ def verify_token(token):
     # Decode token to access the google_id
 
     try:
-        decode = jwt.decode(token, verify=False)
+        caller = jwt.decode(token, verify=False)
     except:
         return False
 
     # Now find the appropriate user
     try:
-        user = User.objects.get(id=decode["_id"]["$oid"])
+        user = User.objects.get(id=caller["id"])
     except User.DoesNotExist:
         return False
 
     # Try verify the token with this users secret
 
     try:
-        decode = jwt.decode(token, user["secret"])
+        decode = jwt.decode(token.encode("utf-8"), user["secret"])
     except jwt.exceptions.InvalidSignatureError:
         return False
 
@@ -61,9 +61,11 @@ class AuthAPI(Resource):
 
     @auth.login_required
     def get(self):
-        caller = get_bearer_header(request)
+        caller = get_caller(request)
 
-        return res("Reached AuthAPI 🎉", "success", user=caller)
+        return res(
+            "Reached AuthAPI 🎉", "success", user=convert_query(caller, sanitize=True)
+        )
 
 
 class AuthGoogleAPI(Resource):
@@ -103,7 +105,7 @@ class AuthGoogleAPI(Resource):
                 google_picture=decode["picture"],
             )
             try:
-                user["first_name"] = decode["family_name"]
+                user["last_name"] = decode["family_name"]
             except:
                 pass
 
@@ -120,8 +122,7 @@ class AuthGoogleAPI(Resource):
         user.save()
 
         # Now make the JWT to return to the client for future auth with the server
-
-        payload = convert_query(user, sanitize=True)
+        payload = {"id": str(user["id"]), "role": user["role"]}
 
         encoded = jwt.encode(payload, secret, algorithm="HS512")
 

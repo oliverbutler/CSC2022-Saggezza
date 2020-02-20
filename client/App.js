@@ -75,6 +75,8 @@ const App = () => {
               dispatch({ type: "RESTORE_TOKEN", user: res.data.user });
             })
             .catch(() => {
+              SecureStore.deleteItemAsync("token");
+              dispatch({ type: "NO_AUTH" });
               console.log("/auth 401");
             });
         } else {

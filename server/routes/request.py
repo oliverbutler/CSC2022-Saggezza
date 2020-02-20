@@ -7,7 +7,7 @@ from PIL import Image
 from model import *
 import datetime
 import os
-
+from routes.auth import auth
 
 # Connect to mongodb
 connect("saggezza_db", host="localhost", port=27017)
@@ -41,13 +41,28 @@ class RequestListAPI(Resource):
 
         return res("Added a new request", "success")
 
+    @auth.login_required
     def get(self):
-        try:
-            requests = Request.objects().all()
-        except:
-            return res("Request doesn't exist", "error"), 400
+        caller = get_caller(request)
+        if caller["role"] == "employee":
+            requests = caller["request_list"]
+            return res(
+                "Your requests returned", "success", requests=convert_query(requests)
+            )
+        elif caller["role"] == "manager":
+            all_requests = []
+            employees = caller["employees"]
+            for employee in employees:
+                all_requests.append(employee["request_list"])
+            return res(
+                "Your employees requests returned",
+                "success",
+                requests=convert_query(all_requests),
+            )
+
+        requests = Request.objects().all()
         return res(
-            "Retrieved Successfully", "success", requests=convert_query(requests)
+            "Retrieved all requests", "success", requests=convert_query(requests)
         )
 
 

@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
 import { SearchBar, ListItem } from "react-native-elements";
+import * as SecureStore from "expo-secure-store";
 
 import { useNavigation } from "@react-navigation/native";
 //Import Custom Header to use on screen
@@ -17,11 +18,20 @@ const Request = () => {
   }, []);
 
   const userRefresh = () => {
-    setRefreshing(true);
-    axios.get(`http://` + ip + `:5000/request`).then(res => {
-      const requests = res.data.requests;
-      setRequests(requests);
-      setRefreshing(false);
+    SecureStore.getItemAsync("token").then(token => {
+      setRefreshing(true);
+      const instance = axios.create({
+        baseURL: `http://${ip}:5000/`,
+        timeout: 1000,
+        headers: { Authorization: "Bearer " + token }
+      });
+      instance
+        .get("/request")
+        .then(res => {
+          setRequests(res.data.requests);
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
     });
   };
 

@@ -9,11 +9,16 @@ from model import User, Request
 connect("saggezza_db", host="localhost", port=27017)
 
 
-def get_bearer_header(request):
+def get_bearer(request):
     bearer_header = request.headers.environ["HTTP_AUTHORIZATION"]
     bearer_header = bearer_header.replace("Bearer ", "")
-
     return jwt.decode(bearer_header, verify=False)
+
+
+def get_caller(request):
+    bearer = get_bearer(request)
+
+    return User.objects().get(id=bearer["id"])
 
 
 def parse(request):
@@ -49,8 +54,15 @@ def res(message: str, type: str, **kwargs):
     return body
 
 
-def convert_query(querySet: QuerySet, sanitize=False) -> QuerySet:
-    # TODO: Add support for converting a list of query sets
+def convert_query(querySet, sanitize=False):
+    if isinstance(querySet, list):
+        converted = []
+        for item in querySet:
+            if sanitize:
+                item["secret"] = None
+            converted.append(json.loads(item.to_json()))
+        return converted
+
     if sanitize:
         querySet["secret"] = None
     return json.loads(querySet.to_json())

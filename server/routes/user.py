@@ -25,7 +25,7 @@ class UserListAPI(Resource):
 
     @auth.login_required
     def post(self):
-        caller = get_bearer_header(request)
+        caller = get_caller(request)
         if caller["role"] != "admin":
             return res("⛔️ Must be an admin to create a user", "error"), 401
 
@@ -45,17 +45,17 @@ class UserListAPI(Resource):
 
     @auth.login_required
     def get(self):
-        caller = get_bearer_header(request)
-        user = User.objects().get(id=caller["_id"]["$oid"])
-        if user["role"] == "admin":
+        caller = get_caller(request)
+        if caller["role"] == "admin":
             users = User.objects().all()
             return res("All users returned", "success", users=convert_query(users),)
-        elif user["role"] == "manager":
+        elif caller["role"] == "manager":
             employees = user["employees"]
-            converted = []  # TODO: Figure out how to return a querySet correctly
-            for i in employees:
-                converted.append(convert_query(i, sanitize=True))
-            return res("Your employees returned", "success", employees=converted)
+            return res(
+                "Your employees returned",
+                "success",
+                employees=convert_query(employees, verify=False),
+            )
 
         return res("⛔️Not Authorized", "error"), 401
 
@@ -68,8 +68,8 @@ class UserAPI(Resource):
 
     @auth.login_required
     def put(self, id):
-        caller = get_bearer_header(request)
-        if caller["_id"]["$oid"] == id:
+        caller = get_caller(request)
+        if caller["id"] == id:
             pass
         elif caller["role"] != "admin":
             return res("⛔️ Must be an admin to edit another user", "error"), 400
