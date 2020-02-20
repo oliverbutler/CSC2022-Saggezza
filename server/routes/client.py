@@ -7,7 +7,7 @@ from schema.client import *
 
 from model import Client
 
-
+from routes.auth import auth
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
@@ -17,7 +17,12 @@ class ClientListAPI(Resource):
     # |- POST: Add a new client
     # |- GET: Return list of clients
 
+    @auth.login_required
     def post(self):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to add a new client", "error"), 400
+
         req = parse(request)
         errors = ClientListSchema().validate(req)
         if errors:
@@ -34,7 +39,12 @@ class ClientListAPI(Resource):
 
         return res('Added a new client', 'success')
 
+    @auth.login_required
     def get(self):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to get a list of all clients", "error"), 400
+
         clients = Client.objects().all()
         return res('Returned list of clients', 'success', clients=convert_query(clients))
 
@@ -45,7 +55,12 @@ class ClientAPI(Resource):
     # |- DELETE: Delete client
     # |- GET: Return client
 
+    @auth.login_required
     def put(self, id):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to modify a client", "error"), 400
+
         req = parse(request)
         errors = ClientSchema().validate(req)
         if errors:
@@ -60,7 +75,11 @@ class ClientAPI(Resource):
 
         return res('Modified client', 'success', client=convert_query(client))
 
+    @auth.login_required
     def delete(self, id):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to delete a client", "error"), 400
         try:
             client = Client.objects(id=id)
         except:
@@ -70,7 +89,9 @@ class ClientAPI(Resource):
 
         return res('Deleted client', 'success')
 
+    @auth.login_required
     def get(self, id):
+
         try:
             client = Client.objects(id=id)[0]
             return res('Returned client', 'success', client=convert_query(client))

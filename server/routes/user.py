@@ -167,6 +167,8 @@ class UserProfileAPI(Resource):
 class UserEmployeeListAPI(Resource):
     # |- /user/<id>/employee NOTE: User must be a Manager
     # |- POST: Add new employee
+    # |- GET: Get all employes of a manager NOTE: User must be an admin
+
     @auth.login_required
     def post(self, id):
         caller = get_bearer(request)
@@ -195,13 +197,13 @@ class UserEmployeeListAPI(Resource):
 
     @auth.login_required
     def get(self):
-        caller = get_bearer(request)
+        caller = get_caller(request)
         if caller["role"] != "admin":
             return res("⛔️ Must be an admin to see a list of manager's employees", "error"), 400
 
         employees = user["employees"]
         return res(
-            "Your employees returned",
+            "Manager's employees returned",
                 "success",
                 employees=convert_query(employees, verify=False),
             )

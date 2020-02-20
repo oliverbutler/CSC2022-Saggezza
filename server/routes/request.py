@@ -7,7 +7,7 @@ from PIL import Image
 from model import *
 import datetime
 import os
-from routes.auth import auth
+
 
 # Connect to mongodb
 connect("saggezza_db", host="localhost", port=27017)
