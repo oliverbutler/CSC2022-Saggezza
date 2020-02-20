@@ -54,15 +54,21 @@ def res(message: str, type: str, **kwargs):
     return body
 
 
-def convert_query(querySet, sanitize=False):
+def convert_query(querySet, sanitize=True):
     if isinstance(querySet, list):
         converted = []
         for item in querySet:
             if sanitize:
-                item["secret"] = None
+                try:
+                    item["secret"] = None
+                except:
+                    pass
             converted.append(json.loads(item.to_json()))
         return converted
 
     if sanitize:
-        querySet["secret"] = None
+        try:
+            querySet["secret"] = None
+        except:
+            pass
     return json.loads(querySet.to_json())

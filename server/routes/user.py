@@ -25,7 +25,7 @@ class UserListAPI(Resource):
 
     @auth.login_required
     def post(self):
-        caller = get_caller(request)
+        caller = get_bearer(request)
         if caller["role"] != "admin":
             return res("⛔️ Must be an admin to create a user", "error"), 401
 
@@ -48,13 +48,13 @@ class UserListAPI(Resource):
         caller = get_caller(request)
         if caller["role"] == "admin":
             users = User.objects().all()
-            return res("All users returned", "success", users=convert_query(users),)
+            return res("All users returned", "success", users=convert_query(users))
         elif caller["role"] == "manager":
-            employees = user["employees"]
+            employees = caller["employees"]
             return res(
                 "Your employees returned",
                 "success",
-                employees=convert_query(employees, verify=False),
+                employees=convert_query(employees),
             )
 
         return res("⛔️Not Authorized", "error"), 401
@@ -68,7 +68,7 @@ class UserAPI(Resource):
 
     @auth.login_required
     def put(self, id):
-        caller = get_caller(request)
+        caller = get_bearer(request)
         if caller["id"] == id:
             pass
         elif caller["role"] != "admin":
