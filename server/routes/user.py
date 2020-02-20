@@ -109,11 +109,11 @@ class UserAPI(Resource):
         user.delete()
         return res("User deleted 💀", "success")
 
-    @auth.login_required
-    def get(self, id):
-        caller = get_bearer(request)
-        if caller["role"] != "admin":
-            return res("⛔️ Must be an admin to delete another user", "error"), 400
+            @auth.login_required
+        def get(self, id):
+            caller = get_bearer(request)
+            if caller["role"] != "admin":
+                return res("⛔️ Must be an admin to delete another user", "error"), 400
 
         try:
             user = User.objects(id=id)[0]
@@ -193,6 +193,18 @@ class UserEmployeeListAPI(Resource):
         else:
             return res("User is not a manager", "error"), 400
 
+    @auth.login_required
+    def get(self):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to see a list of manager's employees", "error"), 400
+
+        employees = user["employees"]
+        return res(
+            "Your employees returned",
+                "success",
+                employees=convert_query(employees, verify=False),
+            )
 
 class UserEmployeeAPI(Resource):
     # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
