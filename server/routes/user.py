@@ -203,18 +203,11 @@ class UserEmployeeListAPI(Resource):
 
         employees = user["employees"]
         return res(
-<<<<<<< HEAD
             "Managers employees returned",
             "success",
-            employees=convert_query(employees, verify=False),
+            employees=convert_query(employees),
         )
 
-=======
-            "Manager's employees returned",
-                "success",
-                employees=convert_query(employees, verify=False),
-            )
->>>>>>> 425d15ea64c03d8a1c4c6ecb11709b229a971561
 
 class UserEmployeeAPI(Resource):
     # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
