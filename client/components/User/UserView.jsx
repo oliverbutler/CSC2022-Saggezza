@@ -63,6 +63,8 @@ class UserView extends Component {
               case "manager":
                 return (
                   // show list of the manager's employees, button is temporary
+                  // localhost:5000/user/this.state.user._id.$oid/employee
+                  // for getting a managers employees
                   <Button
                     title="Users"
                     buttonStyle={{ margin: 5 }}
@@ -72,6 +74,8 @@ class UserView extends Component {
               case "employee":
                 return (
                   // show list of the user's requests, button is temporary
+                  // localhost:5000/user/this.state.user._id.$oid/requests (not confirmed)
+                  // for getting a users requests
                   <Button
                     title="Requests"
                     buttonStyle={{ margin: 5 }}

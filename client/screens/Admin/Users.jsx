@@ -19,7 +19,7 @@ const User = () => {
   const navigation = useNavigation();
   const { state, dispatch } = React.useContext(AppContext);
 
-  const [users, setUsers] = React.useState([]);
+  // const [users, setUsers] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -38,7 +38,7 @@ const User = () => {
       instance
         .get("/user")
         .then(res => {
-          setUsers(res.data.users);
+          dispatch({ type: "SET_USERS", payload: res.data.users });
           setRefreshing(false);
         })
         .catch(err => console.log(err));
@@ -56,7 +56,7 @@ const User = () => {
           value={search}
         />
         <FlatList
-          data={users}
+          data={state.users}
           renderItem={({ item }) => (
             <UserPreview
               onPress={() => navigation.navigate("UserView", { user: item })}

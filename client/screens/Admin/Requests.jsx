@@ -9,9 +9,12 @@ import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
 
+import AppContext from "../../context/AppContext";
+
 const Request = () => {
-  const [requests, setRequests] = useState([]);
+  //const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
+  const { state, dispatch } = React.useContext(AppContext);
 
   useEffect(() => {
     userRefresh();
@@ -28,7 +31,7 @@ const Request = () => {
       instance
         .get("/request")
         .then(res => {
-          setRequests(res.data.requests);
+          dispatch({ type: "SET_REQUESTS", payload: res.data.requests });
           setRefreshing(false);
         })
         .catch(err => console.log(err));
@@ -46,7 +49,7 @@ const Request = () => {
         lightTheme={true}
       /> */}
       <FlatList
-        data={requests}
+        data={state.requests}
         renderItem={({ item }) => (
           <RequestListView
             onPress={() =>
