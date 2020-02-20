@@ -9,6 +9,7 @@ import {
   View,
   ScrollView
 } from "react-native";
+import { Divider } from "react-native-elements";
 
 import AppContext from "../context/AppContext";
 
@@ -28,8 +29,11 @@ const CustomDrawerContent = props => {
             textAlign: "center",
             color: "white"
           }}
-        ></Text>
+        >
+          Peter Pan
+        </Text>
       </View>
+      <Divider style={{ backgroundColor: "#91D000", height: 5 }} />
       <ScrollView>
         <DrawerItemList {...props} />
       </ScrollView>
