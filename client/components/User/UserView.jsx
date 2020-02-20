@@ -65,13 +65,20 @@ class UserView extends Component {
             switch (this.state.user.role) {
               case "manager":
                 return (
+                  // show list of the manager's employees, button is temporary
                   <Button
-                    title="View assigned employees"
+                    title="Users"
                     buttonStyle={{ margin: 5 }}
-                    onPress={() =>
-                      this.props.navigation.navigate("Users")
-                    }
-                    //make a page for a managers users
+                    onPress={() => this.props.navigation.navigate("Users")}
+                  ></Button>
+                );
+              case "employee":
+                return (
+                  // show list of the user's requests, button is temporary
+                  <Button
+                    title="Requests"
+                    buttonStyle={{ margin: 5 }}
+                    onPress={() => this.props.navigation.navigate("Requests")}
                   ></Button>
                 );
               default:
@@ -79,10 +86,6 @@ class UserView extends Component {
             }
           })()}
         </View>
-        <View style={{ alignItems: "center" }}>
-          <Text>{"\n"}Requests:</Text>
-        </View>
-        {/* Display requests similar to requests page */}
       </ScrollView>
     );
   }
