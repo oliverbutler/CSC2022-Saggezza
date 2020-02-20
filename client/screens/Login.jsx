@@ -22,7 +22,6 @@ const Login = () => {
         title="Sign in With Google"
         titleStyle={{
           color: "black",
-          fontFamily: "Arial",
           paddingLeft: 20,
           paddingRight: 20
         }}
