@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { SafeAreaView, View, Text, Image } from "react-native";
-import Label from "../../components/Label";
+import Label from "../Label";
 
 import DatePicker from "react-native-datepicker";
 
@@ -12,7 +12,7 @@ import {
   Input
 } from "react-native-elements";
 
-class NewRequest extends Component {
+class RequestNew extends Component {
   state = {
     date: new Date()
   };
@@ -61,4 +61,4 @@ class NewRequest extends Component {
   }
 }
 //onChangeText={someFunction}
-export default NewRequest;
+export default RequestNew;
