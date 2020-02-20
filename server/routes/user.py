@@ -109,7 +109,7 @@ class UserAPI(Resource):
         user.delete()
         return res("User deleted 💀", "success")
 
-            @auth.login_required
+        @auth.login_required
         def get(self, id):
             caller = get_bearer(request)
             if caller["role"] != "admin":
@@ -201,10 +201,11 @@ class UserEmployeeListAPI(Resource):
 
         employees = user["employees"]
         return res(
-            "Your employees returned",
-                "success",
-                employees=convert_query(employees, verify=False),
-            )
+            "Managers employees returned",
+            "success",
+            employees=convert_query(employees, verify=False),
+        )
+
 
 class UserEmployeeAPI(Resource):
     # |- /user/<id>/employee/<eid> NOTE: User must be a Manager

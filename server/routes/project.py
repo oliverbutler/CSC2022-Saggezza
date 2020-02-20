@@ -5,17 +5,22 @@ from mongoengine import *
 from schema.project import *
 
 from model import Project
-
+from routes.auth import auth
 
 # Connect to mongodb
 connect('saggezza_db', host='localhost', port=27017)
 
 
+@auth.login_required
 class ProjectListAPI(Resource):
     # |- /project
     # |- POST: Create a new project
     # \- GET: Return all projects
     def post(self):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Only an admin can add a project", "error"), 401
+
         req = parse(request)
         errors = ProjectListSchema().validate(req)
         if errors:
