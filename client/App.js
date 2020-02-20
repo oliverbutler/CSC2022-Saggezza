@@ -11,6 +11,7 @@ import SplashScreen from "./screens/SplashScreen";
 import AdminDrawer from "./navigation/Admin/AdminDrawer";
 import EmployeeDrawer from "./navigation/Employee/EmployeeDrawer";
 import ManagerDrawer from "./navigation/Manager/ManagerDrawer";
+import RequestNew from "./components/Request/RequestNew";
 
 const initialState = {
   user: null, // user model from server
@@ -115,6 +116,7 @@ const App = () => {
           ) : (
             <Stack.Screen name="Drawer" component={EmployeeDrawer} />
           )}
+          <Stack.Screen name="RequestNew" component={RequestNew}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </AppContext.Provider>

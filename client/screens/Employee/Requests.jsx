@@ -1,7 +1,15 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
-import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
-import { SearchBar, ListItem } from "react-native-elements";
+import {
+  RefreshControl,
+  SafeAreaView,
+  View,
+  Text,
+  Image,
+  Modal,
+  TouchableHighlight
+} from "react-native";
+import { SearchBar, ListItem, Button } from "react-native-elements";
 import * as SecureStore from "expo-secure-store";
 
 import { useNavigation } from "@react-navigation/native";
@@ -9,12 +17,15 @@ import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
 import AppContext from "../../context/AppContext";
+
 const Requests = () => {
   const navigation = useNavigation();
   const { state, dispatch } = React.useContext(AppContext);
   const [requests, setRequests] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const [modelVisible, setModalVisible] = React.useState(false);
 
   useEffect(() => {
     userRefresh();
@@ -58,6 +69,8 @@ const Requests = () => {
           />
         }
       />
+
+      <Button title="Show" onPress={() => navigation.navigate("RequestNew")} />
     </SafeAreaView>
   );
 };
