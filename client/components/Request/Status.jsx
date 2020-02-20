@@ -34,6 +34,9 @@ function colour(status) {
   if (status == "Pending") {
     return "#fff6b0";
   }
+  if (status == "Approved") {
+    return "#33FF63";
+  }
   return "#bbbbbb";
 }
 
