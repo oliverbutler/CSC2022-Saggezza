@@ -30,6 +30,18 @@ const User = () => {
   const userRefresh = () => {
     SecureStore.getItemAsync("token").then(token => {
       setRefreshing(true);
+      const instance = axios.create({
+        baseURL: `http://${ip}:5000/`,
+        timeout: 1000,
+        headers: { Authorization: "Bearer " + token }
+      });
+      instance
+        .get("/user")
+        .then(res => {
+          setUsers(res.data.users);
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
     });
   };
 
