@@ -184,9 +184,15 @@ class UserEmployeeAPI(Resource):
             user = User.objects(id=id)[0]
         except:
             return res("User doesn't exist", "error"), 400
+
+        try:
+            employee = User.objects().get(id=eid)
+        except:
+            return res("Employee doesn't exist", "error"), 400
+
         if user["role"] == "manager":
             try:
-                user["employees"].remove(eid)
+                user["employees"].remove(employee)
                 user.save()
                 return res("Employee deleted", "success", user=convert_query(user))
             except:

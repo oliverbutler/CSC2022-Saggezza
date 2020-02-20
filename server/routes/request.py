@@ -39,7 +39,7 @@ class RequestListAPI(Resource):
         user["request_list"].append(new_request)
         user.save()
 
-        return res("Added a new request", "success")
+        return res("Added a new request", "success", request=convert_query(new_request))
 
     @auth.login_required
     def get(self):
