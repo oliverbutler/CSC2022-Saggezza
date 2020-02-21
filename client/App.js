@@ -31,7 +31,7 @@ const findUser = (arr, id) => {
 };
 
 const reducer = (prevState, action) => {
-  console.log(`🟩 Action ▶ ${JSON.stringify(action)}`);
+  console.log(`🟩 Action ▶ ${JSON.stringify(action).substring(0, 200)}...`);
   switch (action.type) {
     case "SET_USERS":
       return {
