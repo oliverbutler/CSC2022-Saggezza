@@ -24,6 +24,11 @@ const Settings = () => {
           title="Biometrics"
           leftIcon={<Icon name={"ios-finger-print"} type="ionicon" />}
           switch={<Switch />}
+        />,
+        <ListItem
+          title="Notifications"
+          leftIcon={<Icon name={"bell"} type="feather" />}
+          chevron
         />
       ]
     },
@@ -43,6 +48,27 @@ const Settings = () => {
         <ListItem
           title="Sign Out"
           leftIcon={<Icon name={"log-out"} type="feather" />}
+          onP
+          chevron
+        />
+      ]
+    },
+    {
+      title: "Request Settings",
+      data: [
+        <ListItem
+          title="Edit Categories"
+          leftIcon={<Icon name={"list"} type="feather" />}
+          chevron
+        />,
+        <ListItem
+          title="Approval Time"
+          leftIcon={<Icon name={"clock"} type="feather" />}
+          chevron
+        />,
+        <ListItem
+          title="Download Report (CSV)"
+          leftIcon={<Icon name={"database"} type="feather" />}
           chevron
         />
       ]
