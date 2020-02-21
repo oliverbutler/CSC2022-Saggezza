@@ -33,7 +33,7 @@ export class UserListView extends Component {
             }
           ]}
         >
-          <Icon name="ios-create" type="ionicon" size={40} color="white" />
+          <Icon name="edit" type="feather" size={30} color="white" />
           <Text style={{ alignSelf: "center", fontSize: 20, color: "white" }}>
             Edit
           </Text>

@@ -3,19 +3,18 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../../screens/Admin/Home";
-import Users from "../../screens/Admin/Users";
-import UserView from "../../components/User/UserView";
+import Clients from "../../screens/Admin/Clients";
 
 const Stack = createStackNavigator();
 
-function UserStack() {
+const ClientStack = () => {
   const navigation = useNavigation();
+
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Users"
-        component={Users}
+        name="Clients"
+        component={Clients}
         options={{
           headerLeft: () => (
             <Icon
@@ -26,19 +25,11 @@ function UserStack() {
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: "User List"
+          title: "All Clients"
         }}
-      />
-      <Stack.Screen
-        name="UserView"
-        component={UserView}
-        options={({ route }) => ({
-          title:
-            route.params.user.first_name + " " + route.params.user.last_name
-        })}
       />
     </Stack.Navigator>
   );
-}
+};
 
-export default UserStack;
+export default ClientStack;

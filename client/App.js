@@ -18,7 +18,10 @@ const initialState = {
   isLoading: true,
   isSignIn: false,
   users: null,
-  requests: null
+  requests: null,
+  clients: null,
+  projects: null,
+  categories: null
 };
 
 const findUser = (arr, id) => {
@@ -74,6 +77,21 @@ const reducer = (prevState, action) => {
       return {
         ...prevState,
         requests: newRequests
+      };
+    case "SET_CLIENTS":
+      return {
+        ...prevState,
+        clients: action.payload
+      };
+    case "SET_PROJECTS":
+      return {
+        ...prevState,
+        projects: action.payload
+      };
+    case "SET_CATEGORIES":
+      return {
+        ...prevState,
+        categories: action.payload
       };
     case "RESTORE_TOKEN":
       return {
