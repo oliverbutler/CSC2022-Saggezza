@@ -1,17 +1,7 @@
-import React, { Component, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Image,
-  Modal,
-  RefreshControl,
-  TextInput
-} from "react-native";
-import { SearchBar, ListItem, Button, Input } from "react-native-elements";
-import Label from "../Label";
-import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView, Text, Modal } from "react-native";
+import { Button, Input } from "react-native-elements";
 import DatePicker from "react-native-datepicker";
 import AppContext from "../../context/AppContext";
 import * as SecureStore from "expo-secure-store";
@@ -21,6 +11,7 @@ const RequestNew = ({ navigation }) => {
   const [date, setDate] = React.useState();
   const [name, setName] = React.useState("");
   const { state, dispatch } = React.useContext(AppContext);
+  const [amount, setAmount] = React.useState(0);
 
   const Post = () => {
     SecureStore.getItemAsync("token").then(token => {
@@ -62,10 +53,14 @@ const RequestNew = ({ navigation }) => {
           value={name}
           containerStyle={{ paddingBottom: 20 }}
         />
-
-        <Text style={{ paddingLeft: "2%", fontSize: 16 }}>Date</Text>
+        <Text style={{ paddingLeft: "2%", fontSize: 16 }}>Expense Date</Text>
         <DatePicker
-          style={{ width: "75%", paddingLeft: "5%" }}
+          style={{
+            width: "75%",
+            paddingLeft: "5%",
+            paddingTop: "2%",
+            paddingBottom: "4%"
+          }}
           date={date} //initial date from state
           mode="date" //The enum of date, datetime and time
           placeholder="select date"
@@ -88,6 +83,17 @@ const RequestNew = ({ navigation }) => {
           onDateChange={date => {
             setDate(date);
           }}
+        />
+
+        <Input
+          label="Name of Request"
+          //leftIcon=""
+          placeholder="Enter name of request"
+          errorStyle={{ color: "red" }}
+          //="Some Validation Function"
+          onChangeText={text => setName(text)}
+          value={name}
+          containerStyle={{ paddingBottom: 20 }}
         />
 
         <Button title="Submit" onPress={() => Post()} />
