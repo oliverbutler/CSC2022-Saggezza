@@ -29,10 +29,10 @@ class ClientListAPI(Resource):
         if errors:
             return res("Errors in request", "alert", errors=errors), 400
 
-        client = Client(name=req["name"],)
+        client = Client(name=req["name"])
 
         if "email" in req:
-            client["email"] = (req["email"],)
+            client["email"] = req["email"]
 
         client.save()
 

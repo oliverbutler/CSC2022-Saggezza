@@ -1,12 +1,12 @@
 from flask import Blueprint, Flask
 from flask_restful import Api
 
-from routes.user import *
 from routes.auth import *
-from routes.request import *
 from routes.category import *
 from routes.client import *
 from routes.project import *
+from routes.request import *
+from routes.user import *
 
 api_bp = Blueprint("api", __name__, static_url_path="/static", static_folder="static")
 api = Api(api_bp)

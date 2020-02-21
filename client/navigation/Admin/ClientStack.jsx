@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
 import Clients from "../../screens/Admin/Clients";
+import ClientView from "../../components/Client/ClientView";
 
 const Stack = createStackNavigator();
 
@@ -24,9 +25,34 @@ const ClientStack = () => {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
+          headerRight: () => (
+            <Icon
+              size={30}
+              name="plus-square"
+              type="feather"
+              onPress={() => navigation.navigate("ClientNew")}
+            />
+          ),
           headerLeftContainerStyle: { paddingLeft: 10 },
+          headerRightContainerStyle: { paddingRight: 10 },
           title: "All Clients"
         }}
+      />
+      <Stack.Screen
+        name="ClientView"
+        component={ClientView}
+        options={({ route }) => ({
+          title: route.params.client.name,
+          headerRight: () => (
+            <Icon
+              size={30}
+              name="edit"
+              type="feather"
+              onPress={() => alert("Edit Client")}
+            />
+          ),
+          headerRightContainerStyle: { paddingRight: 10 }
+        })}
       />
     </Stack.Navigator>
   );
