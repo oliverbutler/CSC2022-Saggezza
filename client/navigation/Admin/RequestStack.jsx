@@ -35,9 +35,9 @@ function RequestStack() {
           title: route.params.request.name,
           headerRight: () => (
             <Icon
-              size={30}
-              name="ios-create"
-              type="ionicon"
+              size={25}
+              name="pencil"
+              type="font-awesome"
               onPress={() => alert("Edit Request")}
             />
           ),

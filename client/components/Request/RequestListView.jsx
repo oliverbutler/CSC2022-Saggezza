@@ -25,12 +25,7 @@ const RequestListView = props => {
       title={props.request.name}
       subtitle={dateConvert(props.request.date_created.epoch)}
       onPress={props.onPress}
-      rightElement={
-        <Status
-          style={({ display: "flex" }, { alignItems: "flex-end" })}
-          status={status}
-        ></Status>
-      }
+      rightElement={<Status status={status}></Status>}
     ></ListItem>
   );
 };
