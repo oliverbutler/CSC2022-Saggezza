@@ -22,7 +22,7 @@ const RequestListView = props => {
 
   return (
     <ListItem
-      title={props.request.name}
+      title={props.request.name.replace(/\"/g, "")}
       subtitle={dateConvert(props.request.date_created.epoch)}
       onPress={props.onPress}
       rightElement={<Status status={status}></Status>}
