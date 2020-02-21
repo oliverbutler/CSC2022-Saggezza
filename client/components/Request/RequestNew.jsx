@@ -32,7 +32,7 @@ const RequestNew = ({ navigation }) => {
       instance
         .post("/request", {
           name: JSON.stringify(name),
-          employee: "5e4ff7305c74734a426bc4cd"
+          employee: state.user.id
         })
         .catch(err => console.log(err));
     });
