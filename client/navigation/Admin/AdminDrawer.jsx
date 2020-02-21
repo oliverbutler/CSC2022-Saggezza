@@ -6,6 +6,7 @@ import Drawer from "../../components/Drawer";
 import HomeStack from "./HomeStack";
 import RequestStack from "./RequestStack";
 import UserStack from "./UserStack";
+import ClientStack from "./ClientStack";
 
 const DrawerNav = createDrawerNavigator();
 
@@ -20,6 +21,7 @@ const AdminDrawer = () => {
       <DrawerNav.Screen name="Home" component={HomeStack} />
       <DrawerNav.Screen name="Requests" component={RequestStack} />
       <DrawerNav.Screen name="Users" component={UserStack} />
+      <DrawerNav.Screen name="Clients" component={ClientStack} />
     </DrawerNav.Navigator>
   );
 };

@@ -26,6 +26,8 @@ const RequestListView = props => {
       subtitle={dateConvert(props.request.date_created.epoch)}
       onPress={props.onPress}
       rightElement={<Status status={status}></Status>}
+      bottomDivider
+      chevron
     ></ListItem>
   );
 };

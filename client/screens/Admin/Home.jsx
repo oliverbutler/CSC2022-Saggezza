@@ -1,10 +1,15 @@
 import React, { Component, useEffect, useContext } from "react";
-import { TouchableOpacity, View, ScrollView } from "react-native";
-import { Text, Button } from "react-native-elements";
-
+import {
+  TouchableOpacity,
+  View,
+  ScrollView,
+  ActivityIndicator
+} from "react-native";
 import AppContext from "../../context/AppContext";
-
 import { axios } from "../../helpers/Axios";
+
+import { Text, Button } from "react-native-elements";
+import HomeLabel from "../../components/HomeLabel";
 
 const Home = ({ navigation }) => {
   const { state, dispatch } = useContext(AppContext);
@@ -23,6 +28,12 @@ const Home = ({ navigation }) => {
           dispatch({ type: "SET_REQUESTS", payload: res.data.requests });
         })
         .catch(err => console.log(err));
+      instance
+        .get("/client")
+        .then(res => {
+          dispatch({ type: "SET_CLIENTS", payload: res.data.clients });
+        })
+        .catch(err => console.log(err));
     });
   }, []);
 
@@ -37,31 +48,24 @@ const Home = ({ navigation }) => {
           alignSelf: "flex-start"
         }}
       >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "lightblue",
-            padding: 10,
-            margin: 10,
-            borderRadius: 10,
-            alignSelf: "flex-start"
-          }}
+        <HomeLabel
+          icon="users"
+          number={state.users ? state.users.length : null}
+          title="Users"
           onPress={() => navigation.navigate("Users")}
-        >
-          <Text h4>{state.users ? state.users.length : "..."} Users</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "lightgreen",
-            padding: 10,
-            margin: 10,
-            borderRadius: 10
-          }}
+        />
+        <HomeLabel
+          icon="dollar-sign"
+          number={state.requests ? state.requests.length : null}
+          title="Requests"
           onPress={() => navigation.navigate("Requests")}
-        >
-          <Text h4>
-            {state.requests ? state.requests.length : "..."} Requests
-          </Text>
-        </TouchableOpacity>
+        />
+        <HomeLabel
+          icon="users"
+          number={state.clients ? state.clients.length : null}
+          title="Clients"
+          onPress={() => navigation.navigate("Clients")}
+        />
       </View>
     </ScrollView>
   );
