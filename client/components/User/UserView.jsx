@@ -1,6 +1,6 @@
 // Libary Imports
 import React, { Component } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Button } from "react-native";
 import { Avatar, Text } from "react-native-elements";
 import axios from "axios";
 
@@ -54,6 +54,38 @@ class UserView extends Component {
             {this.state.user.first_name + " " + this.state.user.last_name}
           </Text>
           <Text>{this.state.user.email}</Text>
+          <Text>
+            {this.state.user.role}
+            {"\n"}
+          </Text>
+          {(() => {
+            switch (this.state.user.role) {
+              case "manager":
+                return (
+                  // show list of the manager's employees, button is temporary
+                  // localhost:5000/user/this.state.user._id.$oid/employee
+                  // for getting a managers employees
+                  <Button
+                    title="Users"
+                    buttonStyle={{ margin: 5 }}
+                    onPress={() => this.props.navigation.navigate("Users")}
+                  ></Button>
+                );
+              case "employee":
+                return (
+                  // show list of the user's requests, button is temporary
+                  // localhost:5000/user/this.state.user._id.$oid/requests (not confirmed)
+                  // for getting a users requests
+                  <Button
+                    title="Requests"
+                    buttonStyle={{ margin: 5 }}
+                    onPress={() => this.props.navigation.navigate("Requests")}
+                  ></Button>
+                );
+              default:
+                return null;
+            }
+          })()}
         </View>
       </ScrollView>
     );

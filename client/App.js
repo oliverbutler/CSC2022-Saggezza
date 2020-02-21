@@ -16,12 +16,40 @@ import RequestNew from "./components/Request/RequestNew";
 const initialState = {
   user: null, // user model from server
   isLoading: true,
-  isSignIn: false
+  isSignIn: false,
+  users: null,
+  requests: null
 };
 
 const reducer = (prevState, action) => {
   console.log(`🟩 Action ▶ ${JSON.stringify(action)}`);
   switch (action.type) {
+    case "SET_USERS":
+      return {
+        ...prevState,
+        users: action.payload
+      };
+    case "SET_REQUESTS":
+      return {
+        ...prevState,
+        requests: action.payload
+      };
+    case "SET_REQUEST":
+      var index = prevState.requests.indexOf(
+        element => element._id.$oid == action.payload._id.$oid
+      );
+      if (index > -1) {
+        updated = prevState.requests;
+        updated[index] = action.payload;
+        return {
+          ...prevState,
+          requests: updated
+        };
+      }
+      return {
+        ...prevState,
+        requests: prevState.requests.push(action.payload)
+      };
     case "RESTORE_TOKEN":
       return {
         ...prevState,
