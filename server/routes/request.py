@@ -8,7 +8,7 @@ from model import *
 import datetime
 import os
 
-from routes.auth import auth\
+from routes.auth import auth
 
 # Connect to mongodb
 connect("saggezza_db", host="localhost", port=27017)
@@ -52,7 +52,9 @@ class RequestListAPI(Resource):
         if caller["role"] == "employee":
             requests = caller["request_list"]
             return res(
-                "Your requests returned", "success", requests=convert_query(requests)
+                "Your requests returned",
+                "success",
+                requests=convert_query(requests, list=True),
             )
         elif caller["role"] == "manager":
             all_requests = []
@@ -62,12 +64,14 @@ class RequestListAPI(Resource):
             return res(
                 "Your employees requests returned",
                 "success",
-                requests=convert_query(all_requests),
+                requests=convert_query(all_requests, list=True),
             )
 
         requests = Request.objects().all()
         return res(
-            "Retrieved all requests", "success", requests=convert_query(requests)
+            "Retrieved all requests",
+            "success",
+            requests=convert_query(requests, list=True),
         )
 
 
@@ -127,7 +131,7 @@ class RequestAPI(Resource):
             return res(
                 "Users request returned successfully",
                 "success",
-                returned_requests=convert_query(returned_requests),
+                returned_requests=convert_query(returned_requests, list=True),
             )
         except:
             pass
@@ -151,8 +155,16 @@ class RequestParameterListAPI(Resource):
     @auth.login_required
     def post(self, id):
         caller = get_caller(request)
-        if caller["role"] != "employee":
-            return res("⛔️ Must be an employee to change a request parameter", "error"), 401
+        if caller["role"] == "admin":
+            pass
+        elif caller["role"] != "employee":
+            return (
+                res(
+                    "⛔️ Must be an employee or admin to change a request parameter",
+                    "error",
+                ),
+                401,
+            )
 
         req = parse(request)
         errors = RequestParameterListSchema().validate(req)
@@ -219,7 +231,10 @@ class RequestParameterAPI(Resource):
     def put(self, id, pid):
         caller = get_caller(request)
         if caller["role"] != "employee":
-            return res("⛔️ Must be an employee to change a request parameter", "error"), 401
+            return (
+                res("⛔️ Must be an employee to change a request parameter", "error"),
+                401,
+            )
 
         req = parse(request)
         errors = RequestParameterSchema().validate(req)
@@ -254,7 +269,10 @@ class RequestParameterAPI(Resource):
     def delete(self, id, pid):
         caller = get_caller(request)
         if caller["role"] != "employee":
-            return res("⛔️ Must be an employee to delete a request parameter", "error"), 401
+            return (
+                res("⛔️ Must be an employee to delete a request parameter", "error"),
+                401,
+            )
 
         try:
             returned_request = Request.objects(id=id)[0]

@@ -8,8 +8,9 @@ from schema.client import *
 from model import Client
 
 from routes.auth import auth
+
 # Connect to mongodb
-connect('saggezza_db', host='localhost', port=27017)
+connect("saggezza_db", host="localhost", port=27017)
 
 
 class ClientListAPI(Resource):
@@ -26,27 +27,25 @@ class ClientListAPI(Resource):
         req = parse(request)
         errors = ClientListSchema().validate(req)
         if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
+            return res("Errors in request", "alert", errors=errors), 400
 
-        client = Client(
-            name=req['name'],
-        )
+        client = Client(name=req["name"],)
 
-        if 'email' in req:
-            client['email'] = req['email'],
+        if "email" in req:
+            client["email"] = (req["email"],)
 
         client.save()
 
-        return res('Added a new client', 'success')
+        return res("Added a new client", "success", client=convert_query(client))
 
     @auth.login_required
     def get(self):
-        caller = get_bearer(request)
-        if caller["role"] != "admin":
-            return res("⛔️ Must be an admin to get a list of all clients", "error"), 400
-
         clients = Client.objects().all()
-        return res('Returned list of clients', 'success', clients=convert_query(clients))
+        return res(
+            "Returned list of clients",
+            "success",
+            clients=convert_query(clients, list=True),
+        )
 
 
 class ClientAPI(Resource):
@@ -64,16 +63,18 @@ class ClientAPI(Resource):
         req = parse(request)
         errors = ClientSchema().validate(req)
         if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
+            return res("Errors in request", "alert", errors=errors), 400
         try:
             client = Client.objects(id=id)[0]
         except:
-            return res("Client doesn't exist", 'error'), 400
+            return res("Client doesn't exist", "error"), 400
 
         for i in req:
             client[i] = req[i]
 
-        return res('Modified client', 'success', client=convert_query(client))
+        client.save()
+
+        return res("Modified client", "success", client=convert_query(client))
 
     @auth.login_required
     def delete(self, id):
@@ -83,17 +84,17 @@ class ClientAPI(Resource):
         try:
             client = Client.objects(id=id)
         except:
-            return res("Client doesn't exist", 'error'), 400
+            return res("Client doesn't exist", "error"), 400
 
         client.delete()
 
-        return res('Deleted client', 'success')
+        return res("Deleted client", "success")
 
     @auth.login_required
     def get(self, id):
 
         try:
             client = Client.objects(id=id)[0]
-            return res('Returned client', 'success', client=convert_query(client))
+            return res("Returned client", "success", client=convert_query(client))
         except:
-            return res("Client doesn't exist", 'error'), 400
+            return res("Client doesn't exist", "error"), 400

@@ -6,8 +6,9 @@ from schema.category import *
 from model import Category
 
 from routes.auth import auth
+
 # Connect to mongodb
-connect('saggezza_db', host='localhost', port=27017)
+connect("saggezza_db", host="localhost", port=27017)
 
 
 class CategoryListAPI(Resource):
@@ -24,20 +25,21 @@ class CategoryListAPI(Resource):
         req = parse(request)
         errors = CategorySchema().validate(req)
         if errors:
-            return res('Errors in request', 'alert', errors=errors), 400
-        category = Category(
-            name=req['name']
-        )
+            return res("Errors in request", "alert", errors=errors), 400
+        category = Category(name=req["name"])
         category.save()
-        return res('Category created successfully', 'success', category=convert_query(category))
+        return res(
+            "Category created successfully", "success", category=convert_query(category)
+        )
 
     @auth.login_required
     def get(self):
-        caller = get_bearer(request)
-        if caller["role"] != "admin" or caller["role"] != "employee":
-            return res("⛔️ Must be an admin or an employee to get a list of categories", "error"), 400
         categories = Category.objects().all()
-        return res('All categories returned', 'success', categories=convert_query(categories))
+        return res(
+            "All categories returned",
+            "success",
+            categories=convert_query(categories, list=True),
+        )
 
 
 class CategoryAPI(Resource):
@@ -58,18 +60,20 @@ class CategoryAPI(Resource):
             for i in req:
                 user[i] = req[i]
 
-            return res('Category Modified', 'success', category=convert_query(category))
+            return res("Category Modified", "success", category=convert_query(category))
         except:
-            return res("Category doesn't exist", 'error'), 400
+            return res("Category doesn't exist", "error"), 400
 
     @auth.login_required
     def get(self, id):
 
         try:
             category = Category.objects(id=id)[0]
-            return res('Retrieved Successfully', 'success', category=convert_query(category))
+            return res(
+                "Retrieved Successfully", "success", category=convert_query(category)
+            )
         except:
-            return res("Category doesn't exist", 'error'), 400
+            return res("Category doesn't exist", "error"), 400
 
     @auth.login_required
     def delete(self, id):
@@ -80,6 +84,8 @@ class CategoryAPI(Resource):
         try:
             category = Category.objects(id=id)
             category.delete()
-            return res('Category deleted 💀', 'success', category=convert_query(category))
+            return res(
+                "Category deleted 💀", "success", category=convert_query(category)
+            )
         except:
-            return res("Category doesn't exist", 'error'), 400
+            return res("Category doesn't exist", "error"), 400

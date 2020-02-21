@@ -11,10 +11,12 @@ class UserListSchema(Schema):
 
 
 class UserSchema(Schema):
+    role = fields.Str()
     email = fields.Email(validate=Length(max=32))
     first_name = fields.Str(validate=Length(max=32))
     last_name = fields.Str(validate=Length(max=32))
-    role = fields.Str()
+    client = fields.Str()
+    project = fields.Str()
 
 
 class UserEmployeeListSchema(Schema):
