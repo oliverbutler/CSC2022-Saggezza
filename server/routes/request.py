@@ -21,7 +21,7 @@ class RequestListAPI(Resource):
     @auth.login_required
     def post(self):
         caller = get_caller(request)
-        if caller["role"] != "admin":
+        if caller["role"] not in ["admin", "employee"]:
             return res("⛔️ Must be an employee to submit a request", "error"), 401
 
         req = parse(request)
