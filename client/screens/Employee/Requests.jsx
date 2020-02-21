@@ -61,7 +61,7 @@ const Requests = () => {
             request={item}
           />
         )}
-        keyExtractor={item => item._id.$oid}
+        // keyExtractor={item => item._id.$oid}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
