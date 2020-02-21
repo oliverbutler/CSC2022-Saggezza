@@ -63,7 +63,7 @@ const User = () => {
               user={item}
             />
           )}
-          keyExtractor={item => item._id.$oid}
+          keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
           }

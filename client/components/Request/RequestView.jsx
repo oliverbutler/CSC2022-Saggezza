@@ -40,14 +40,14 @@ const RequestView = props => {
       <Label label="Name">{request.name}</Label>
 
       <Label label="Date Created">
-        {dateConvert(request.date_created.$date)}
+        {dateConvert(request.date_created.epoch)}
       </Label>
 
       <Divider />
 
       <Label label="Amount">£{request.request_parameter_list[0].amount}</Label>
       <Label label="Date Expense">
-        {dateConvert(request.request_parameter_list[0].date_expense.$date)}
+        {dateConvert(request.request_parameter_list[0].date_expense.epoch)}
       </Label>
       <Label label="Billable">
         {request.request_parameter_list[0].billable_client.toString()}

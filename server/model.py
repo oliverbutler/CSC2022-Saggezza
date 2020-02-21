@@ -155,7 +155,10 @@ class Request(Document):
             "id": str(self.id),
             "name": str(self.name),
             "employee": str(self.employee.id),
-            "date_created": str(self.date_created),
+            "date_created": {
+                "date": str(self.date_created),
+                "epoch": int(round(self.date_created.timestamp() * 1000)),
+            },
             "status": str(self.status),
         }
         if self.date_submit:

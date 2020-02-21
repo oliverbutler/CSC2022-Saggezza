@@ -21,7 +21,7 @@ class UserView extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://` + ip + `:5000/request/` + this.state.user._id.$oid)
+      .get(`http://` + ip + `:5000/request/` + this.state.user.id)
       .then(res => {
         const requests = res.data.returned_requests;
         this.setState({ requests });

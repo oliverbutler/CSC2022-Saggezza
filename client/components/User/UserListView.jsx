@@ -43,11 +43,14 @@ export class RequestListView extends Component {
   };
 
   render() {
-    const BadgedAvatar = withBadge(this.props.user.request_list.length, {
-      right: -6,
-      status: "warning",
-      hidden: !this.props.user.request_list.length > 0
-    })(Avatar);
+    const BadgedAvatar = withBadge(
+      this.props.user.request_list ? this.props.user.request_list.length : null,
+      {
+        right: -6,
+        status: "warning",
+        hidden: this.props.user.request_list ? false : true
+      }
+    )(Avatar);
 
     return (
       <Swipeable

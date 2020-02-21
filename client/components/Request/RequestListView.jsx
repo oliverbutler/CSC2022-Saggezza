@@ -20,12 +20,10 @@ const RequestListView = props => {
     return newDate.toLocaleString();
   };
 
-  const dateCreated = dateConvert(props.request.date_created.$date);
-
   return (
     <ListItem
       title={props.request.name}
-      subtitle={dateCreated}
+      subtitle={dateConvert(props.request.date_created.epoch)}
       onPress={props.onPress}
       rightElement={
         <Status
