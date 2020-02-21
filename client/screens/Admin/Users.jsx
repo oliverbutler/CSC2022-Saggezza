@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { axios } from "../../helpers/Axios";
 
 // Libary Imports
 import { RefreshControl, SafeAreaView, View } from "react-native";
@@ -23,18 +23,9 @@ const User = () => {
   const [search, setSearch] = React.useState("");
   const [refreshing, setRefreshing] = React.useState(false);
 
-  React.useEffect(() => {
-    userRefresh();
-  }, []);
-
   const userRefresh = () => {
-    SecureStore.getItemAsync("token").then(token => {
-      setRefreshing(true);
-      const instance = axios.create({
-        baseURL: `http://${ip}:5000/`,
-        timeout: 1000,
-        headers: { Authorization: "Bearer " + token }
-      });
+    setRefreshing(true);
+    axios().then(instance => {
       instance
         .get("/user")
         .then(res => {

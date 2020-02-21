@@ -14,7 +14,7 @@ const getProfile = user => {
   } else return "none";
 };
 
-export class RequestListView extends Component {
+export class UserListView extends Component {
   renderLeftActions = (progress, dragX) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50, 200, 2001],
@@ -84,4 +84,4 @@ export class RequestListView extends Component {
   }
 }
 
-export default RequestListView;
+export default UserListView;

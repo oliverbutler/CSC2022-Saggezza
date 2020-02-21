@@ -21,6 +21,15 @@ const initialState = {
   requests: null
 };
 
+const findUser = (arr, id) => {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].id == id) {
+      return i;
+    }
+  }
+  return -1;
+};
+
 const reducer = (prevState, action) => {
   console.log(`🟩 Action ▶ ${JSON.stringify(action)}`);
   switch (action.type) {
@@ -29,26 +38,42 @@ const reducer = (prevState, action) => {
         ...prevState,
         users: action.payload
       };
+    case "SET_USER":
+      newUsers = prevState.users.slice();
+      index = findUser(prevState.users, action.payload.id);
+
+      if (index > -1) {
+        newUsers[index] = action.payload;
+        return {
+          ...prevState,
+          users: newUsers
+        };
+      }
+      newUsers.push(action.payload);
+      return {
+        ...prevState,
+        users: newUsers
+      };
     case "SET_REQUESTS":
       return {
         ...prevState,
         requests: action.payload
       };
     case "SET_REQUEST":
-      var index = prevState.requests.indexOf(
-        element => element._id.$oid == action.payload._id.$oid
-      );
+      newRequests = prevState.requests.slice();
+      index = findUser(prevState.requests, action.payload.id);
+
       if (index > -1) {
-        updated = prevState.requests;
-        updated[index] = action.payload;
+        newRequests[index] = action.payload;
         return {
           ...prevState,
-          requests: updated
+          requests: newRequests
         };
       }
+      newRequests.push(action.payload);
       return {
         ...prevState,
-        requests: prevState.requests.push(action.payload)
+        requests: newRequests
       };
     case "RESTORE_TOKEN":
       return {

@@ -131,7 +131,7 @@ class RequestAPI(Resource):
             return res(
                 "Users request returned successfully",
                 "success",
-                returned_requests=convert_query(returned_requests, list=True),
+                request=convert_query(returned_requests, list=True),
             )
         except:
             pass
@@ -144,7 +144,7 @@ class RequestAPI(Resource):
         return res(
             "Request returned successfully",
             "success",
-            returned_request=convert_query(returned_request),
+            request=convert_query(returned_request),
         )
 
 

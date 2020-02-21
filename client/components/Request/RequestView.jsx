@@ -11,6 +11,9 @@ import { Divider, ListItem } from "react-native-elements";
 
 // Custom Component Imports
 import Label from "../Label";
+import AppContext from "../../context/AppContext";
+import { useNavigation } from "@react-navigation/native";
+import { axios } from "../../helpers/Axios";
 
 // Config Imports
 import "../../secrets.js";
@@ -21,20 +24,30 @@ const dateConvert = date => {
 };
 
 const RequestView = props => {
-  const request = props.route.params.request;
+  const { state, dispatch } = React.useContext(AppContext);
+  const navigation = useNavigation();
+
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const userRefresh = () => {
+  const request = props.route.params.request;
+
+  const requestRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    axios().then(instance => {
+      instance
+        .get("/request/" + request.id)
+        .then(res => {
+          dispatch({ type: "SET_REQUEST", payload: res.data.request });
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
+    });
   };
 
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
+        <RefreshControl refreshing={refreshing} onRefresh={requestRefresh} />
       }
     >
       <Label label="Name">{request.name}</Label>
@@ -45,7 +58,7 @@ const RequestView = props => {
 
       <Divider />
 
-      <Label label="Amount">£{request.request_parameter_list[0].amount}</Label>
+      {/* <Label label="Amount">£{request.request_parameter_list[0].amount}</Label>
       <Label label="Date Expense">
         {dateConvert(request.request_parameter_list[0].date_expense.epoch)}
       </Label>
@@ -57,7 +70,7 @@ const RequestView = props => {
       </Label>
       <Label label="Description">
         {request.request_parameter_list[0].description}
-      </Label>
+      </Label> */}
     </ScrollView>
   );
 };

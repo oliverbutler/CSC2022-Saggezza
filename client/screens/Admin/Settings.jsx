@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 // Libary Imports
-import { View, Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
@@ -16,7 +16,13 @@ const Settings = () => {
   const { state, dispatch } = React.useContext(AppContext);
   const navigation = useNavigation();
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <ScrollView
+      contentContainerStyle={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+      }}
+    >
       <Button
         title="Sign Out"
         icon={
@@ -30,7 +36,7 @@ const Settings = () => {
         buttonStyle={{ width: 150 }}
         onPress={() => signOut(dispatch)}
       />
-    </View>
+    </ScrollView>
   );
 };
 

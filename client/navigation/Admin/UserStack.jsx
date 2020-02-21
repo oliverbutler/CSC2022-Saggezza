@@ -32,10 +32,10 @@ function UserStack() {
       <Stack.Screen
         name="UserView"
         component={UserView}
-        options={({ route }) => ({
-          title:
-            route.params.user.first_name + " " + route.params.user.last_name
-        })}
+        // options={({ route }) => ({
+        //   title:
+        //     route.params.user.first_name + " " + route.params.user.last_name
+        // })}
       />
     </Stack.Navigator>
   );

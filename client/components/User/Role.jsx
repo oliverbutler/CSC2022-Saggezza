@@ -5,25 +5,27 @@ const Role = props => {
   return (
     <View
       style={{
-        backgroundColor: colour(this.props.role),
-        alignSelf: "flex-start",
-        padding: 5,
+        backgroundColor: colour(props.role),
+        padding: 8,
+        margin: 10,
         flex: 1,
-        borderRadius: 5,
+        borderRadius: 15,
         justifyContent: "center",
         alignItems: "center"
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>{capitalize(props.role)}</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+        {capitalize(props.role)}
+      </Text>
     </View>
   );
 };
 
-const capitalize = () => {
+const capitalize = string => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const colour = () => {
+const colour = role => {
   if (role == "manager") {
     return "#ffb9b0";
   }
