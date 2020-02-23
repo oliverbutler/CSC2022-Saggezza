@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { SafeAreaView, Text, Modal } from "react-native";
+import { SafeAreaView, Text, Modal, Alert } from "react-native";
 import { Button, Input } from "react-native-elements";
 import DatePicker from "react-native-datepicker";
 import AppContext from "../../context/AppContext";
@@ -12,6 +12,7 @@ const RequestNew = ({ navigation }) => {
   const [name, setName] = React.useState("");
   const { state, dispatch } = React.useContext(AppContext);
   const [amount, setAmount] = React.useState(0);
+  const [status, setStatus] = React.useState("");
 
   const Post = () => {
     SecureStore.getItemAsync("token").then(token => {
@@ -24,6 +25,22 @@ const RequestNew = ({ navigation }) => {
         .post("/request", {
           name: JSON.stringify(name),
           employee: state.user.id
+        })
+        .then(res => {
+          if (res.status == 200) {
+            Alert.alert(
+              "Success",
+              "Please add Addtional Info",
+              [
+                {
+                  text: "OK",
+
+                  onPress: () => navigation.goBack()
+                }
+              ],
+              { cancelable: false }
+            );
+          }
         })
         .catch(err => console.log(err));
     });
@@ -53,6 +70,7 @@ const RequestNew = ({ navigation }) => {
           value={name}
           containerStyle={{ paddingBottom: 20 }}
         />
+        <Text>{status}</Text>
         <Text style={{ paddingLeft: "2%", fontSize: 16 }}>Expense Date</Text>
         <DatePicker
           style={{
@@ -85,18 +103,7 @@ const RequestNew = ({ navigation }) => {
           }}
         />
 
-        <Input
-          label="Name of Request"
-          //leftIcon=""
-          placeholder="Enter name of request"
-          errorStyle={{ color: "red" }}
-          //="Some Validation Function"
-          onChangeText={text => setName(text)}
-          value={name}
-          containerStyle={{ paddingBottom: 20 }}
-        />
-
-        <Button title="Submit" onPress={() => Post()} />
+        <Button title="Submit Draft" onPress={() => Post()} />
 
         <Button title="Cancel" onPress={() => navigation.goBack()} />
       </Modal>

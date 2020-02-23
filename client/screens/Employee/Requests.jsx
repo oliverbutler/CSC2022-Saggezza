@@ -49,17 +49,21 @@ const Requests = () => {
     });
   };
 
+  const navigate = request => {
+    console.log(request);
+    if (request.status == "draft") {
+      navigation.navigate("RequestAddParams", { request: request });
+    } else {
+      //navigation.navigate("RequestView", { request: request });
+    }
+  };
+
   return (
     <SafeAreaView style={{ height: "100%" }}>
       <FlatList
         data={requests}
         renderItem={({ item }) => (
-          <RequestListView
-            onPress={() =>
-              navigation.navigate("RequestView", { request: item })
-            }
-            request={item}
-          />
+          <RequestListView onPress={() => navigate(item)} request={item} />
         )}
         // keyExtractor={item => item._id.$oid}
         refreshControl={

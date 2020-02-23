@@ -11,6 +11,7 @@ import ManagerDrawer from "./navigation/Manager/ManagerDrawer";
 import Login from "./screens/Login";
 import SplashScreen from "./screens/SplashScreen";
 import ClientNew from "./components/Client/ClientNew";
+import RequestAddParams from "./components/Request/RequestAddParams";
 
 const initialState = {
   user: null, // user model from server
@@ -203,6 +204,7 @@ const App = () => {
             <Stack.Screen name="Drawer" component={EmployeeDrawer} />
           )}
           <Stack.Screen name="RequestNew" component={RequestNew} />
+          <Stack.Screen name="RequestAddParams" component={RequestAddParams} />
           <Stack.Screen name="ClientNew" component={ClientNew} />
         </Stack.Navigator>
       </NavigationContainer>
