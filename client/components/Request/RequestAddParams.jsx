@@ -56,7 +56,7 @@ const RequestAddParams = props => {
 
         <Button title="Submit" onPress={() => Post()} />
 
-        <Button title="Cancel" onPress={() => navigation.goBack()} />
+        <Button title="Cancel" onPress={() => props.navigation.goBack()} />
       </Modal>
     </SafeAreaView>
   );
