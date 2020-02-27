@@ -17,11 +17,11 @@ const initialState = {
   user: null, // user model from server
   isLoading: true,
   isSignIn: false,
-  users: null,
-  requests: null,
-  clients: null,
-  projects: null,
-  categories: null
+  users: [],
+  requests: [],
+  clients: [],
+  projects: [],
+  categories: []
 };
 
 const findUser = (arr, id) => {

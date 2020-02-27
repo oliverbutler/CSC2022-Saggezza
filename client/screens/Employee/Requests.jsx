@@ -35,7 +35,7 @@ const Requests = () => {
     SecureStore.getItemAsync("token").then(token => {
       setRefreshing(true);
       const instance = axios.create({
-        baseURL: `http://10.17.5.94:5000/`,
+        baseURL: "http://" + ip + ":5000/",
         timeout: 1000,
         headers: { Authorization: "Bearer " + token }
       });

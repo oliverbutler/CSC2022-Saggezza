@@ -34,6 +34,12 @@ const Home = ({ navigation }) => {
           dispatch({ type: "SET_CLIENTS", payload: res.data.clients });
         })
         .catch(err => console.log(err));
+      instance
+        .get("/category")
+        .then(res => {
+          dispatch({ type: "SET_CATEGORIES", payload: res.data.categories });
+        })
+        .catch(err => console.log(err));
     });
   }, []);
 
