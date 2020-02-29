@@ -30,14 +30,13 @@ const RequestAddParams = props => {
   const Post = () => {
     SecureStore.getItemAsync("token").then(token => {
       const instance = axios.create({
-        baseURL: `http://10.17.5.94:5000/`,
+        baseURL: "http://" + ip + ":5000/",
         timeout: 1000,
         headers: { Authorization: "Bearer " + token }
       });
       instance
-        .post("/request", {
-          name: JSON.stringify(name),
-          employee: state.user.id
+        .post("/request" + props.route.params.request.id + "/request/" + {}, {
+          catergory: JSON.stringify(category)
         })
         .catch(err => console.log(err));
     });
@@ -65,7 +64,7 @@ const RequestAddParams = props => {
           Add Details to Draft
         </Text>
 
-        <Text></Text>
+        <Text>{props.route.params.request.id}</Text>
 
         <Input
           label="Name of Request"
@@ -124,7 +123,7 @@ const RequestAddParams = props => {
 
         <Button title="Submit" onPress={() => Post()} />
 
-        <Button title="Cancel" onPress={() => navigation.goBack()} />
+        <Button title="Cancel" onPress={() => props.navigation.goBack()} />
       </Modal>
     </SafeAreaView>
   );
