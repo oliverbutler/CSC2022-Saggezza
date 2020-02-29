@@ -14,7 +14,7 @@ const getProfile = user => {
   } else return "none";
 };
 
-export class RequestListView extends Component {
+export class UserListView extends Component {
   renderLeftActions = (progress, dragX) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50, 200, 2001],
@@ -33,7 +33,7 @@ export class RequestListView extends Component {
             }
           ]}
         >
-          <Icon name="ios-create" type="ionicon" size={40} color="white" />
+          <Icon name="edit" type="feather" size={30} color="white" />
           <Text style={{ alignSelf: "center", fontSize: 20, color: "white" }}>
             Edit
           </Text>
@@ -43,11 +43,14 @@ export class RequestListView extends Component {
   };
 
   render() {
-    const BadgedAvatar = withBadge(this.props.user.request_list.length, {
-      right: -6,
-      status: "warning",
-      hidden: !this.props.user.request_list.length > 0
-    })(Avatar);
+    const BadgedAvatar = withBadge(
+      this.props.user.request_list ? this.props.user.request_list.length : null,
+      {
+        right: -6,
+        status: "warning",
+        hidden: this.props.user.request_list ? false : true
+      }
+    )(Avatar);
 
     return (
       <Swipeable
@@ -81,4 +84,4 @@ export class RequestListView extends Component {
   }
 }
 
-export default RequestListView;
+export default UserListView;

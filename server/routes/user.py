@@ -4,7 +4,7 @@ from functions import *
 from mongoengine import *
 from schema.user import *
 from PIL import Image
-from model import User, Request
+from model import User, Request, Client, Project
 import datetime
 import os
 import uuid
@@ -41,20 +41,23 @@ class UserListAPI(Resource):
             role=req["role"],
         )
         user.save()
-        return res("User created", "success", user=convert_query(user, sanitize=True))
+        return res("User created", "success", user=convert_query(user))
 
     @auth.login_required
     def get(self):
-        caller = get_caller(request)
+        caller = get_bearer(request)
         if caller["role"] == "admin":
             users = User.objects().all()
-            return res("All users returned", "success", users=convert_query(users))
+            return res(
+                "All users returned", "success", users=convert_query(users, list=True)
+            )
+
         elif caller["role"] == "manager":
             employees = caller["employees"]
             return res(
                 "Your employees returned",
                 "success",
-                employees=convert_query(employees),
+                employees=convert_query(employees, list=True),
             )
 
         return res("⛔️Not Authorized", "error"), 401
@@ -85,13 +88,58 @@ class UserAPI(Resource):
             return res("User doesn't exist", "error"), 400
 
         for i in req:
-            user[i] = req[i]
+            if i == "role" and caller["role"] != "admin":
+                return res("⛔️ Cannot change your own role", "error"), 400
+
+            if i == "role":
+                # If changing to an admin, remove fields they shouldn't have
+                if req[i] in [
+                    "admin",
+                    "pending",
+                ]:  # If we make them admin or pending remove all their fields
+                    user["employees"] = []
+                    user["request_list"] = []
+                    user["client"] = None
+                    user["project"] = None
+                if req[i] == "employee":
+                    user["employees"] = []
+                    user["client"] = None
+                    user["project"] = None
+                if req[i] == "manager":
+                    user["request_list"]
+
+            if i == "project":
+                if user["role"] == "manager":
+                    try:
+                        project = Project.objects().get(id=req[i])
+                    except:
+                        return res("Invalid project ID", "error")
+                    user["project"] = project
+                else:
+                    return res(user["role"] + " cant have a project", "error"), 400
+            elif i == "client":
+                if user["role"] == "manager":
+                    try:
+                        client = Client.objects().get(id=req[i])
+                    except:
+                        return res("Invalid project ID", "error")
+                    user["client"] = client
+                else:
+                    return res(user["role"] + " cant have a client", "error"), 400
+            else:
+                user[i] = req[i]
 
         user.save()
 
         return res("User modified", "success", user=convert_query(user))
 
+    @auth.login_required
     def delete(self, id):
+
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to delete another user", "error"), 400
+
         try:
             user = User.objects(id=id)[0]
         except:
@@ -100,7 +148,13 @@ class UserAPI(Resource):
         user.delete()
         return res("User deleted 💀", "success")
 
+    @auth.login_required
     def get(self, id):
+
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return res("⛔️ Must be an admin to delete another user", "error"), 400
+
         try:
             user = User.objects(id=id)[0]
             return res("Retrieved Successfully", "success", user=convert_query(user))
@@ -153,8 +207,17 @@ class UserProfileAPI(Resource):
 class UserEmployeeListAPI(Resource):
     # |- /user/<id>/employee NOTE: User must be a Manager
     # |- POST: Add new employee
+    # |- GET: Get all employes of a manager NOTE: User must be an admin
 
+    @auth.login_required
     def post(self, id):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return (
+                res("⛔️ Must be an admin to add an employee to a manager", "error"),
+                400,
+            )
+
         req = parse(request)
         errors = UserEmployeeListSchema().validate(req)
         if errors:
@@ -163,6 +226,7 @@ class UserEmployeeListAPI(Resource):
             user = User.objects(id=id)[0]
         except:
             return res("User doesn't exist", "error"), 400
+
         if user["role"] == "manager":
             try:
                 employee = User.objects(id=req["employee"])[0]
@@ -174,19 +238,51 @@ class UserEmployeeListAPI(Resource):
         else:
             return res("User is not a manager", "error"), 400
 
+    @auth.login_required
+    def get(self):
+        caller = get_caller(request)
+        if caller["role"] != "admin":
+            return (
+                res(
+                    "⛔️ Must be an admin to see a list of manager's employees", "error"
+                ),
+                400,
+            )
+
+        employees = user["employees"]
+        return res(
+            "Managers employees returned",
+            "success",
+            employees=convert_query(employees, list=True),
+        )
+
 
 class UserEmployeeAPI(Resource):
     # |- /user/<id>/employee/<eid> NOTE: User must be a Manager
     # |- DELETE: Delete employee
 
+    @auth.login_required
     def delete(self, id, eid):
+        caller = get_bearer(request)
+        if caller["role"] != "admin":
+            return (
+                res("⛔️ Must be an admin to add an employee to a manager", "error"),
+                400,
+            )
+
         try:
             user = User.objects(id=id)[0]
         except:
             return res("User doesn't exist", "error"), 400
+
+        try:
+            employee = User.objects().get(id=eid)
+        except:
+            return res("Employee doesn't exist", "error"), 400
+
         if user["role"] == "manager":
             try:
-                user["employees"].remove(eid)
+                user["employees"].remove(employee)
                 user.save()
                 return res("Employee deleted", "success", user=convert_query(user))
             except:

@@ -37,7 +37,7 @@ def verify_token(token):
     # Now find the appropriate user
     try:
         user = User.objects.get(id=caller["id"])
-    except User.DoesNotExist:
+    except:
         return False
 
     # Try verify the token with this users secret
@@ -63,9 +63,7 @@ class AuthAPI(Resource):
     def get(self):
         caller = get_caller(request)
 
-        return res(
-            "Reached AuthAPI 🎉", "success", user=convert_query(caller, sanitize=True)
-        )
+        return res("Reached AuthAPI 🎉", "success", user=convert_query(caller))
 
 
 class AuthGoogleAPI(Resource):
@@ -132,6 +130,6 @@ class AuthGoogleAPI(Resource):
             "Created JWT 🎉",
             "success",
             token=encoded.decode("utf-8"),
-            user=convert_query(user, sanitize=True),
+            user=convert_query(user),
         )
 

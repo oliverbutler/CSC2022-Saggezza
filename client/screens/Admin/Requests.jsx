@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
 import { SearchBar, ListItem } from "react-native-elements";
 import * as SecureStore from "expo-secure-store";
@@ -9,26 +9,22 @@ import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../../components/Request/RequestListView";
 
-const Request = () => {
-  const [requests, setRequests] = useState([]);
-  const [refreshing, setRefreshing] = useState(true);
+import AppContext from "../../context/AppContext";
 
-  useEffect(() => {
-    userRefresh();
-  }, []);
+import { axios } from "../../helpers/Axios";
+
+const Request = () => {
+  //const [requests, setRequests] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const { state, dispatch } = React.useContext(AppContext);
 
   const userRefresh = () => {
-    SecureStore.getItemAsync("token").then(token => {
-      setRefreshing(true);
-      const instance = axios.create({
-        baseURL: `http://${ip}:5000/`,
-        timeout: 1000,
-        headers: { Authorization: "Bearer " + token }
-      });
+    setRefreshing(true);
+    axios().then(instance => {
       instance
         .get("/request")
         .then(res => {
-          setRequests(res.data.requests);
+          dispatch({ type: "SET_REQUESTS", payload: res.data.requests });
           setRefreshing(false);
         })
         .catch(err => console.log(err));
@@ -46,7 +42,7 @@ const Request = () => {
         lightTheme={true}
       /> */}
       <FlatList
-        data={requests}
+        data={state.requests}
         renderItem={({ item }) => (
           <RequestListView
             onPress={() =>
@@ -55,12 +51,9 @@ const Request = () => {
             request={item}
           />
         )}
-        keyExtractor={item => item._id.$oid}
+        keyExtractor={item => item.id}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => userRefresh()}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
         }
       />
     </SafeAreaView>

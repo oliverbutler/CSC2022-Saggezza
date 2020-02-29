@@ -18,9 +18,9 @@ function RequestStack() {
         options={{
           headerLeft: () => (
             <Icon
-              size={35}
-              name="ios-menu"
-              type="ionicon"
+              size={30}
+              name="menu"
+              type="feather"
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
@@ -36,8 +36,8 @@ function RequestStack() {
           headerRight: () => (
             <Icon
               size={30}
-              name="ios-create"
-              type="ionicon"
+              name="edit"
+              type="feather"
               onPress={() => alert("Edit Request")}
             />
           ),

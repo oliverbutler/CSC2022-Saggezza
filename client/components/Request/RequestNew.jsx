@@ -1,39 +1,85 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from "axios";
-import { SafeAreaView, View, Text, Image } from "react-native";
-import Label from "../Label";
-
+import { SafeAreaView, Text, Modal, Alert } from "react-native";
+import { Button, Input } from "react-native-elements";
 import DatePicker from "react-native-datepicker";
+import AppContext from "../../context/AppContext";
+import * as SecureStore from "expo-secure-store";
 
-import {
-  FormLabel,
-  FormInput,
-  FormValidationMessage,
-  Input
-} from "react-native-elements";
+const RequestNew = ({ navigation }) => {
+  const [modelVisible, setModalVisible] = React.useState(true);
+  const [date, setDate] = React.useState();
+  const [name, setName] = React.useState("");
+  const { state, dispatch } = React.useContext(AppContext);
+  const [amount, setAmount] = React.useState(0);
+  const [status, setStatus] = React.useState("");
 
-class RequestNew extends Component {
-  state = {
-    date: new Date()
+  const Post = () => {
+    SecureStore.getItemAsync("token").then(token => {
+      const instance = axios.create({
+        baseURL: "http://" + ip + ":5000/",
+        timeout: 1000,
+        headers: { Authorization: "Bearer " + token }
+      });
+      instance
+        .post("/request", {
+          name: JSON.stringify(name),
+          employee: state.user.id
+        })
+        .then(res => {
+          if (res.status == 200) {
+            Alert.alert(
+              "Success",
+              "Please add Addtional Info",
+              [
+                {
+                  text: "OK",
+
+                  onPress: () => navigation.goBack()
+                }
+              ],
+              { cancelable: false }
+            );
+          }
+        })
+        .catch(err => console.log(err));
+    });
   };
-  render() {
-    const { navigate } = this.props;
 
-    const { date } = this.state;
+  return (
+    <SafeAreaView style={{ height: "100%" }}>
+      <Modal animationType="slide" transparent={false} visible={modelVisible}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 25,
+            paddingBottom: 20,
+            paddingTop: 40
+          }}
+        >
+          New Request Form
+        </Text>
 
-    return (
-      <SafeAreaView style={{ height: "100%" }}>
         <Input
           label="Name of Request"
           //leftIcon=""
           placeholder="Enter name of request"
           errorStyle={{ color: "red" }}
-          errorMessage="Some Validation Function"
+          //="Some Validation Function"
+          onChangeText={text => setName(text)}
+          value={name}
+          containerStyle={{ paddingBottom: 20 }}
         />
-        <Label label="Date"></Label>
+        <Text>{status}</Text>
+        <Text style={{ paddingLeft: "2%", fontSize: 16 }}>Expense Date</Text>
         <DatePicker
-          style={{ width: 200 }}
-          date={this.state.date} //initial date from state
+          style={{
+            width: "75%",
+            paddingLeft: "5%",
+            paddingTop: "2%",
+            paddingBottom: "4%"
+          }}
+          date={date} //initial date from state
           mode="date" //The enum of date, datetime and time
           placeholder="select date"
           format="DD-MM-YYYY"
@@ -53,12 +99,17 @@ class RequestNew extends Component {
             }
           }}
           onDateChange={date => {
-            this.setState({ date: date });
+            setDate(date);
           }}
         />
-      </SafeAreaView>
-    );
-  }
-}
+
+        <Button title="Submit Draft" onPress={() => Post()} />
+
+        <Button title="Cancel" onPress={() => navigation.goBack()} />
+      </Modal>
+    </SafeAreaView>
+  );
+};
+
 //onChangeText={someFunction}
 export default RequestNew;

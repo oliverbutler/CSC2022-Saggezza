@@ -1,11 +1,15 @@
 // Libary Imports
 import React, { Component } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Button, RefreshControl } from "react-native";
 import { Avatar, Text } from "react-native-elements";
-import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import { axios } from "../../helpers/Axios";
+
+import AppContext from "../../context/AppContext";
 
 // Config Imports
 import "../../secrets.js";
+import Role from "./Role";
 
 const getProfile = user => {
   if (user.profile_picture != "") {
@@ -13,50 +17,78 @@ const getProfile = user => {
   } else return "none";
 };
 
-class UserView extends Component {
-  state = {
-    requests: [],
-    user: this.props.route.params.user
+const UserView = props => {
+  const { state, dispatch } = React.useContext(AppContext);
+  const navigation = useNavigation();
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const user = props.route.params.user;
+
+  const userRefresh = () => {
+    setRefreshing(true);
+    axios().then(instance => {
+      instance
+        .get("/user/" + user.id)
+        .then(res => {
+          dispatch({ type: "SET_USER", payload: res.data.user });
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
+    });
   };
 
-  componentDidMount() {
-    axios
-      .get(`http://` + ip + `:5000/request/` + this.state.user._id.$oid)
-      .then(res => {
-        const requests = res.data.returned_requests;
-        this.setState({ requests });
-      });
-  }
+  return (
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
+      }
+    >
+      <View style={{ alignSelf: "center", paddingTop: 15, padding: 10 }}>
+        <Avatar
+          rounded
+          size="xlarge"
+          title={user.first_name.charAt(0) + user.last_name.charAt(0)}
+          // source={{
+          //   uri: getProfile(this.state.user)
+          // }}
+        />
+      </View>
+      <View style={{ alignItems: "center" }}>
+        <Text h2>{user.first_name + " " + user.last_name}</Text>
+        <Text>{user.email}</Text>
+        <Role role={user.role} />
+        {(() => {
+          switch (user.role) {
+            case "manager":
+              return (
+                // show list of the manager's employees, button is temporary
+                // localhost:5000/user/this.state.user._id.$oid/employee
+                // for getting a managers employees
+                <Button
+                  title="Users"
+                  buttonStyle={{ margin: 5 }}
+                  onPress={() => navigation.navigate("Users")}
+                ></Button>
+              );
+            case "employee":
+              return (
+                // show list of the user's requests, button is temporary
+                // localhost:5000/user/this.state.user._id.$oid/requests (not confirmed)
+                // for getting a users requests
+                <Button
+                  title="Requests"
+                  buttonStyle={{ margin: 5 }}
+                  onPress={() => navigation.navigate("Requests")}
+                ></Button>
+              );
+            default:
+              return null;
+          }
+        })()}
+      </View>
+    </ScrollView>
+  );
+};
 
-  _deleteHandler = () => {
-    //function to make simple alert
-    alert("Deleted User");
-  };
-
-  render() {
-    return (
-      <ScrollView>
-        <View style={{ alignSelf: "center", paddingTop: 15, padding: 10 }}>
-          <Avatar
-            rounded
-            size="xlarge"
-            title={
-              this.state.user.first_name.charAt(0) +
-              this.state.user.last_name.charAt(0)
-            }
-            source={{
-              uri: getProfile(this.state.user)
-            }}
-          />
-        </View>
-        <View style={{ alignItems: "center" }}>
-          <Text h2>
-            {this.state.user.first_name + " " + this.state.user.last_name}
-          </Text>
-          <Text>{this.state.user.email}</Text>
-        </View>
-      </ScrollView>
-    );
-  }
-}
 export default UserView;
