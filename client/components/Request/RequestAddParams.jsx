@@ -9,15 +9,17 @@ import {
   Picker,
   View,
   StyleSheet,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native";
-import { Button, Input } from "react-native-elements";
+import { Button, Input, Icon } from "react-native-elements";
 import AppContext from "../../context/AppContext";
 import * as SecureStore from "expo-secure-store";
 import RNPickerSelect from "react-native-picker-select";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const RequestAddParams = props => {
   console.log(props);
@@ -28,11 +30,9 @@ const RequestAddParams = props => {
   const [amount, setAmount] = React.useState(0);
   const [status, setStatus] = React.useState("");
   const [category, setCategory] = React.useState("LOl");
-  const [image, setImage] = React.useState(null);
-
-  // let { image } = this.state;
-
-  var data = [["Food", "Fuel", "Accomodation", "Drugs"]];
+  const [image, setImage] = React.useState();
+  const [closing, setClosing] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const Post = () => {
     SecureStore.getItemAsync("token").then(token => {
@@ -71,6 +71,11 @@ const RequestAddParams = props => {
     console.log("hi");
   });
 
+  const dateConvert = date => {
+    var newDate = new Date(date);
+    return newDate.toLocaleString();
+  };
+
   const _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -82,35 +87,54 @@ const RequestAddParams = props => {
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      setImage(result.uri);
     }
   };
 
   return (
-    <SafeAreaView style={{ height: "100%" }}>
-      <Modal animationType="slide" transparent={false} visible={modelVisible}>
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 25,
-            paddingBottom: 20,
-            paddingTop: 40
-          }}
-        >
-          Add Details to Draft
-        </Text>
-
-        <Text>{props.route.params.request.id}</Text>
+    <Modal animationType="slide" transparent={false} visible={modelVisible}>
+      <SafeAreaView>
+        <View style={{ flexDirection: "row", paddingBottom: 15 }}>
+          <View style={{ flex: 1 }}></View>
+          <Text
+            h2
+            h2Style={{
+              flex: 5,
+              textAlign: "center"
+            }}
+          >
+            Add Details to Draft
+          </Text>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center"
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setClosing(true);
+                props.navigation.goBack();
+              }}
+            >
+              {closing ? (
+                <ActivityIndicator></ActivityIndicator>
+              ) : (
+                <Icon name="x-square" type="feather" size={30} />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
 
         <Input
           label="Name of Request"
           editable={false}
-          value={props.route.params.request.name}
+          value={props.route.params.request.name.replace(/\"/g, "")}
           containerStyle={{ paddingBottom: 20 }}
         />
 
         <Input
-          label="Name of Request"
+          label="Date of Submission"
           editable={false}
           value={props.route.params.request.date_created.date}
           containerStyle={{ paddingBottom: 20 }}
@@ -158,7 +182,11 @@ const RequestAddParams = props => {
         </View>
 
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            paddingBottom: 20
+          }}
         >
           <Button
             title="Pick an image from camera roll"
@@ -172,11 +200,20 @@ const RequestAddParams = props => {
           )}
         </View>
 
-        <Button title="Submit" onPress={() => Post()} />
-
-        <Button title="Cancel" onPress={() => props.navigation.goBack()} />
-      </Modal>
-    </SafeAreaView>
+        {loading ? (
+          <ActivityIndicator></ActivityIndicator>
+        ) : (
+          <Button
+            style={{
+              flexDirection: "row",
+              justifyContent: "center"
+            }}
+            title="Submit"
+            onPress={() => Post()}
+          />
+        )}
+      </SafeAreaView>
+    </Modal>
   );
 };
 
