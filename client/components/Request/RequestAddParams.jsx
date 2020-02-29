@@ -4,9 +4,6 @@ import {
   SafeAreaView,
   Text,
   Modal,
-  Alert,
-  ShadowPropTypesIOS,
-  Picker,
   View,
   StyleSheet,
   Image,
@@ -68,9 +65,9 @@ const RequestAddParams = props => {
 
   useEffect(() => {
     getPermissionAsync();
-    console.log("hi");
   });
 
+  //Doesnt work atm
   const dateConvert = date => {
     var newDate = new Date(date);
     return newDate.toLocaleString();
