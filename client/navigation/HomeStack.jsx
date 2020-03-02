@@ -20,7 +20,7 @@ const HomeStack = () => {
   } else if ((state.user.role = "manager")) {
     titleA = "Manager Home";
   } else if ((state.user.role = "employee")) {
-    titleA = "Admin Home";
+    titleA = "Employee Home";
   }
   return (
     <Stack.Navigator>

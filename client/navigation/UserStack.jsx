@@ -3,14 +3,23 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../screens/Admin/Home";
 import Users from "../screens/Admin/Users";
 import UserView from "../components/User/UserView";
 
+// Context
+import AppContext from "../context/AppContext";
+
 const Stack = createStackNavigator();
 
-function UserStack() {
+const UserStack = () => {
   const navigation = useNavigation();
+  const { state, dispatch } = React.useContext(AppContext);
+  titleA = "";
+  if ((state.user.role = "admin")) {
+    titleA = "All Users";
+  } else if ((state.user.role = "manager")) {
+    titleA = "Your Employees";
+  }
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -26,7 +35,7 @@ function UserStack() {
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: "User List"
+          title: titleA
         }}
       />
       <Stack.Screen
@@ -39,6 +48,6 @@ function UserStack() {
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default UserStack;

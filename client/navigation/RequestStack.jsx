@@ -6,10 +6,22 @@ import { useNavigation, DrawerActions } from "@react-navigation/native";
 import Requests from "../screens/Admin/Requests";
 import RequestView from "../components/Request/RequestView";
 
+// Context
+import AppContext from "../context/AppContext";
+
 const Stack = createStackNavigator();
 
-function RequestStack() {
+const RequestStack = () => {
   const navigation = useNavigation();
+  const { state, dispatch } = React.useContext(AppContext);
+  titleA = "";
+  if ((state.user.role = "admin")) {
+    titleA = "All Requests";
+  } else if ((state.user.role = "manager")) {
+    titleA = "Your Employees Requests";
+  } else if ((state.user.role = "employee")) {
+    titleA = "Your Requests";
+  }
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -25,7 +37,7 @@ function RequestStack() {
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: "All Requests"
+          title: titleA
         }}
       />
       <Stack.Screen
@@ -46,6 +58,6 @@ function RequestStack() {
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default RequestStack;
