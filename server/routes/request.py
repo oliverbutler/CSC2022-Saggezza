@@ -203,6 +203,7 @@ class RequestParameterListAPI(Resource):
         return res(
             "Request Parameter added",
             "success",
+            parameter=convert_query(request_parameter),
             request=convert_query(returned_request),
         )
 

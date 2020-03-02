@@ -133,7 +133,7 @@ const reducer = (prevState, action) => {
         ...prevState,
         user: null,
         isSignIn: false,
-        loading: true
+        isLoading: true
       };
   }
 };
