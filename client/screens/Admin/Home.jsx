@@ -54,6 +54,7 @@ const Home = ({ navigation }) => {
           alignSelf: "flex-start"
         }}
       >
+        {/*
         <HomeLabel
           icon="users"
           number={state.users ? state.users.length : null}
@@ -71,7 +72,7 @@ const Home = ({ navigation }) => {
           number={state.clients ? state.clients.length : null}
           title="Clients"
           onPress={() => navigation.navigate("Clients")}
-        />
+        />*/}
       </View>
     </ScrollView>
   );
