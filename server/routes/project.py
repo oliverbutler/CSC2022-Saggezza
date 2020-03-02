@@ -36,7 +36,7 @@ class ProjectListAPI(Resource):
     def get(self):
         categories = Project.objects().all()
         return res(
-            "All categories returned",
+            "All projects returned",
             "success",
             categories=convert_query(categories, list=True),
         )
@@ -53,19 +53,22 @@ class ProjectAPI(Resource):
         caller = get_caller(request)
         if caller["role"] != "admin":
             return res("⛔️ Must be an admin to update a project", "error"), 400
+        
+        req = parse(request)
+        errors = ProjectSchema().validate(req)
+        if errors:
+            return res("Errors in request", "alert", errors=errors), 400
         try:
-            req = parse(request)
-            errors = ProjectSchema().validate(req)
-            if errors:
-                return res("Errors in request", "alert", errors=errors), 400
-            project = Project.objects(id=id)
-
-            for i in req:
-                user[i] = req[i]
-
-            return res("Project Modified", "success", project=convert_query(project))
+            project = Project.objects(id=id)[0]
         except:
             return res("Project doesn't exist", "error"), 400
+        for i in req:
+            project[i] = req[i]
+
+        project.save()
+
+        return res("Project Modified", "success", project=convert_query(project))
+        
 
     @auth.login_required
     def get(self, id):

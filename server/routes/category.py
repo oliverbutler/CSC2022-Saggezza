@@ -55,10 +55,10 @@ class CategoryAPI(Resource):
             return res("⛔️ Must be an admin to update a category", "error"), 400
         try:
             req = parse(request)
-            category = Category.objects(id=id)
+            category = Category.objects(id=id)[0]
 
             for i in req:
-                user[i] = req[i]
+                category[i] = req[i]
 
             return res("Category Modified", "success", category=convert_query(category))
         except:
