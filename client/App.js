@@ -5,9 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import React from "react";
 import RequestNew from "./components/Request/RequestNew";
 import AppContext from "./context/AppContext";
-import AdminDrawer from "./navigation/Admin/AdminDrawer";
-import EmployeeDrawer from "./navigation/Employee/EmployeeDrawer";
-import ManagerDrawer from "./navigation/Manager/ManagerDrawer";
+import AppDrawer from "./navigation/AppDrawer";
 import Login from "./screens/Login";
 import SplashScreen from "./screens/SplashScreen";
 import ClientNew from "./components/Client/ClientNew";
@@ -196,12 +194,8 @@ const App = () => {
                 animationTypeForReplace: state.isSignIn ? "push" : "pop"
               }}
             />
-          ) : state.user.role == "admin" ? (
-            <Stack.Screen name="Drawer" component={AdminDrawer} />
-          ) : state.user.role == "manager" ? (
-            <Stack.Screen name="Drawer" component={ManagerDrawer} />
           ) : (
-            <Stack.Screen name="Drawer" component={EmployeeDrawer} />
+            <Stack.Screen name="Drawer" component={AppDrawer} />
           )}
           <Stack.Screen name="RequestNew" component={RequestNew} />
           <Stack.Screen name="RequestAddParams" component={RequestAddParams} />
