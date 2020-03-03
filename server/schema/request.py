@@ -21,7 +21,7 @@ class RequestSchema(Schema):
 class RequestParameterListSchema(Schema):
     category = fields.Str(required=True, validate=Length(max=24))
     name = fields.Str(required=True, validate=Length(max=32))
-    amount = fields.Int(required=True)
+    amount = fields.Decimal(required=True)
     # TODO: Not sure how to validate date
     date_expense = fields.Str(required=True)
     billable_client = fields.Bool(required=True)
