@@ -58,6 +58,7 @@ class RequestParameter(EmbeddedDocument):
     payment_method = StringField(required=True, choices=["corporate", "own"])
     file_evidence = StringField()
     description = StringField(max_length=1080)
+    file = StringField(default="")
 
     def to_json(self):
         decode = {
