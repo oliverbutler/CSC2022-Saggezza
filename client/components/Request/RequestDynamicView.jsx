@@ -82,11 +82,11 @@ const RequestDynamicView = paramID => {
       });
       instance
         .post("/request/" + paramID.paramID + "/parameter", {
-          name: "Thomas",
-          amount: 12.12,
+          name: expenseName,
+          amount: amount,
           category: category,
           date_expense: "2020-1-15",
-          billable_client: true,
+          billable_client: billableChecked,
           payment_method: "own"
         })
 
