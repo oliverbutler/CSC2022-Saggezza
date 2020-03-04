@@ -20,6 +20,7 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DatePicker from "react-native-datepicker";
+import RequestDynamicView from "./RequestDynamicView";
 
 const RequestAddParams = props => {
   console.log(props);
@@ -42,33 +43,7 @@ const RequestAddParams = props => {
   const [billableChecked, setBillableChecked] = React.useState(false);
   const [payentMethod, setPaymentMethod] = React.useState("");
 
-  const Post = () => {
-    if (personalChecked) {
-      setPaymentMethod("own");
-    } else {
-      setPaymentMethod("corporate");
-    }
-    SecureStore.getItemAsync("token").then(token => {
-      const instance = axios.create({
-        baseURL: "http://" + ip + ":5000/",
-        timeout: 1000,
-        headers: { Authorization: "Bearer " + token }
-      });
-      instance
-        .post("/request/" + props.route.params.request.id + "/parameter", {
-          name: expenseName,
-          amount: amount,
-          category: category,
-          date_expense: "2020-1-15",
-          billable_client: billableChecked,
-          payment_method: "own"
-        })
-
-        .then(res => console.log(res.data))
-
-        .catch(err => console.log(err));
-    });
-  };
+  const [title, setTitle] = React.useState("Add New Expense");
 
   const categoryToArray = categories => {
     var newarray = [];
@@ -78,18 +53,13 @@ const RequestAddParams = props => {
     return newarray;
   };
 
-  const getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
+  const changeButtonTitle = () => {
+    if (state.show == true) {
+      setTitle("Cancel Expense");
+    } else {
+      setTitle("Add New Expense");
     }
   };
-
-  useEffect(() => {
-    getPermissionAsync();
-  });
 
   //Doesnt work atm
   const dateConvert = date => {
@@ -97,33 +67,24 @@ const RequestAddParams = props => {
     return newDate.toLocaleString();
   };
 
-  const _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
-
   return (
     <Modal animationType="slide" transparent={false} visible={modelVisible}>
       <SafeAreaView>
         <ScrollView>
-          <View style={{ flexDirection: "row", paddingBottom: 15 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingBottom: 10
+              //backgroundColor: "#91D000"
+            }}
+          >
             <View style={{ flex: 1 }}></View>
             <Text
               style={{
                 textAlign: "center",
                 fontSize: 23,
                 paddingBottom: 20,
-                paddingTop: 10
+                paddingTop: 20
               }}
             >
               Request Application
@@ -144,181 +105,43 @@ const RequestAddParams = props => {
                 {closing ? (
                   <ActivityIndicator></ActivityIndicator>
                 ) : (
-                  <Icon name="x-square" type="feather" size={30} />
+                  <Icon name="x-square" type="feather" size={40} />
                 )}
               </TouchableOpacity>
             </View>
           </View>
 
-          <Input
-            label="Name of Request"
-            editable={false}
-            value={props.route.params.request.name.replace(/\"/g, "")}
-            containerStyle={{ paddingBottom: 20 }}
-          />
-
-          <Input
-            label="Date of Submission"
-            editable={false}
-            value={props.route.params.request.date_created.date}
-            containerStyle={{ paddingBottom: 20 }}
-          />
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 23,
-              paddingBottom: 20,
-              paddingTop: 10
-            }}
-          >
-            Add an Expense
-          </Text>
-
-          <Input
-            label="Name of Expense"
-            //leftIcon=""
-            placeholder="Enter Expense"
-            errorStyle={{ color: "red" }}
-            //="Some Validation Function"
-            onChangeText={text => setExpenseName(text)}
-            value={expenseName}
-            containerStyle={{ paddingBottom: 20 }}
-          />
-
-          <Input
-            label="Amount "
-            //leftIcon=""
-            placeholder="Enter Amount"
-            errorStyle={{ color: "red" }}
-            //="Some Validation Function"
-            onChangeText={text => setAmount(text)}
-            value={amount}
-            containerStyle={{ paddingBottom: 20 }}
-          />
-
-          <Input
-            label="Category"
-            placeholder="Select a Category"
-            value={category}
-            //containerStyle={{}}
-          />
-
-          <Picker
-            selectedValue={category}
-            onValueChange={onValueChange => setCategory(onValueChange)}
-          >
-            {state.categories.map((item, index) => {
-              return (
-                <Picker.Item label={item.name} value={item.id} key={index} />
-              );
-            })}
-          </Picker>
-          <Text style={{ paddingLeft: "2%", fontSize: 16 }}>Expense Date</Text>
-          <DatePicker
-            style={{
-              width: "75%",
-              paddingLeft: "5%",
-              paddingTop: "2%",
-              paddingBottom: "4%"
-            }}
-            date={expenseDate} //initial date from state
-            mode="date" //The enum of date, datetime and time
-            placeholder="select date"
-            format="DD-MM-YYYY"
-            minDate="01-01-2019"
-            maxDate="01-01-2022"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: "absolute",
-                left: 0,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={expenseDate => {
-              setExpenseDate(expenseDate);
-            }}
-          />
-
-          <Text style={{ paddingLeft: "2%", fontSize: 16 }}>
-            Payment Method
-          </Text>
-          <CheckBox
-            center
-            title="Personal"
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            checked={personalChecked}
-            onPress={() => setPersonalChecked(!personalChecked)}
-          />
-          <CheckBox
-            center
-            title="Corporate"
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            checked={corporateChecked}
-            onPress={() => setCoorprateChecked(!corporateChecked)}
-          />
-
-          <Text style={{ paddingLeft: "2%", fontSize: 16, paddingTop: 20 }}>
-            Billable to Client?
-          </Text>
-          <CheckBox
-            center
-            title="Yes"
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            checked={billableChecked}
-            onPress={() => setBillableChecked(!billableChecked)}
-          />
-
-          <Text
-            style={{
-              paddingLeft: "2%",
-              fontSize: 16,
-              paddingTop: 20,
-              paddingBottom: 20
-            }}
-          >
-            Upload Evidence
-          </Text>
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              paddingBottom: 20
-            }}
-          >
-            <Button
-              title="Pick an image from camera roll"
-              onPress={() => _pickImage()}
-              style={{ paddingBottom: 20 }}
+          <View>
+            <Input
+              label="Name of Request"
+              editable={false}
+              value={props.route.params.request.name.replace(/\"/g, "")}
+              containerStyle={{ paddingBottom: 20 }}
             />
-            {image && (
-              <Image
-                source={{ uri: image }}
-                style={{ width: 200, height: 200 }}
-              />
-            )}
-          </View>
 
-          {loading ? (
-            <ActivityIndicator></ActivityIndicator>
-          ) : (
+            <Input
+              label="Date of Submission"
+              editable={false}
+              value={props.route.params.request.date_created.date}
+              containerStyle={{ paddingBottom: 20 }}
+            />
+
             <Button
               style={{
                 flexDirection: "row",
                 justifyContent: "center"
               }}
-              title="Submit"
-              onPress={() => Post()}
+              title={state.title}
+              onPress={() => {
+                dispatch({ type: "SHOW", payload: !state.show });
+                dispatch({ type: "TITLE", payload: "Cancel" });
+                changeButtonTitle();
+              }}
             />
-          )}
+            {state.show ? (
+              <RequestDynamicView paramID={props.route.params.request.id} />
+            ) : null}
+          </View>
         </ScrollView>
       </SafeAreaView>
     </Modal>
