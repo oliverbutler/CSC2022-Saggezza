@@ -58,7 +58,7 @@ const Request = () => {
       />
       <Button
         title="Add Request"
-        onPress={() => navigation.navigate("RequestNew")}
+        onPress={() => navigation.navigate("Modal")}
       />
     </SafeAreaView>
   );

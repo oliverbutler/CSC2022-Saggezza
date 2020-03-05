@@ -8,8 +8,10 @@ import AppContext from "./context/AppContext";
 import AppDrawer from "./navigation/AppDrawer";
 import Login from "./screens/Login";
 import SplashScreen from "./screens/SplashScreen";
-import ClientNew from "./components/Client/ClientNew";
-import RequestAddParams from "./components/Request/RequestAddParams";
+// import ClientNew from "./components/Client/ClientNew";
+// import RequestAddParams from "./components/Request/RequestAddParams";
+
+import Modal from "./screens/Modal"
 
 const initialState = {
   user: null, // user model from server
@@ -19,9 +21,7 @@ const initialState = {
   requests: [],
   clients: [],
   projects: [],
-  categories: [],
-  show: false,
-  title: "Add New Expense"
+  categories: []
 };
 
 const findUser = (arr, id) => {
@@ -210,9 +210,7 @@ const App = () => {
           ) : (
             <Stack.Screen name="Drawer" component={AppDrawer} />
           )}
-          <Stack.Screen name="RequestNew" component={RequestNew} />
-          <Stack.Screen name="RequestAddParams" component={RequestAddParams} />
-          <Stack.Screen name="ClientNew" component={ClientNew} />
+          <Stack.Screen name="Modal" component={Modal} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContext.Provider>
