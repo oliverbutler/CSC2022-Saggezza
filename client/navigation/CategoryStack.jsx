@@ -3,9 +3,7 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../screens/Admin/Home";
-import Users from "../screens/Admin/Users";
-import Categories from "../screens/Admin/Categories";
+import Categories from "../screens/Categories";
 import UserView from "../components/User/UserView";
 
 const Stack = createStackNavigator();

@@ -1,17 +1,17 @@
 import React, { Component, useEffect, useState } from "react";
 // import axios from "axios";
-import { RefreshControl, SafeAreaView, View, Text, Image } from "react-native";
+import { RefreshControl, SafeAreaView, View, Text, Button } from "react-native";
 import { SearchBar, ListItem } from "react-native-elements";
 import * as SecureStore from "expo-secure-store";
 
 import { useNavigation } from "@react-navigation/native";
 //Import Custom Header to use on screen
 import { FlatList } from "react-native-gesture-handler";
-import RequestListView from "../../components/Request/RequestListView";
+import RequestListView from "../components/Request/RequestListView";
 
-import AppContext from "../../context/AppContext";
+import AppContext from "../context/AppContext";
 
-import { axios } from "../../helpers/Axios";
+import { axios } from "../helpers/Axios";
 
 const Request = () => {
   //const [requests, setRequests] = useState([]);
@@ -55,6 +55,10 @@ const Request = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
         }
+      />
+      <Button
+        title="Add Request"
+        onPress={() => navigation.navigate("RequestNew")}
       />
     </SafeAreaView>
   );

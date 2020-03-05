@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { axios } from "../../helpers/Axios";
+import { axios } from "../helpers/Axios";
 
 // Libary Imports
-import { RefreshControl, SafeAreaView, View } from "react-native";
+import { RefreshControl, SafeAreaView, View , Text} from "react-native";
 import { SearchBar } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
 // Custom Component Imports
-import UserPreview from "../../components/User/UserListView";
-import AppContext from "../../context/AppContext";
+import UserPreview from "../components/User/UserListView";
+import AppContext from "../context/AppContext";
 
 // Config Import
-import "../../secrets.js";
+import "../secrets.js";
 
 const User = () => {
   const navigation = useNavigation();
@@ -37,6 +37,7 @@ const User = () => {
   };
 
   return (
+
     <View>
       <SafeAreaView style={{ height: "100%" }}>
         <SearchBar
@@ -46,6 +47,7 @@ const User = () => {
           onChangeText={setSearch}
           value={search}
         />
+        <Text>You are a {state.user.role}</Text>
         <FlatList
           data={state.users}
           renderItem={({ item }) => (

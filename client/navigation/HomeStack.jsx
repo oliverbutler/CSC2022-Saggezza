@@ -3,8 +3,8 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../screens/Admin/Home";
-import Settings from "../screens/Admin/Settings";
+import Home from "../screens/Home";
+import Settings from "../screens/Settings";
 
 // Context
 import AppContext from "../context/AppContext";
@@ -15,11 +15,11 @@ const HomeStack = () => {
   const navigation = useNavigation();
   const { state, dispatch } = React.useContext(AppContext);
   titleA = "";
-  if ((state.user.role = "admin")) {
+  if ((state.user.role == "admin")) {
     titleA = "Admin Home";
-  } else if ((state.user.role = "manager")) {
+  } else if ((state.user.role == "manager")) {
     titleA = "Manager Home";
-  } else if ((state.user.role = "employee")) {
+  } else if ((state.user.role == "employee")) {
     titleA = "Employee Home";
   }
   return (

@@ -34,7 +34,7 @@ const findUser = (arr, id) => {
 };
 
 const reducer = (prevState, action) => {
-  console.log(`🟩 Action ▶ ${JSON.stringify(action).substring(0, 200)}...`);
+  console.log(`🟩 Action ▶ ${JSON.stringify(action)}`);
   switch (action.type) {
     case "SET_USERS":
       return {
@@ -129,11 +129,12 @@ const reducer = (prevState, action) => {
         isSignIn: true
       };
     case "SIGN_OUT":
+      SecureStore.deleteItemAsync('token')
       return {
         ...prevState,
         user: null,
         isSignIn: false,
-        isLoading: true
+        isLoading: false
       };
     case "SHOW":
       return {

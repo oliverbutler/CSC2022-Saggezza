@@ -16,7 +16,11 @@ const DrawerNav = createDrawerNavigator();
 
 const AppDrawer = () => {
   const { state, dispatch } = React.useContext(AppContext);
-  if ((state.user.role = "admin")) {
+
+  if(!state.user)
+    return <></>
+
+  if (state.user.role == "admin") {
     return (
       <DrawerNav.Navigator
         drawerContent={Drawer}
@@ -32,7 +36,7 @@ const AppDrawer = () => {
       </DrawerNav.Navigator>
     );
   }
-  if ((state.user.role = "manager")) {
+  if (state.user.role == "manager") {
     return (
       <DrawerNav.Navigator
         drawerContent={Drawer}
@@ -41,12 +45,11 @@ const AppDrawer = () => {
         }}
       >
         <DrawerNav.Screen name="Home" component={HomeStack} />
-        <DrawerNav.Screen name="Employees" component={UserStack} />
         <DrawerNav.Screen name="Requests" component={RequestStack} />
       </DrawerNav.Navigator>
     );
   }
-  if ((state.user.role = "employee")) {
+  if (state.user.role == "employee") {
     return (
       <DrawerNav.Navigator
         drawerContent={Drawer}
@@ -55,7 +58,7 @@ const AppDrawer = () => {
         }}
       >
         <DrawerNav.Screen name="Home" component={HomeStack} />
-        <DrawerNav.Screen name="My Requests" component={RequestStack} />
+        <DrawerNav.Screen name="Requests" component={RequestStack} />
       </DrawerNav.Navigator>
     );
   }

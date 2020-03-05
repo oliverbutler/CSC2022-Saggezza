@@ -3,7 +3,7 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Clients from "../screens/Admin/Clients";
+import Clients from "../screens/Clients";
 import ClientView from "../components/Client/ClientView";
 
 const Stack = createStackNavigator();

@@ -26,7 +26,7 @@ const HomeLabel = props => {
           {props.number ? (
             props.number
           ) : (
-            <ActivityIndicator></ActivityIndicator>
+            ""
           )}
         </Text>
         <Text style={styles.text}>{props.title}</Text>

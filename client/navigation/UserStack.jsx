@@ -3,7 +3,7 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Users from "../screens/Admin/Users";
+import Users from "../screens/Users";
 import UserView from "../components/User/UserView";
 
 // Context
@@ -15,9 +15,9 @@ const UserStack = () => {
   const navigation = useNavigation();
   const { state, dispatch } = React.useContext(AppContext);
   titleA = "";
-  if ((state.user.role = "admin")) {
+  if ((state.user.role == "admin")) {
     titleA = "All Users";
-  } else if ((state.user.role = "manager")) {
+  } else if ((state.user.role == "manager")) {
     titleA = "Your Employees";
   }
   return (
