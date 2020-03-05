@@ -35,9 +35,9 @@ class UserListAPI(Resource):
             return res("Errors in request", "alert", errors=errors), 400
 
         user = User(
-            first_name=req["first_name"],
-            last_name=req["last_name"],
-            email=req["email"],
+            first_name=req["first_name"].capitalize(),
+            last_name=req["last_name"].capitalize(),
+            email=req["email"].lower(),
             role=req["role"],
         )
         user.save()
