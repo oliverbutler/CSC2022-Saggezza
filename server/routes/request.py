@@ -7,12 +7,15 @@ from PIL import Image
 from model import *
 import datetime
 import os
+import uuid
 
 from routes.auth import auth
 
 # Connect to mongodb
 connect("saggezza_db", host="localhost", port=27017)
 
+UPLOAD_FOLDER = "./static/file/"
+ALLOWED_EXTENSIONS = set(["jpg"])
 
 class RequestListAPI(Resource):
     # |- /request
@@ -203,7 +206,6 @@ class RequestParameterListAPI(Resource):
         return res(
             "Request Parameter added",
             "success",
-            parameter=convert_query(request_parameter),
             request=convert_query(returned_request),
         )
 
@@ -314,3 +316,73 @@ class RequestParameterAPI(Resource):
                 )
 
         return res("Request Parameter doesn't exist", "error"), 400
+
+class RequestParameterAPIFile(Resource):
+    # |- /request/<id>/parameter/<pid>/file
+    # |- POST: Upload a new parameter
+    # \- DELETE: Delete uploaded parameter
+    
+    def post(self, id, pid):
+        caller = get_caller(request)
+        if caller["role"] != "employee":
+            return (
+                res("⛔️ Must be an employee to change a request parameter", "error"),
+                401,
+            )
+
+        req = parse(request)
+        errors = RequestParameterSchema().validate(req)
+        if errors:
+            return res("Errors in request", "alert", errors=errors), 400
+
+        try:
+            returned_request = Request.objects(id=id)[0]
+        except:
+            return res("Request doesn't exist", "error"), 400
+
+        found = False
+        for parameter in returned_request["request_parameter_list"]:
+            if str(parameter["_id"]) == pid:
+                found = True
+                break
+
+        if not found:
+            return res("Request Parameter not present within Request 😔", "error"), 400
+
+        if "file" in request.files:
+            file = request.files["file"]
+            image = Image.open(file)
+
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+
+            name = uuid.uuid4().hex
+            
+            image.save(UPLOAD_FOLDER + name + ".jpg")
+            parameter["file"] = "/file/" + name + ".jpg"
+            
+            returned_request.save()
+            return res("Parameter added successfully", "success")
+        else:
+            return res("No file in the request called file", "error"), 400
+
+
+    def delete(self, id, pid):
+        try:
+            returned_request = Request.objects(id=id)[0]
+            for parameter in returned_request["request_parameter_list"]:
+                if str(parameter["_id"]) == pid:
+                    found = True
+                    break
+
+            if not found:
+                return res("Request Parameter not present within Request 😔", "error"), 400
+
+            if os.path.exists("./static" + parameter["file"]):
+                os.remove(os.path.join("./static" + parameter["file"]))
+                returned_request.save()
+                return res("Parameter deleted", "success")
+            else:
+                return res("File does not exist", "error"), 400
+        except:
+            return res("Request doesn't exist", "error"), 400

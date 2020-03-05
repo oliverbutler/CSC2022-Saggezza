@@ -31,6 +31,7 @@ api.add_resource(RequestListAPI, "/request")
 api.add_resource(RequestAPI, "/request/<id>")
 api.add_resource(RequestParameterListAPI, "/request/<id>/parameter")
 api.add_resource(RequestParameterAPI, "/request/<id>/parameter/<pid>")
+api.add_resource(RequestParameterAPIFile, "/request/<id>/parameter/<pid>/file")
 
 # Category
 

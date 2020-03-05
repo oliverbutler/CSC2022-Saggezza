@@ -19,7 +19,9 @@ const initialState = {
   requests: [],
   clients: [],
   projects: [],
-  categories: []
+  categories: [],
+  show: false,
+  title: "Add New Expense"
 };
 
 const findUser = (arr, id) => {
@@ -132,6 +134,16 @@ const reducer = (prevState, action) => {
         user: null,
         isSignIn: false,
         isLoading: true
+      };
+    case "SHOW":
+      return {
+        ...prevState,
+        show: action.payload
+      };
+    case "TITLE":
+      return {
+        ...prevState,
+        title: action.payload
       };
   }
 };
