@@ -1,15 +1,16 @@
 import React from "react";
 import axios from "axios";
-import { SafeAreaView, Text, Modal, Alert } from "react-native";
-import { Button, Input } from "react-native-elements";
+import { View, Text, Alert, Button } from "react-native";
+import { Input } from "react-native-elements";
 import AppContext from "../../context/AppContext";
 import * as SecureStore from "expo-secure-store";
+import { useNavigation } from "@react-navigation/native";
 
-const RequestNew = ({ navigation }) => {
-  const [modelVisible, setModalVisible] = React.useState(true);
+const RequestNew = () => {
   const [name, setName] = React.useState("");
   const { state, dispatch } = React.useContext(AppContext);
-  const [status, setStatus] = React.useState("");
+
+  const navigation = useNavigation();
 
   const Post = () => {
     SecureStore.getItemAsync("token").then(token => {
@@ -24,55 +25,30 @@ const RequestNew = ({ navigation }) => {
           employee: state.user.id
         })
         .then(res => {
-          if (res.status == 200) {
-            Alert.alert(
-              "Success",
-              "Please add Addtional Info",
-              [
-                {
-                  text: "OK",
-
-                  onPress: () => navigation.goBack()
-                }
-              ],
-              { cancelable: false }
-            );
-          }
+          dispatch({ type: "SET_REQUEST", payload: res.data.request });
+          navigation.navigate("RequestView", {
+            request: res.data.request
+          });
         })
         .catch(err => console.log(err));
     });
   };
 
   return (
-    <SafeAreaView style={{ height: "100%" }}>
-      <Modal animationType="slide" transparent={false} visible={modelVisible}>
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 25,
-            paddingBottom: 20,
-            paddingTop: 40
-          }}
-        >
-          New Request Form
-        </Text>
+    <View style={{ height: "100%" }}>
+      <Input
+        label="Name of Request"
+        //leftIcon=""
+        placeholder="Enter name of request"
+        errorStyle={{ color: "red" }}
+        //="Some Validation Function"
+        onChangeText={text => setName(text)}
+        value={name}
+        containerStyle={{ paddingBottom: 20 }}
+      />
 
-        <Input
-          label="Name of Request"
-          //leftIcon=""
-          placeholder="Enter name of request"
-          errorStyle={{ color: "red" }}
-          //="Some Validation Function"
-          onChangeText={text => setName(text)}
-          value={name}
-          containerStyle={{ paddingBottom: 20 }}
-        />
-
-        <Button title="Submit Draft" onPress={() => Post()} />
-
-        <Button title="Cancel" onPress={() => navigation.goBack()} />
-      </Modal>
-    </SafeAreaView>
+      <Button title="Submit Draft" onPress={() => Post()} />
+    </View>
   );
 };
 

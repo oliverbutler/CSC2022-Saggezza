@@ -8,10 +8,14 @@ import AppContext from "./context/AppContext";
 import AppDrawer from "./navigation/AppDrawer";
 import Login from "./screens/Login";
 import SplashScreen from "./screens/SplashScreen";
+import {
+  TransitionSpecs,
+  CardStyleInterpolators
+} from "@react-navigation/stack";
 // import ClientNew from "./components/Client/ClientNew";
 // import RequestAddParams from "./components/Request/RequestAddParams";
 
-import Modal from "./screens/Modal"
+import Modal from "./screens/Modal";
 
 const initialState = {
   user: null, // user model from server
@@ -129,7 +133,7 @@ const reducer = (prevState, action) => {
         isSignIn: true
       };
     case "SIGN_OUT":
-      SecureStore.deleteItemAsync('token')
+      SecureStore.deleteItemAsync("token");
       return {
         ...prevState,
         user: null,
@@ -210,7 +214,13 @@ const App = () => {
           ) : (
             <Stack.Screen name="Drawer" component={AppDrawer} />
           )}
-          <Stack.Screen name="Modal" component={Modal} />
+          <Stack.Screen
+            name="Modal"
+            component={Modal}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContext.Provider>

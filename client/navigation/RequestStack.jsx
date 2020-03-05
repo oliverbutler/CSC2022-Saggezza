@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { View, Icon } from "react-native-elements";
+import { StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
+
+import { BlurView } from "expo-blur";
 
 import Requests from "../screens/Requests";
 import RequestView from "../components/Request/RequestView";
@@ -15,11 +18,11 @@ const RequestStack = () => {
   const navigation = useNavigation();
   const { state, dispatch } = React.useContext(AppContext);
   titleA = "";
-  if ((state.user.role == "admin")) {
+  if (state.user.role == "admin") {
     titleA = "All Requests";
-  } else if ((state.user.role == "manager")) {
+  } else if (state.user.role == "manager") {
     titleA = "Your Employees Requests";
-  } else if ((state.user.role == "employee")) {
+  } else if (state.user.role == "employee") {
     titleA = "Your Requests";
   }
   return (
@@ -37,23 +40,25 @@ const RequestStack = () => {
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: titleA
+          title: titleA,
+          headerRight: () => (
+            <Icon
+              size={30}
+              name="plus-square"
+              type="feather"
+              onPress={() =>
+                navigation.navigate("Modal", { type: "ADD_REQUEST" })
+              }
+            />
+          ),
+          headerRightContainerStyle: { paddingRight: 10 }
         }}
       />
       <Stack.Screen
         name="RequestView"
         component={RequestView}
         options={({ route }) => ({
-          title: route.params.request.name,
-          headerRight: () => (
-            <Icon
-              size={30}
-              name="edit"
-              type="feather"
-              onPress={() => alert("Edit Request")}
-            />
-          ),
-          headerRightContainerStyle: { paddingRight: 10 }
+          title: route.params.request.name
         })}
       />
     </Stack.Navigator>

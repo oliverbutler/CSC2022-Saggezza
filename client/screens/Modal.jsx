@@ -2,10 +2,32 @@ import React from "react";
 import { SafeAreaView, View, TouchableOpacity } from "react-native";
 import { Text, Button, Icon } from "react-native-elements";
 
-const Modal = ({ navigation }) => {
+import RequestNew from "../components/Request/RequestNew";
+
+const Modal = ({ navigation, route }) => {
+  var title = "";
+  var content = <></>;
+
+  switch (route.params.type) {
+    case "ADD_REQUEST":
+      title = "Add Request";
+      content = <RequestNew />;
+      break;
+    default:
+      break;
+  }
+
   return (
     <SafeAreaView>
-      <View style={{ flexDirection: "row", paddingBottom: 15 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          paddingBottom: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: "lightgrey",
+          marginBottom: 20
+        }}
+      >
         <View style={{ flex: 1 }}></View>
         <Text
           h3
@@ -14,7 +36,7 @@ const Modal = ({ navigation }) => {
             textAlign: "center"
           }}
         >
-          Create 🍌
+          {title}
         </Text>
         <View
           style={{
@@ -27,6 +49,7 @@ const Modal = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      {content}
     </SafeAreaView>
   );
 };

@@ -17,8 +17,7 @@ const DrawerNav = createDrawerNavigator();
 const AppDrawer = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
-  if(!state.user)
-    return <></>
+  if (!state.user) return <></>;
 
   if (state.user.role == "admin") {
     return (

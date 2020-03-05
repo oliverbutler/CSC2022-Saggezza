@@ -56,10 +56,6 @@ const Request = () => {
           <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
         }
       />
-      <Button
-        title="Add Request"
-        onPress={() => navigation.navigate("Modal")}
-      />
     </SafeAreaView>
   );
 };
