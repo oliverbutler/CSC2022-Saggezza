@@ -20,7 +20,7 @@ const RequestNew = ({ navigation }) => {
       });
       instance
         .post("/request", {
-          name: JSON.stringify(name),
+          name: name,
           employee: state.user.id
         })
         .then(res => {
