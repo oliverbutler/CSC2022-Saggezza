@@ -1,22 +1,35 @@
-import React, { Component, useEffect, useState } from "react";
-// import axios from "axios";
-import { RefreshControl, SafeAreaView, View, Text } from "react-native";
-import { SearchBar, ListItem, Button } from "react-native-elements";
-import * as SecureStore from "expo-secure-store";
-
 import { useNavigation } from "@react-navigation/native";
-//Import Custom Header to use on screen
+import Fuse from "fuse.js";
+import React, { useEffect, useState } from "react";
+import { RefreshControl, SafeAreaView } from "react-native";
+import { SearchBar } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
 import RequestListView from "../components/Request/RequestListView";
-
 import AppContext from "../context/AppContext";
-
 import { axios } from "../helpers/Axios";
 
 const Request = () => {
-  //const [requests, setRequests] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
   const { state, dispatch } = React.useContext(AppContext);
+
+  const [search, setSearch] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const [results, setResults] = useState([]);
+
+  var options = {
+    shouldSort: true,
+    threshold: 0.6,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: ["name"]
+  };
+
+  var fuse = new Fuse(state.requests, options);
+
+  useEffect(() => {
+    setResults(fuse.search(search));
+  }, [search]);
 
   const userRefresh = () => {
     setRefreshing(true);
@@ -35,14 +48,15 @@ const Request = () => {
 
   return (
     <SafeAreaView style={{ height: "100%" }}>
-      {/* <SearchBar
-        placeholder="Search for an application..."
-        onChangeText={updateSearch(search)}
-        value={search}
+      <SearchBar
+        round={true}
         lightTheme={true}
-      /> */}
+        placeholder="Search Requests..."
+        onChangeText={setSearch}
+        value={search}
+      />
       <FlatList
-        data={state.requests}
+        data={search == "" ? state.requests : results}
         renderItem={({ item }) => (
           <RequestListView
             onPress={() =>

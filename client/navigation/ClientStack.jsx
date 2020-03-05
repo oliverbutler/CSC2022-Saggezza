@@ -30,7 +30,9 @@ const ClientStack = () => {
               size={30}
               name="plus-square"
               type="feather"
-              onPress={() => navigation.navigate("ClientNew")}
+              onPress={() =>
+                navigation.navigate("Modal", { type: "ADD_CLIENT" })
+              }
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },

@@ -1,77 +1,72 @@
-import React, { Component } from "react";
-import axios from "axios";
-
-// Libary Imports
-import { RefreshControl, SafeAreaView, View } from "react-native";
-import { SearchBar } from "react-native-elements";
-import { FlatList } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import * as SecureStore from "expo-secure-store";
-
-// Custom Component Imports
-import UserPreview from "../components/User/UserListView";
+import Fuse from "fuse.js";
+import React, { useEffect, useState } from "react";
+import { RefreshControl, SafeAreaView, Text } from "react-native";
+import { SearchBar, ListItem } from "react-native-elements";
+import { FlatList } from "react-native-gesture-handler";
 import AppContext from "../context/AppContext";
+import { axios } from "../helpers/Axios";
+import CategoryListView from "../components/Category/CategoryListView";
 
-// Config Import
-import "../secrets.js";
-
-const Category = () => {
-  const navigation = useNavigation();
+const Categories = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
-  const [category, setCategory] = React.useState([]);
-  const [search, setSearch] = React.useState("");
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [search, setSearch] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const [results, setResults] = useState([]);
 
-  React.useEffect(() => {
-    categoryRefresh();
-  }, []);
+  var options = {
+    shouldSort: true,
+    threshold: 0.6,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: ["name"]
+  };
 
-  const categoryRefresh = () => {
-    SecureStore.getItemAsync("token").then(token => {
-      setRefreshing(true);
-      const instance = axios.create({
-        baseURL: `http://${ip}:5000/`,
-        timeout: 1000,
-        headers: { Authorization: "Bearer " + token }
-      });
+  var fuse = new Fuse(state.categories, options);
+
+  useEffect(() => {
+    setResults(fuse.search(search));
+  }, [search]);
+
+  const userRefresh = () => {
+    setRefreshing(true);
+    axios().then(instance => {
       instance
-        .get("/category") //change to category 
+        .get("/category")
         .then(res => {
-          setCategory(res.data.category);
+          dispatch({ type: "SET_CATEGORIES", payload: res.data.categories });
           setRefreshing(false);
         })
         .catch(err => console.log(err));
     });
   };
 
+  const navigation = useNavigation();
 
   return (
-    <View>
-      <SafeAreaView style={{ height: "100%" }}>
-        <SearchBar
-          round={true}
-          lightTheme={true}
-          placeholder="Search Category..."
-          onChangeText={setSearch}
-          value={search}
-        />
-        <FlatList
-          data={category}
-          renderItem={({ item }) => (
-            <CategoryPreview
-              onPress={() => navigation.navigate("CategoryView", { category: item })}
-              category={item}
-            />
-          )}
-          keyExtractor={item => item._id.$oid}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={categoryRefresh} />
-          }
-        />
-      </SafeAreaView>
-    </View>
+    <SafeAreaView style={{ height: "100%" }}>
+      <SearchBar
+        round={true}
+        lightTheme={true}
+        placeholder="Search Categories..."
+        onChangeText={setSearch}
+        value={search}
+      />
+      <FlatList
+        data={search == "" ? state.categories : results}
+        renderItem={({ item }) => (
+          <CategoryListView category={item}></CategoryListView>
+        )}
+        keyExtractor={item => item.id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
+        }
+      />
+    </SafeAreaView>
   );
 };
 
-export default Category;
+export default Categories;

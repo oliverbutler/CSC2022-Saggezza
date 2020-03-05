@@ -131,9 +131,9 @@ class User(Document):
             for i in self.employees:
                 employees.append(str(i.id))
                 decode["employees"] = employees
-        if self.client:
+        if self["client"] != None:
             decode["client"] = self.client.to_json()
-        if self.project:
+        if self["project"] != None:
             decode["project"] = self.project.to_json()
 
         return decode

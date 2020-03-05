@@ -42,6 +42,12 @@ const Home = ({ navigation }) => {
             dispatch({ type: "SET_USERS", payload: res.data.users });
           })
           .catch(err => console.log(err));
+        instance // admin, manager
+          .get("/project")
+          .then(res => {
+            dispatch({ type: "SET_PROJECTS", payload: res.data.projects });
+          })
+          .catch(err => console.log(err));
       }
     });
   }, []);
@@ -71,6 +77,12 @@ const Home = ({ navigation }) => {
               number={state.clients ? state.clients.length : null}
               title="Clients"
               onPress={() => navigation.navigate("Clients")}
+            />
+            <HomeLabel
+              icon="user"
+              number={state.projects ? state.projects.length : null}
+              title="Projects"
+              onPress={() => navigation.navigate("Projects")}
             />
           </>
         ) : (

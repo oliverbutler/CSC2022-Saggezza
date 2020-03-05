@@ -3,11 +3,11 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Drawer from "../components/Drawer";
 
 // Routes
-import CategoryStack from "./CategoryStack";
 import ClientStack from "./ClientStack";
 import HomeStack from "./HomeStack";
 import RequestStack from "./RequestStack";
 import UserStack from "./UserStack";
+import ProjectStack from "./ProjectStack";
 
 // Context
 import AppContext from "../context/AppContext";
@@ -17,7 +17,7 @@ const DrawerNav = createDrawerNavigator();
 const AppDrawer = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
-  if (!state.user) return <></>;
+  if (!state.user) return null;
 
   if (state.user.role == "admin") {
     return (
@@ -30,8 +30,8 @@ const AppDrawer = () => {
         <DrawerNav.Screen name="Home" component={HomeStack} />
         <DrawerNav.Screen name="Requests" component={RequestStack} />
         <DrawerNav.Screen name="Users" component={UserStack} />
-        <DrawerNav.Screen name="Categories" component={CategoryStack} />
         <DrawerNav.Screen name="Clients" component={ClientStack} />
+        <DrawerNav.Screen name="Projects" component={ProjectStack} />
       </DrawerNav.Navigator>
     );
   }

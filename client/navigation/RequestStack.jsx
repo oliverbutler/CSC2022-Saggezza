@@ -41,16 +41,20 @@ const RequestStack = () => {
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           title: titleA,
-          headerRight: () => (
-            <Icon
-              size={30}
-              name="plus-square"
-              type="feather"
-              onPress={() =>
-                navigation.navigate("Modal", { type: "ADD_REQUEST" })
-              }
-            />
-          ),
+          headerRight: () => {
+            {
+              state.user.role == "employee" ? (
+                <Icon
+                  size={30}
+                  name="plus-square"
+                  type="feather"
+                  onPress={() =>
+                    navigation.navigate("Modal", { type: "ADD_REQUEST" })
+                  }
+                />
+              ) : null;
+            }
+          },
           headerRightContainerStyle: { paddingRight: 10 }
         }}
       />

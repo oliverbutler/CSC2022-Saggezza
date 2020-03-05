@@ -32,7 +32,7 @@ class ClientListAPI(Resource):
         client = Client(name=req["name"])
 
         if "email" in req:
-            client["email"] = req["email"]
+            client["email"] = req["email"].lower()
 
         client.save()
 

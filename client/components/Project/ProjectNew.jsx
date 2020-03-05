@@ -11,24 +11,19 @@ import AppContext from "../../context/AppContext";
 import { axios } from "../../helpers/Axios";
 import { useNavigation } from "@react-navigation/native";
 
-const ClientNew = () => {
+const ProjectNew = () => {
   const navigation = useNavigation();
   const { state, dispatch } = React.useContext(AppContext);
 
   const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
 
   const post = () => {
-    var data = {};
-    data.name = name;
-    if (email != "") {
-      data.email = email;
-    }
+    var data = { name: name };
     axios().then(instance => {
       instance
-        .post("/client", data)
+        .post("/project", data)
         .then(res => {
-          dispatch({ type: "SET_CLIENT", payload: res.data.client });
+          dispatch({ type: "SET_PROJECT", payload: res.data.project });
           navigation.goBack();
         })
         .catch(err => {
@@ -40,23 +35,13 @@ const ClientNew = () => {
   return (
     <View>
       <Input
-        label="Name of Client"
+        label="Name of Project"
         //leftIcon=""
-        placeholder="Enter name of Client"
+        placeholder="Enter name of Project"
         // errorStyle={{ color: "red" }}
         //="Some Validation Function"
         onChangeText={text => setName(text)}
         value={name}
-        containerStyle={{ paddingBottom: 20 }}
-      />
-      <Input
-        label="Contact Email"
-        //leftIcon=""
-        placeholder="Optional"
-        // errorStyle={{ color: "red" }}
-        //="Some Validation Function"
-        onChangeText={text => setEmail(text)}
-        value={email}
         containerStyle={{ paddingBottom: 20 }}
       />
 
@@ -72,4 +57,4 @@ const ClientNew = () => {
   );
 };
 
-export default ClientNew;
+export default ProjectNew;

@@ -34,11 +34,11 @@ class ProjectListAPI(Resource):
 
     @auth.login_required
     def get(self):
-        categories = Project.objects().all()
+        projects = Project.objects().all()
         return res(
             "All projects returned",
             "success",
-            categories=convert_query(categories, list=True),
+            projects=convert_query(projects, list=True),
         )
 
 
@@ -53,7 +53,7 @@ class ProjectAPI(Resource):
         caller = get_caller(request)
         if caller["role"] != "admin":
             return res("⛔️ Must be an admin to update a project", "error"), 400
-        
+
         req = parse(request)
         errors = ProjectSchema().validate(req)
         if errors:
@@ -68,7 +68,6 @@ class ProjectAPI(Resource):
         project.save()
 
         return res("Project Modified", "success", project=convert_query(project))
-        
 
     @auth.login_required
     def get(self, id):

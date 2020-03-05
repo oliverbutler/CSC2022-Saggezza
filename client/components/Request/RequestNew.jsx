@@ -1,10 +1,10 @@
 import React from "react";
-import axios from "axios";
 import { View, Text, Alert, Button } from "react-native";
 import { Input } from "react-native-elements";
 import AppContext from "../../context/AppContext";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
+import { axios } from "../../helpers/Axios";
 
 const RequestNew = () => {
   const [name, setName] = React.useState("");
@@ -13,12 +13,7 @@ const RequestNew = () => {
   const navigation = useNavigation();
 
   const Post = () => {
-    SecureStore.getItemAsync("token").then(token => {
-      const instance = axios.create({
-        baseURL: "http://" + ip + ":5000/",
-        timeout: 1000,
-        headers: { Authorization: "Bearer " + token }
-      });
+    axios().then(instance => {
       instance
         .post("/request", {
           name: name,
@@ -52,5 +47,4 @@ const RequestNew = () => {
   );
 };
 
-//onChangeText={someFunction}
 export default RequestNew;
