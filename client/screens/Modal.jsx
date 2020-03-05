@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, View, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, TouchableOpacity, ScrollView } from "react-native";
 import { Text, Button, Icon } from "react-native-elements";
 
 import RequestNew from "../components/Request/RequestNew";
@@ -71,7 +71,7 @@ const Modal = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {content}
+      <ScrollView style={{ height: "100%" }}>{content}</ScrollView>
     </SafeAreaView>
   );
 };
