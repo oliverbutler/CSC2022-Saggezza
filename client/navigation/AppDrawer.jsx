@@ -11,13 +11,15 @@ import UserStack from "./UserStack";
 
 // Context
 import AppContext from "../context/AppContext";
+import { Text } from "react-native";
 
 const DrawerNav = createDrawerNavigator();
 
 const AppDrawer = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
-  if (!state.user) return <></>;
+  if(!state.user)
+    return <Text></Text>
 
   if (state.user.role == "admin") {
     return (
