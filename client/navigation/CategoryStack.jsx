@@ -3,18 +3,20 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../../screens/Employee/Home";
-import Settings from "../../screens/Employee/Settings";
+import Home from "../screens/Admin/Home";
+import Users from "../screens/Admin/Users";
+import Categories from "../screens/Admin/Categories";
+import UserView from "../components/User/UserView";
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+function CategoryStack() {
   const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Categories"
+        component={Categories}
         options={{
           headerLeft: () => (
             <Icon
@@ -24,22 +26,19 @@ const HomeStack = () => {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
-          headerRight: () => (
-            <Icon
-              size={35}
-              name="ios-settings"
-              type="ionicon"
-              onPress={() => navigation.navigate("Settings")}
-            />
-          ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: "Employee Home"
+          title: "Category List"
         }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen
+        name="CategoryView"
+        component={UserView}
+        options={({ route }) => ({
+          title: route.params.category.name
+        })}
+      />
     </Stack.Navigator>
   );
-};
+}
 
-export default HomeStack;
+export default CategoryStack;

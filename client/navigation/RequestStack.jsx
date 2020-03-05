@@ -3,19 +3,30 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Clients from "../../screens/Admin/Clients";
-import ClientView from "../../components/Client/ClientView";
+import Requests from "../screens/Admin/Requests";
+import RequestView from "../components/Request/RequestView";
+
+// Context
+import AppContext from "../context/AppContext";
 
 const Stack = createStackNavigator();
 
-const ClientStack = () => {
+const RequestStack = () => {
   const navigation = useNavigation();
-
+  const { state, dispatch } = React.useContext(AppContext);
+  titleA = "";
+  if ((state.user.role = "admin")) {
+    titleA = "All Requests";
+  } else if ((state.user.role = "manager")) {
+    titleA = "Your Employees Requests";
+  } else if ((state.user.role = "employee")) {
+    titleA = "Your Requests";
+  }
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Clients"
-        component={Clients}
+        name="Requests"
+        component={Requests}
         options={{
           headerLeft: () => (
             <Icon
@@ -25,30 +36,21 @@ const ClientStack = () => {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
-          headerRight: () => (
-            <Icon
-              size={30}
-              name="plus-square"
-              type="feather"
-              onPress={() => navigation.navigate("ClientNew")}
-            />
-          ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: "All Clients"
+          title: titleA
         }}
       />
       <Stack.Screen
-        name="ClientView"
-        component={ClientView}
+        name="RequestView"
+        component={RequestView}
         options={({ route }) => ({
-          title: route.params.client.name,
+          title: route.params.request.name,
           headerRight: () => (
             <Icon
               size={30}
               name="edit"
               type="feather"
-              onPress={() => alert("Edit Client")}
+              onPress={() => alert("Edit Request")}
             />
           ),
           headerRightContainerStyle: { paddingRight: 10 }
@@ -58,4 +60,4 @@ const ClientStack = () => {
   );
 };
 
-export default ClientStack;
+export default RequestStack;

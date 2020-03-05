@@ -48,7 +48,7 @@ const Settings = () => {
         <ListItem
           title="Sign Out"
           leftIcon={<Icon name={"log-out"} type="feather" />}
-          onPress={() => dispatch("SIGN OUT")}
+          onPress={() => dispatch({ type: "SIGN_OUT" })}
           chevron
         />
       ]

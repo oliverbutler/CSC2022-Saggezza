@@ -3,18 +3,19 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../../screens/Admin/Home";
-import Settings from "../../screens/Admin/Settings";
+import Clients from "../screens/Admin/Clients";
+import ClientView from "../components/Client/ClientView";
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const ClientStack = () => {
   const navigation = useNavigation();
+
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Clients"
+        component={Clients}
         options={{
           headerLeft: () => (
             <Icon
@@ -27,19 +28,34 @@ const HomeStack = () => {
           headerRight: () => (
             <Icon
               size={30}
-              name="settings"
+              name="plus-square"
               type="feather"
-              onPress={() => navigation.navigate("Settings")}
+              onPress={() => navigation.navigate("ClientNew")}
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           headerRightContainerStyle: { paddingRight: 10 },
-          title: "Admin Home"
+          title: "All Clients"
         }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen
+        name="ClientView"
+        component={ClientView}
+        options={({ route }) => ({
+          title: route.params.client.name,
+          headerRight: () => (
+            <Icon
+              size={30}
+              name="edit"
+              type="feather"
+              onPress={() => alert("Edit Client")}
+            />
+          ),
+          headerRightContainerStyle: { paddingRight: 10 }
+        })}
+      />
     </Stack.Navigator>
   );
 };
 
-export default HomeStack;
+export default ClientStack;
