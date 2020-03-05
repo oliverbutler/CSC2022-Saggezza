@@ -3,18 +3,28 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Home from "../../screens/Admin/Home";
-import Settings from "../../screens/Admin/Settings";
+import Users from "../screens/Users";
+import UserView from "../components/User/UserView";
+
+// Context
+import AppContext from "../context/AppContext";
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const UserStack = () => {
   const navigation = useNavigation();
+  const { state, dispatch } = React.useContext(AppContext);
+  titleA = "";
+  if ((state.user.role == "admin")) {
+    titleA = "All Users";
+  } else if ((state.user.role == "manager")) {
+    titleA = "Your Employees";
+  }
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Users"
+        component={Users}
         options={{
           headerLeft: () => (
             <Icon
@@ -24,22 +34,20 @@ const HomeStack = () => {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
-          headerRight: () => (
-            <Icon
-              size={30}
-              name="settings"
-              type="feather"
-              onPress={() => navigation.navigate("Settings")}
-            />
-          ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: "Admin Home"
+          title: titleA
         }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen
+        name="UserView"
+        component={UserView}
+        options={({ route }) => ({
+          title:
+            route.params.user.first_name + " " + route.params.user.last_name
+        })}
+      />
     </Stack.Navigator>
   );
 };
 
-export default HomeStack;
+export default UserStack;

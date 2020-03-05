@@ -5,13 +5,13 @@ import * as SecureStore from "expo-secure-store";
 import React from "react";
 import RequestNew from "./components/Request/RequestNew";
 import AppContext from "./context/AppContext";
-import AdminDrawer from "./navigation/Admin/AdminDrawer";
-import EmployeeDrawer from "./navigation/Employee/EmployeeDrawer";
-import ManagerDrawer from "./navigation/Manager/ManagerDrawer";
+import AppDrawer from "./navigation/AppDrawer";
 import Login from "./screens/Login";
 import SplashScreen from "./screens/SplashScreen";
-import ClientNew from "./components/Client/ClientNew";
-import RequestAddParams from "./components/Request/RequestAddParams";
+// import ClientNew from "./components/Client/ClientNew";
+// import RequestAddParams from "./components/Request/RequestAddParams";
+
+import Modal from "./screens/Modal"
 
 const initialState = {
   user: null, // user model from server
@@ -34,7 +34,7 @@ const findUser = (arr, id) => {
 };
 
 const reducer = (prevState, action) => {
-  console.log(`🟩 Action ▶ ${JSON.stringify(action).substring(0, 200)}...`);
+  console.log(`🟩 Action ▶ ${JSON.stringify(action)}`);
   switch (action.type) {
     case "SET_USERS":
       return {
@@ -129,11 +129,22 @@ const reducer = (prevState, action) => {
         isSignIn: true
       };
     case "SIGN_OUT":
+      SecureStore.deleteItemAsync('token')
       return {
         ...prevState,
         user: null,
         isSignIn: false,
-        isLoading: true
+        isLoading: false
+      };
+    case "SHOW":
+      return {
+        ...prevState,
+        show: action.payload
+      };
+    case "TITLE":
+      return {
+        ...prevState,
+        title: action.payload
       };
   }
 };
@@ -196,16 +207,10 @@ const App = () => {
                 animationTypeForReplace: state.isSignIn ? "push" : "pop"
               }}
             />
-          ) : state.user.role == "admin" ? (
-            <Stack.Screen name="Drawer" component={AdminDrawer} />
-          ) : state.user.role == "manager" ? (
-            <Stack.Screen name="Drawer" component={ManagerDrawer} />
           ) : (
-            <Stack.Screen name="Drawer" component={EmployeeDrawer} />
+            <Stack.Screen name="Drawer" component={AppDrawer} />
           )}
-          <Stack.Screen name="RequestNew" component={RequestNew} />
-          <Stack.Screen name="RequestAddParams" component={RequestAddParams} />
-          <Stack.Screen name="ClientNew" component={ClientNew} />
+          <Stack.Screen name="Modal" component={Modal} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContext.Provider>

@@ -9,11 +9,11 @@ import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 
 // Custom Component Imports
-import UserPreview from "../../components/User/UserListView";
-import AppContext from "../../context/AppContext";
+import UserPreview from "../components/User/UserListView";
+import AppContext from "../context/AppContext";
 
 // Config Import
-import "../../secrets.js";
+import "../secrets.js";
 
 const Category = () => {
   const navigation = useNavigation();

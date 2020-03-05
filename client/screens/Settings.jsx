@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { SafeAreaView, SectionList, Text, StyleSheet } from "react-native";
-import AppContext from "../../context/AppContext";
-import "../../secrets.js";
+import AppContext from "../context/AppContext";
+import "../secrets.js";
 import { ListItem } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import { Switch } from "react-native-gesture-handler";
@@ -48,7 +48,7 @@ const Settings = () => {
         <ListItem
           title="Sign Out"
           leftIcon={<Icon name={"log-out"} type="feather" />}
-          onPress={() => dispatch("SIGN OUT")}
+          onPress={() => dispatch({ type: "SIGN_OUT" })}
           chevron
         />
       ]
@@ -92,6 +92,7 @@ const Settings = () => {
 
   return (
     <SafeAreaView>
+      <Text>{state.user.role}</Text>
       <SectionList
         style={{ height: "100%" }}
         sections={SETTINGS}

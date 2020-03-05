@@ -2,9 +2,9 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { RefreshControl, SafeAreaView } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import ClientListView from "../../components/Client/ClientListView";
-import AppContext from "../../context/AppContext";
-import { axios } from "../../helpers/Axios";
+import ClientListView from "../components/Client/ClientListView";
+import AppContext from "../context/AppContext";
+import { axios } from "../helpers/Axios";
 
 const Clients = () => {
   const [refreshing, setRefreshing] = useState(false);
