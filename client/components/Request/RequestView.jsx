@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+
 import {
   RefreshControl,
   ScrollView,
@@ -18,7 +18,7 @@ import * as SecureStore from "expo-secure-store";
 import Label from "../Label";
 import AppContext from "../../context/AppContext";
 import { useNavigation } from "@react-navigation/native";
-//import { axios } from "../../helpers/Axios";
+import { axios } from "../../helpers/Axios";
 import DatePicker from "react-native-datepicker";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
@@ -67,26 +67,21 @@ const RequestView = props => {
   };
 
   const Post = () => {
-    console.log(category);
-    // if (personalChecked) {
-    //   setPaymentMethod("own");
-    // } else {
-    //   setPaymentMethod("corporate");
-    // }
-    SecureStore.getItemAsync("token").then(token => {
-      const instance = axios.create({
-        baseURL: "http://" + ip + ":5000/",
-        timeout: 1000,
-        headers: { Authorization: "Bearer " + token }
-      });
+    console.log(expenseName);
+    if (personalChecked) {
+      setPaymentMethod("own");
+    } else {
+      setPaymentMethod("corporate");
+    }
+    axios().then(instance => {
       instance
         .post("/request/" + props.route.params.request.id + "/parameter", {
-          name: "Thomas",
-          amount: 21.21,
+          name: "dick",
+          amount: amount,
           category: category,
           date_expense: "2020-1-15",
-          billable_client: true,
-          payment_method: "own"
+          billable_client: billableChecked,
+          payment_method: payentMethod
         })
 
         .then(res => console.log(res.data))
