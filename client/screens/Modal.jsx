@@ -1,8 +1,12 @@
 import React from "react";
-import { SafeAreaView, View, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, TouchableOpacity, ScrollView } from "react-native";
 import { Text, Button, Icon } from "react-native-elements";
 
 import RequestNew from "../components/Request/RequestNew";
+import CategoryNew from "../components/Category/CategoryNew";
+import ClientNew from "../components/Client/ClientNew";
+import ProjectNew from "../components/Project/ProjectNew";
+import UserEdit from "../components/User/UserEdit";
 
 const Modal = ({ navigation, route }) => {
   var title = "";
@@ -12,6 +16,24 @@ const Modal = ({ navigation, route }) => {
     case "ADD_REQUEST":
       title = "Add Request";
       content = <RequestNew />;
+      break;
+    case "ADD_CATEGORY":
+      title = "Add Category";
+      content = <CategoryNew />;
+      break;
+    case "ADD_CLIENT":
+      title = "Add Client";
+      content = <ClientNew />;
+      break;
+    case "EDIT_USER":
+      title = "Edit User";
+      console.log(route.params);
+      if (route.params.myself) content = <UserEdit myself={true} />;
+      else content = <UserEdit id={route.params.id} />;
+      break;
+    case "ADD_PROJECT":
+      title = "Add Project";
+      content = <ProjectNew />;
       break;
     default:
       break;
@@ -49,7 +71,7 @@ const Modal = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {content}
+      <ScrollView style={{ height: "100%" }}>{content}</ScrollView>
     </SafeAreaView>
   );
 };

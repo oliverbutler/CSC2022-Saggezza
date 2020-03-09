@@ -6,12 +6,13 @@ import "../secrets.js";
 import { ListItem } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import { Switch } from "react-native-gesture-handler";
+import { Alert } from "react-native";
 
 const Settings = () => {
   const { state, dispatch } = React.useContext(AppContext);
   const navigation = useNavigation();
 
-  const SETTINGS = [
+  var SETTINGS = [
     {
       title: "App",
       data: [
@@ -36,8 +37,13 @@ const Settings = () => {
       title: "Profile",
       data: [
         <ListItem
-          title="Your Account"
+          title="My Account"
           leftIcon={<Icon name={"user"} type="feather" />}
+          onPress={() =>
+            navigation.navigate("UserView", {
+              myself: true
+            })
+          }
           chevron
         />,
         <ListItem
@@ -48,27 +54,15 @@ const Settings = () => {
         <ListItem
           title="Sign Out"
           leftIcon={<Icon name={"log-out"} type="feather" />}
-          onPress={() => dispatch({ type: "SIGN_OUT" })}
-          chevron
-        />
-      ]
-    },
-    {
-      title: "Request Settings",
-      data: [
-        <ListItem
-          title="Edit Categories"
-          leftIcon={<Icon name={"list"} type="feather" />}
-          chevron
-        />,
-        <ListItem
-          title="Approval Time"
-          leftIcon={<Icon name={"clock"} type="feather" />}
-          chevron
-        />,
-        <ListItem
-          title="Download Report (CSV)"
-          leftIcon={<Icon name={"database"} type="feather" />}
+          onPress={() => {
+            Alert.alert("Sign Out", "Are you sure?", [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "OK", onPress: () => dispatch({ type: "SIGN_OUT" }) }
+            ]);
+          }}
           chevron
         />
       ]
@@ -90,9 +84,32 @@ const Settings = () => {
     }
   ];
 
+  if (state.user.role == "admin") {
+    SETTINGS.push({
+      title: "Request Settings",
+      data: [
+        <ListItem
+          title="Edit Categories"
+          leftIcon={<Icon name={"list"} type="feather" />}
+          onPress={() => navigation.navigate("Category")}
+          chevron
+        />,
+        <ListItem
+          title="Approval Time"
+          leftIcon={<Icon name={"clock"} type="feather" />}
+          chevron
+        />,
+        <ListItem
+          title="Download Report (CSV)"
+          leftIcon={<Icon name={"database"} type="feather" />}
+          chevron
+        />
+      ]
+    });
+  }
+
   return (
     <SafeAreaView>
-      <Text>{state.user.role}</Text>
       <SectionList
         style={{ height: "100%" }}
         sections={SETTINGS}

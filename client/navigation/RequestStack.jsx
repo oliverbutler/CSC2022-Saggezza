@@ -42,6 +42,8 @@ const RequestStack = () => {
           headerLeftContainerStyle: { paddingLeft: 10 },
           title: titleA,
           headerRight: () => (
+            //{
+            //state.user.role == "employee" ? (
             <Icon
               size={30}
               name="plus-square"
@@ -50,6 +52,8 @@ const RequestStack = () => {
                 navigation.navigate("Modal", { type: "ADD_REQUEST" })
               }
             />
+            // ) : null;
+            //}
           ),
           headerRightContainerStyle: { paddingRight: 10 }
         }}

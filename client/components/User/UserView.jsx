@@ -23,7 +23,9 @@ const UserView = props => {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const user = props.route.params.user;
+  var user = {};
+  if (props.route.params.myself) user = state.user;
+  else user = state.users.find(user => user.id == props.route.params.id);
 
   const userRefresh = () => {
     setRefreshing(true);

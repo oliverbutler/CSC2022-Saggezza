@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import "../secrets";
 
 const instance = async () => {
   return SecureStore.getItemAsync("token").then(token => {

@@ -38,7 +38,7 @@ const findUser = (arr, id) => {
 };
 
 const reducer = (prevState, action) => {
-  console.log(`🟩 Action ▶ ${JSON.stringify(action)}`);
+  console.log(`🟩 Action ▶ ${JSON.stringify(action).substring(0, 200)}...`);
   switch (action.type) {
     case "SET_USERS":
       return {
@@ -61,6 +61,7 @@ const reducer = (prevState, action) => {
         ...prevState,
         users: newUsers
       };
+
     case "SET_REQUESTS":
       return {
         ...prevState,
@@ -107,6 +108,22 @@ const reducer = (prevState, action) => {
       return {
         ...prevState,
         projects: action.payload
+      };
+    case "SET_PROJECT":
+      newProjects = prevState.projects.slice();
+      index = findUser(prevState.projects, action.payload.id);
+
+      if (index > -1) {
+        newProjects[index] = action.payload;
+        return {
+          ...prevState,
+          projects: newProjects
+        };
+      }
+      newProjects.push(action.payload);
+      return {
+        ...prevState,
+        projects: newProjects
       };
     case "SET_CATEGORIES":
       return {

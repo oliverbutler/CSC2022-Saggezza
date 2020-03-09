@@ -3,28 +3,19 @@ import { View, Icon } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 
-import Users from "../screens/Users";
-import UserView from "../components/User/UserView";
-
-// Context
-import AppContext from "../context/AppContext";
+import Projects from "../screens/Projects";
+import ProjectView from "../components/Project/ProjectView";
 
 const Stack = createStackNavigator();
 
-const UserStack = () => {
+const ProjectStack = () => {
   const navigation = useNavigation();
-  const { state, dispatch } = React.useContext(AppContext);
-  titleA = "";
-  if (state.user.role == "admin") {
-    titleA = "All Users";
-  } else if (state.user.role == "manager") {
-    titleA = "Your Employees";
-  }
+
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Users"
-        component={Users}
+        name="Projects"
+        component={Projects}
         options={{
           headerLeft: () => (
             <Icon
@@ -34,33 +25,39 @@ const UserStack = () => {
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
           ),
+          headerRight: () => (
+            <Icon
+              size={30}
+              name="plus-square"
+              type="feather"
+              onPress={() =>
+                navigation.navigate("Modal", { type: "ADD_PROJECT" })
+              }
+            />
+          ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: titleA
+          headerRightContainerStyle: { paddingRight: 10 },
+          title: "All Projects"
         }}
       />
       <Stack.Screen
-        name="UserView"
-        component={UserView}
+        name="ProjectView"
+        component={ProjectView}
         options={({ route }) => ({
+          title: route.params.project.name,
           headerRight: () => (
             <Icon
               size={30}
               name="edit"
               type="feather"
-              onPress={() =>
-                navigation.navigate("Modal", {
-                  type: "EDIT_USER",
-                  id: route.params.id
-                })
-              }
+              onPress={() => alert("Edit Project")}
             />
           ),
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: route.params.title
+          headerRightContainerStyle: { paddingRight: 10 }
         })}
       />
     </Stack.Navigator>
   );
 };
 
-export default UserStack;
+export default ProjectStack;
