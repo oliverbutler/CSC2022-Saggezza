@@ -52,7 +52,7 @@ const Home = ({ navigation }) => {
     });
   }, []);
 
-  if (!state.user) return <></>;
+  if (!state.user) return <Text></Text>;
 
   return (
     <ScrollView contentContainerStyle={{ alignItems: "center" }}>
