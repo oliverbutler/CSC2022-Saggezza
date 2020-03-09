@@ -51,10 +51,11 @@ const RequestView = props => {
   const [amount, setAmount] = React.useState(0);
   const [category, setCategory] = React.useState();
   const [expenseDate, setExpenseDate] = React.useState();
-  const [personalChecked, setPersonalChecked] = React.useState(false);
-  const [corporateChecked, setCoorprateChecked] = React.useState(false);
+
+  const [personalChecked, setPersonalChecked] = React.useState(true);
+  const [paymentMethod, setPaymentMethod] = React.useState("");
+
   const [billableChecked, setBillableChecked] = React.useState(false);
-  const [payentMethod, setPaymentMethod] = React.useState("");
 
   const requestRefresh = () => {
     setRefreshing(true);
@@ -85,7 +86,7 @@ const RequestView = props => {
           category: category,
           date_expense: expenseDate.toString(),
           billable_client: billableChecked,
-          payment_method: payentMethod
+          payment_method: paymentMethod
         })
 
         .then(res =>
@@ -216,15 +217,21 @@ const RequestView = props => {
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             checked={personalChecked}
-            onPress={() => setPersonalChecked(!personalChecked)}
+            onPress={() => {
+              setPaymentMethod("own");
+              setPersonalChecked(true);
+            }}
           />
           <CheckBox
             center
             title="Corporate"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={corporateChecked}
-            onPress={() => setCoorprateChecked(!corporateChecked)}
+            checked={!personalChecked}
+            onPress={() => {
+              setPaymentMethod("corporate");
+              setPersonalChecked(false);
+            }}
           />
 
           <Text style={{ paddingLeft: "2%", fontSize: 16, paddingTop: 20 }}>
