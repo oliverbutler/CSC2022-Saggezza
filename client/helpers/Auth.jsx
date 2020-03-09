@@ -15,9 +15,9 @@ const showGoogleAuth = async dispatch => {
   try {
     const result = await Google.logInAsync({
       androidClientId:
-        "1040363071237-i276na9d415sc6uvgoj0129p0fot4lut.apps.googleusercontent.com",
+        "414892856589-vc0mglc2gku2pjooqpnejfl1i3g07tvf.apps.googleusercontent.com",
       iosClientId:
-        "1040363071237-qtj1ukjm4vrod5fc9bm78vq2qmnhjcf0.apps.googleusercontent.com",
+        "414892856589-blc94dbqjpgke3tm4amne4dcnd7amsht.apps.googleusercontent.com",
       scopes: ["profile", "email"]
     });
     if (result.type == "success") {
