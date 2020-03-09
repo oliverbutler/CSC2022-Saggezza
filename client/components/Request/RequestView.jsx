@@ -19,10 +19,13 @@ import Label from "../Label";
 import AppContext from "../../context/AppContext";
 import { useNavigation } from "@react-navigation/native";
 import { axios } from "../../helpers/Axios";
-import DatePicker from "react-native-datepicker";
+//import DatePicker from "react-native-datepicker";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
+//import DatePicker from "react-datepicker";
+//import DatePicker from "react-date-picker";
+import DatePicker from "react-native-datepicker";
 
 // Config Imports
 import "../../secrets.js";
@@ -67,6 +70,7 @@ const RequestView = props => {
   };
 
   const Post = () => {
+    console.log(expenseDate);
     console.log(expenseName);
     if (personalChecked) {
       setPaymentMethod("own");
@@ -76,15 +80,17 @@ const RequestView = props => {
     axios().then(instance => {
       instance
         .post("/request/" + props.route.params.request.id + "/parameter", {
-          name: "dick",
+          name: expenseName,
           amount: amount,
           category: category,
-          date_expense: "2020-1-15",
+          date_expense: expenseDate.toString(),
           billable_client: billableChecked,
           payment_method: payentMethod
         })
 
-        .then(res => console.log(res.data))
+        .then(res =>
+          console.log(res.data.request.request_parameter_list.length)
+        )
 
         .catch(err => console.log(err));
     });
@@ -173,19 +179,15 @@ const RequestView = props => {
             })}
           </Picker>
           <Text style={{ paddingLeft: "2%", fontSize: 16 }}>Expense Date</Text>
+
           <DatePicker
-            style={{
-              width: "75%",
-              paddingLeft: "5%",
-              paddingTop: "2%",
-              paddingBottom: "4%"
-            }}
-            date={expenseDate} //initial date from state
-            mode="date" //The enum of date, datetime and time
+            style={{ width: 200 }}
+            date={expenseDate}
+            mode="date"
             placeholder="select date"
-            format="DD-MM-YYYY"
-            minDate="01-01-2019"
-            maxDate="01-01-2022"
+            format="YYYY-MM-DD"
+            minDate="2019-01-01"
+            maxDate="2021-01-01"
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{
@@ -198,6 +200,7 @@ const RequestView = props => {
               dateInput: {
                 marginLeft: 36
               }
+              // ... You can check the source to find the other keys.
             }}
             onDateChange={expenseDate => {
               setExpenseDate(expenseDate);
