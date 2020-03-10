@@ -5,8 +5,9 @@ import requests
 from flask import jsonify
 from mongoengine import QuerySet, connect, DoesNotExist, ValidationError
 from model import User, Request
+import config
 
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 
 def get_bearer(request):
