@@ -46,6 +46,7 @@ const RequestView = props => {
   const [loading, setLoading] = React.useState(false);
 
   const [image, setImage] = React.useState();
+  const [paramID, setParamID] = React.useState("");
 
   const [expenseName, setExpenseName] = React.useState();
   const [amount, setAmount] = React.useState(0);
@@ -70,9 +71,33 @@ const RequestView = props => {
     });
   };
 
+  const _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+  const getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
+
   const Post = () => {
-    console.log(expenseDate);
-    console.log(expenseName);
+    console.log(image);
+    var images = new FormData();
+    images.set("file", image);
     if (personalChecked) {
       setPaymentMethod("own");
     } else {
@@ -89,11 +114,30 @@ const RequestView = props => {
           payment_method: paymentMethod
         })
 
-        .then(res =>
-          console.log(res.data.request.request_parameter_list.length)
-        )
+        .then(res => {
+          instance.get(
+            "/request/" + props.route.params.request.id + "/parameter"
+          );
+          var index = res.data.request.request_parameter_list.length;
+          setParamID(res.data.request.request_parameter_list[index - 1].id);
+        })
 
         .catch(err => console.log(err));
+    });
+    axios().then(instance => {
+      instance
+        .post(
+          "/request/" +
+            props.route.params.request.id +
+            "/parameter/" +
+            paramID +
+            "/file",
+          {
+            file: images
+          }
+        )
+        .then(res => console.log(res.data))
+        .catch(e => console.log(e));
     });
   };
 
