@@ -13,9 +13,11 @@ import requests
 import jwt
 import secrets
 from flask_httpauth import HTTPTokenAuth
+import config
+
 
 # Connect to mongodb
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 # Create auth
 auth = HTTPTokenAuth(scheme="Bearer")

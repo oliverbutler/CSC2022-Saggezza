@@ -6,9 +6,10 @@ from schema.category import *
 from model import Category
 
 from routes.auth import auth
+import config
 
 # Connect to mongodb
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 
 class CategoryListAPI(Resource):

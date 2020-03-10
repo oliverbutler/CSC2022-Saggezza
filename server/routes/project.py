@@ -3,13 +3,13 @@ from flask_restful import Resource
 from functions import *
 from mongoengine import *
 from schema.project import *
-
+import config
 from model import Project
 from routes.auth import auth
 
 
 # Connect to mongodb
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 
 class ProjectListAPI(Resource):

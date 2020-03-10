@@ -6,11 +6,11 @@ from schema.category import *
 from schema.client import *
 
 from model import Client
-
+import config
 from routes.auth import auth
 
 # Connect to mongodb
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 
 class ClientListAPI(Resource):

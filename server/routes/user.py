@@ -8,11 +8,11 @@ from model import User, Request, Client, Project
 import datetime
 import os
 import uuid
-
+import config
 from routes.auth import auth
 
 # Connect to mongodb
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 UPLOAD_FOLDER = "./static/profile/"
 ALLOWED_EXTENSIONS = set(["jpg"])

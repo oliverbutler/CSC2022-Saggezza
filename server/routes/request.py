@@ -8,14 +8,15 @@ from model import *
 import datetime
 import os
 import uuid
-
+import config
 from routes.auth import auth
 
 # Connect to mongodb
-connect("saggezza_db", host="localhost", port=27017)
+connect("saggezza_db", host=config.DB_URL, port=27017)
 
 UPLOAD_FOLDER = "./static/file/"
 ALLOWED_EXTENSIONS = set(["jpg"])
+
 
 class RequestListAPI(Resource):
     # |- /request
@@ -261,7 +262,7 @@ class RequestParameterAPI(Resource):
 
         if not found:
             return res("Request Parameter not present within Request 😔", "error"), 400
-    
+
         return res(
             "Request Parameter Updated 🎉",
             "success",
@@ -317,11 +318,12 @@ class RequestParameterAPI(Resource):
 
         return res("Request Parameter doesn't exist", "error"), 400
 
+
 class RequestParameterAPIFile(Resource):
     # |- /request/<id>/parameter/<pid>/file
     # |- POST: Upload a new parameter
     # \- DELETE: Delete uploaded parameter
-    
+
     def post(self, id, pid):
         caller = get_caller(request)
         if caller["role"] != "employee":
@@ -357,15 +359,14 @@ class RequestParameterAPIFile(Resource):
                 os.makedirs(UPLOAD_FOLDER)
 
             name = uuid.uuid4().hex
-            
+
             image.save(UPLOAD_FOLDER + name + ".jpg")
             parameter["file"] = "/file/" + name + ".jpg"
-            
+
             returned_request.save()
             return res("Parameter added successfully", "success")
         else:
             return res("No file in the request called file", "error"), 400
-
 
     def delete(self, id, pid):
         try:
@@ -376,7 +377,10 @@ class RequestParameterAPIFile(Resource):
                     break
 
             if not found:
-                return res("Request Parameter not present within Request 😔", "error"), 400
+                return (
+                    res("Request Parameter not present within Request 😔", "error"),
+                    400,
+                )
 
             if os.path.exists("./static" + parameter["file"]):
                 os.remove(os.path.join("./static" + parameter["file"]))
