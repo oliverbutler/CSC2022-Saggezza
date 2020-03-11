@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Button } from "react-native";
+import { View, Button, Text } from "react-native";
 import { Input } from "react-native-elements";
 import { axios } from "../../helpers/Axios";
 import AppContext from "../../context/AppContext";
 import { useNavigation } from "@react-navigation/native";
+import RNPickerSelect from "react-native-picker-select";
 
 const UserEdit = ({ id, myself }) => {
   const { state, dispatch } = React.useContext(AppContext);
@@ -65,16 +66,8 @@ const UserEdit = ({ id, myself }) => {
         containerStyle={{ paddingBottom: 20 }}
       />
       {user.role == "admin" ? (
-        <Input
-          label="Role"
-          placeholder="Enter Role"
-          errorStyle={{ color: "red" }}
-          onChangeText={text => setCurrentUser({ ...currentUser, role: text })}
-          value={currentUser.role}
-          containerStyle={{ paddingBottom: 20 }}
-        />
+        <Input label="Role" value={currentUser.role} inputComponent="Text" />
       ) : null}
-
       <Button title="Update User" onPress={handleSubmit} />
     </View>
   );

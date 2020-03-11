@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, ActivityIndicator } from "react-native";
 import { Input } from "react-native-elements";
 import { axios } from "../../helpers/Axios";
 import { useNavigation } from "@react-navigation/native";
@@ -9,6 +9,7 @@ const CategoryNew = () => {
   const navigation = useNavigation();
   const [name, setName] = React.useState("");
   const { state, dispatch } = React.useContext(AppContext);
+  const [loading, setLoading] = React.useState(false);
 
   const postCategory = () => {
     axios().then(instance => {
@@ -41,8 +42,17 @@ const CategoryNew = () => {
         value={name}
         containerStyle={{ paddingBottom: 20 }}
       />
-
-      <Button title="Add Category" onPress={postCategory} />
+      {loading ? (
+        <ActivityIndicator></ActivityIndicator>
+      ) : (
+        <Button
+          title="Add Category"
+          onPress={() => {
+            postCategory();
+            setLoading(true);
+          }}
+        />
+      )}
     </View>
   );
 };
