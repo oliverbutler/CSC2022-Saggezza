@@ -8,7 +8,13 @@ from routes.project import *
 from routes.request import *
 from routes.user import *
 
-api_bp = Blueprint("api", __name__, static_url_path="/static", static_folder="static")
+import sentry_sdk
+
+sentry_sdk.init("https://7d7d994df12b4ca685424cf0a38927b1@sentry.io/4365952")
+
+application = Flask(__name__)
+
+api_bp = Blueprint("application", __name__)
 api = Api(api_bp)
 
 # Auth
@@ -49,15 +55,14 @@ api.add_resource(ProjectListAPI, "/project")
 api.add_resource(ProjectAPI, "/project/<id>")
 
 
-def create_app(config_filename):
-    app = Flask(__name__)
-    app.config.from_object(config_filename)
-
-    app.register_blueprint(api_bp)
-
-    return app
+@application.route("/")
+def hello_world():
+    return "Hello, World!"
 
 
+application.register_blueprint(api_bp)
+
+
+# run the app.
 if __name__ == "__main__":
-    app = create_app("config")
-    app.run(debug=True, host="0.0.0.0")
+    application.run(debug=True)

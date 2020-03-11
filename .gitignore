@@ -8,3 +8,4 @@ __pycache__/
 server/routes/__pycache__/category.cpython-37.pyc
 client/secrets.js
 yarn-error.log
+server/virt

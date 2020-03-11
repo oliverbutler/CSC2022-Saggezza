@@ -23,6 +23,7 @@
     "expo-secure-store": "^8.0.0",
     "fbjs": "^1.0.0",
     "fuse.js": "^3.4.6",
+    "https": "^1.0.0",
     "react": "~16.9.0",
     "react-date-picker": "^7.10.0",
     "react-datepicker": "^2.14.0",
