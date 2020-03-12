@@ -31,6 +31,9 @@ const showGoogleAuth = async dispatch => {
           Notifications.getExpoPushTokenAsync().then(token => {
             console.log("token time bitches: ");
             console.log(token);
+            instance
+              .post("/push", { token: token })
+              .then(res => console.log("success"));
           });
 
           if (res.data.status.type == "success") {
