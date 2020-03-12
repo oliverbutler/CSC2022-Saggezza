@@ -26,7 +26,6 @@ auth = HTTPTokenAuth(scheme="Bearer")
 @auth.verify_token
 def verify_token(token):
     if token == "":
-        yeet = 1 / 0
         return False
 
     # Decode token to access the google_id
@@ -34,14 +33,12 @@ def verify_token(token):
     try:
         caller = jwt.decode(token, verify=False)
     except:
-        yeet = 1 / 0
         return False
 
     # Now find the appropriate user
     try:
         user = User.objects.get(id=caller["id"])
     except:
-        yeet = 1 / 0
         return False
 
     # Try verify the token with this users secret
@@ -49,7 +46,6 @@ def verify_token(token):
     try:
         decode = jwt.decode(token.encode("utf-8"), user["secret"])
     except jwt.exceptions.InvalidSignatureError:
-        yeet = 1 / 0
         return False
 
     return True
