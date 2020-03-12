@@ -7,6 +7,7 @@ from routes.client import *
 from routes.project import *
 from routes.request import *
 from routes.user import *
+from routes.push import *
 
 import sentry_sdk
 
@@ -21,6 +22,10 @@ api = Api(api_bp)
 
 api.add_resource(AuthAPI, "/auth")
 api.add_resource(AuthGoogleAPI, "/auth/google")
+
+# ----------------------------------- Push ----------------------------------- #
+
+api.add_resource(PushAPI, "/push")
 
 # User
 

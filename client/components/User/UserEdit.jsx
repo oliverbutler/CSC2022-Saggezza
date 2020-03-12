@@ -65,9 +65,9 @@ const UserEdit = ({ id, myself }) => {
         value={currentUser.email}
         containerStyle={{ paddingBottom: 20 }}
       />
-      {user.role == "admin" ? (
-        <Input label="Role" value={currentUser.role} inputComponent="Text" />
-      ) : null}
+      {/* {user.role == "admin" ? (
+        <Input label="Role" value={currentUser.role} />
+      ) : null} */}
       <Button title="Update User" onPress={handleSubmit} />
     </View>
   );

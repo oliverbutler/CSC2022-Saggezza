@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-
+import { Notifications } from "expo";
 import { decode } from "base-64";
 import * as Google from "expo-google-app-auth";
 import AppContext from "../context/AppContext";
@@ -28,6 +28,11 @@ const showGoogleAuth = async dispatch => {
       instance
         .post("/auth/google", { idToken: result.idToken })
         .then(res => {
+          Notifications.getExpoPushTokenAsync().then(token => {
+            console.log("token time bitches: ");
+            console.log(token);
+          });
+
           if (res.data.status.type == "success") {
             SecureStore.setItemAsync("token", res.data.token);
             console.log(res.data.token);

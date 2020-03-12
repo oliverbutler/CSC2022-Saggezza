@@ -109,6 +109,7 @@ class User(Document):
     employees = ListField(ReferenceField("self"))
     client = ReferenceField(Client)
     project = ReferenceField(Project)
+    push_token = StringField()
 
     def to_json(self):
         decode = {

@@ -8,6 +8,8 @@ import AppContext from "./context/AppContext";
 import AppDrawer from "./navigation/AppDrawer";
 import Login from "./screens/Login";
 import SplashScreen from "./screens/SplashScreen";
+import * as Permissions from "expo-permissions";
+
 import {
   TransitionSpecs,
   CardStyleInterpolators
@@ -176,6 +178,18 @@ const App = () => {
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // Try get token from SecureStore, if its there, dispatch restore token
+
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      // only asks if permissions have not already been determined, because
+      // iOS won't necessarily prompt the user a second time.
+      // On Android, permissions are granted on app installation, so
+      // `askAsync` will never prompt the user
+
+      // Stop here if the user did not grant permissions
+      if (status !== "granted") {
+        alert("No notification permissions!");
+        return;
+      }
 
       SecureStore.getItemAsync("token").then(token => {
         // If token is null, its not found
