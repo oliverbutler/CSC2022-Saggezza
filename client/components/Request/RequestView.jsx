@@ -95,15 +95,18 @@ const RequestView = props => {
   };
 
   const Post = () => {
-    console.log(image);
     var images = new FormData();
-    images.set("file", image);
+    //images.set("file");
+    images.append("file", image);
+
+    console.log(images);
+
     if (personalChecked) {
       setPaymentMethod("own");
     } else {
       setPaymentMethod("corporate");
     }
-    axios().then(instance => {
+    axios(false).then(instance => {
       instance
         .post("/request/" + props.route.params.request.id + "/parameter", {
           name: expenseName,
@@ -120,11 +123,12 @@ const RequestView = props => {
           );
           var index = res.data.request.request_parameter_list.length;
           setParamID(res.data.request.request_parameter_list[index - 1].id);
+          console.log(paramID);
         })
-
         .catch(err => console.log(err));
     });
-    axios().then(instance => {
+
+    axios(true).then(instance => {
       instance
         .post(
           "/request/" +
@@ -136,8 +140,7 @@ const RequestView = props => {
             file: images
           }
         )
-        .then(res => console.log(res.data))
-        .catch(e => console.log(e));
+        .catch(err => console.log(err));
     });
   };
 
