@@ -188,7 +188,6 @@ const App = () => {
       // Stop here if the user did not grant permissions
       if (status !== "granted") {
         alert("No notification permissions!");
-        return;
       }
 
       SecureStore.getItemAsync("token").then(token => {

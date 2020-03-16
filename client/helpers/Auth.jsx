@@ -5,10 +5,21 @@ import { decode } from "base-64";
 import * as Google from "expo-google-app-auth";
 import AppContext from "../context/AppContext";
 import * as SecureStore from "expo-secure-store";
+import { axios as tokenAxios } from "./Axios";
 
 const signOut = dispatch => {
   SecureStore.deleteItemAsync("token");
   dispatch({ type: "SIGN_OUT" });
+};
+
+const pushSend = () => {
+  Notifications.getExpoPushTokenAsync().then(token => {
+    console.log("token time bitches: ");
+    console.log(token);
+    tokenAxios().then(instance => {
+      instance.post("/push", { token: token });
+    });
+  });
 };
 
 const showGoogleAuth = async dispatch => {
@@ -28,14 +39,7 @@ const showGoogleAuth = async dispatch => {
       instance
         .post("/auth/google", { idToken: result.idToken })
         .then(res => {
-          Notifications.getExpoPushTokenAsync().then(token => {
-            console.log("token time bitches: ");
-            console.log(token);
-            instance
-              .post("/push", { token: token })
-              .then(res => console.log("success"));
-          });
-
+          pushSend();
           if (res.data.status.type == "success") {
             SecureStore.setItemAsync("token", res.data.token);
             console.log(res.data.token);
