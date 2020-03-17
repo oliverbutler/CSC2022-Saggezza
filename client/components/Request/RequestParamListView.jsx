@@ -7,7 +7,8 @@ import {
   View,
   Text,
   Image,
-  StyleSheet
+  StyleSheet,
+  ShadowPropTypesIOS
 } from "react-native";
 
 import "../../secrets";
@@ -20,7 +21,7 @@ const RequestParamListView = props => {
 
   return (
     <ListItem
-      title={props.name}
+      title={props.param.name}
       //   subtitle={dateConvert(props.request.date_created.epoch)}
       //   onPress={props.onPress}
       //   rightElement={<Status status={status}></Status>}

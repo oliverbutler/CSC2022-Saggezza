@@ -58,7 +58,7 @@ const RequestView = props => {
   const [personalChecked, setPersonalChecked] = React.useState(true);
   const [paymentMethod, setPaymentMethod] = React.useState("");
 
-  const [params, setParams] = React.useState();
+  const [params, setParams] = React.useState([]);
 
   const [billableChecked, setBillableChecked] = React.useState(false);
 
@@ -92,18 +92,16 @@ const RequestView = props => {
   };
 
   useEffect(() => {
-    console.log(props.route.params.request.id);
     axios().then(instance => {
       instance
         // /request/<id>/parameter
         .get("/request/" + props.route.params.request.id + "/parameter")
         .then(res => {
           // dispatch({ type: "SET_REQUESTS", payload: res.data.requests });
-          console.log(res.data);
-          //setParams(res.data.request_parameter);
+          setParams(res.data.request_parameters);
           setRefreshing(false);
         })
-        .catch(err => console.log("Failed Getting Params"));
+        .catch(err => console.log(err));
     });
   }, []);
 
@@ -418,11 +416,12 @@ const RequestView = props => {
             param={item}
           />
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index}
         // refreshControl={
         //   <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
         // }
       />
+
       <Button
         style={{
           flexDirection: "row",
