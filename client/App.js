@@ -222,10 +222,10 @@ const App = () => {
     bootstrapAsync();
   }, []);
 
-  if (state.isLoading) {
-    // We haven't finished checking for the token yet
-    return <SplashScreen />;
-  }
+  // if (state.isLoading) {
+  //   // We haven't finished checking for the token yet
+  //   return <SplashScreen />;
+  // }
 
   const Stack = createStackNavigator();
 
