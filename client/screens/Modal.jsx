@@ -40,10 +40,11 @@ const Modal = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ height: "100%" }}>
       <View
         style={{
           flexDirection: "row",
+          paddingTop: 25,
           paddingBottom: 10,
           borderBottomWidth: 1,
           borderBottomColor: "lightgrey",

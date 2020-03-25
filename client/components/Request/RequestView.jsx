@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 
 import {
   RefreshControl,
   ScrollView,
   SafeAreaView,
-  FlatList,
   Text,
   Image,
   Picker,
   View
 } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 import { Input, Button, CheckBox } from "react-native-elements";
 import * as SecureStore from "expo-secure-store";
@@ -26,6 +26,8 @@ import * as Permissions from "expo-permissions";
 //import DatePicker from "react-datepicker";
 //import DatePicker from "react-date-picker";
 import DatePicker from "react-native-datepicker";
+
+import RequestParamListView from "../Request/RequestParamListView";
 
 // Config Imports
 import "../../secrets.js";
@@ -56,6 +58,8 @@ const RequestView = props => {
   const [personalChecked, setPersonalChecked] = React.useState(true);
   const [paymentMethod, setPaymentMethod] = React.useState("");
 
+  const [params, setParams] = React.useState([]);
+
   const [billableChecked, setBillableChecked] = React.useState(false);
 
   const requestRefresh = () => {
@@ -70,6 +74,36 @@ const RequestView = props => {
         .catch(err => console.log(err));
     });
   };
+
+  const userRefresh = () => {
+    setRefreshing(true);
+    axios().then(instance => {
+      instance
+        // /request/<id>/parameter
+        .get("/request/" + props.route.params.request.id + "/parameter")
+        .then(res => {
+          // dispatch({ type: "SET_REQUESTS", payload: res.data.requests });
+          console.log(res.data);
+          setParams(res.data);
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
+    });
+  };
+
+  useEffect(() => {
+    axios().then(instance => {
+      instance
+        // /request/<id>/parameter
+        .get("/request/" + props.route.params.request.id + "/parameter")
+        .then(res => {
+          // dispatch({ type: "SET_REQUESTS", payload: res.data.requests });
+          setParams(res.data.request_parameters);
+          setRefreshing(false);
+        })
+        .catch(err => console.log(err));
+    });
+  }, []);
 
   const _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -95,15 +129,18 @@ const RequestView = props => {
   };
 
   const Post = () => {
-    console.log(image);
     var images = new FormData();
-    images.set("file", image);
+    //images.set("file");
+    images.append("file", image);
+
+    console.log(images);
+
     if (personalChecked) {
       setPaymentMethod("own");
     } else {
       setPaymentMethod("corporate");
     }
-    axios().then(instance => {
+    axios(false).then(instance => {
       instance
         .post("/request/" + props.route.params.request.id + "/parameter", {
           name: expenseName,
@@ -120,25 +157,25 @@ const RequestView = props => {
           );
           var index = res.data.request.request_parameter_list.length;
           setParamID(res.data.request.request_parameter_list[index - 1].id);
+          console.log(paramID);
         })
-
         .catch(err => console.log(err));
     });
-    axios().then(instance => {
-      instance
-        .post(
-          "/request/" +
-            props.route.params.request.id +
-            "/parameter/" +
-            paramID +
-            "/file",
-          {
-            file: images
-          }
-        )
-        .then(res => console.log(res.data))
-        .catch(e => console.log(e));
-    });
+
+    // axios(true).then(instance => {
+    //   instance
+    //     .post(
+    //       "/request/" +
+    //         props.route.params.request.id +
+    //         "/parameter/" +
+    //         paramID +
+    //         "/file",
+    //       {
+    //         file: images
+    //       }
+    //     )
+    //     .catch(err => console.log(err));
+    // });
   };
 
   if (show == true)
@@ -357,6 +394,32 @@ const RequestView = props => {
         editable={false}
         value={props.route.params.request.date_created.date}
         containerStyle={{ paddingBottom: 20 }}
+      />
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 23,
+          paddingBottom: 20,
+          paddingTop: 10
+        }}
+      >
+        Submitted Expenses
+      </Text>
+
+      <FlatList
+        data={params}
+        renderItem={({ item }) => (
+          <RequestParamListView
+            // onPress={() =>
+            //   navigation.navigate("RequestView", { request: item })
+            // }
+            param={item}
+          />
+        )}
+        keyExtractor={(item, index) => index}
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={userRefresh} />
+        // }
       />
 
       <Button
