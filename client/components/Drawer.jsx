@@ -16,7 +16,7 @@ import AppContext from "../context/AppContext";
 const CustomDrawerContent = props => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ backgroundColor: "#8a8a8a" }}>
+      <View style={{ backgroundColor: "#94D500" }}>
         <Image
           style={styles.image}
           source={require("../assets/saggezza.png")}
@@ -33,7 +33,7 @@ const CustomDrawerContent = props => {
           {props.name}
         </Text>
       </View>
-      <Divider style={{ backgroundColor: "#91D000", height: 5 }} />
+      <Divider style={{ backgroundColor: "#94D500", height: 5 }} />
       <ScrollView>
         <DrawerItemList {...props} />
       </ScrollView>

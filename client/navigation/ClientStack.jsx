@@ -37,7 +37,8 @@ const ClientStack = () => {
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           headerRightContainerStyle: { paddingRight: 10 },
-          title: "All Clients"
+          title: "All Clients",
+          headerStyle: { backgroundColor: "#94D500" }
         }}
       />
       <Stack.Screen

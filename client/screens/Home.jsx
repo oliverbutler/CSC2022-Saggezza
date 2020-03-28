@@ -56,7 +56,9 @@ const Home = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-      <Text h2>Welcome {state.user.first_name}</Text>
+      <Text h2 style={{ marginTop: 20 }}>
+        Welcome {state.user.first_name}
+      </Text>
       <View
         style={{
           marginLeft: 30,

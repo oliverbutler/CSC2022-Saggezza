@@ -41,6 +41,7 @@ const RequestStack = () => {
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           title: titleA,
+          headerStyle: { backgroundColor: "#94D500" },
           headerRight: () => (
             //{
             //state.user.role == "employee" ? (

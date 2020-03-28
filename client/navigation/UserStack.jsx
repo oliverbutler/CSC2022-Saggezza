@@ -35,7 +35,8 @@ const UserStack = () => {
             />
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
-          title: titleA
+          title: titleA,
+          headerStyle: { backgroundColor: "#94D500" }
         }}
       />
       <Stack.Screen

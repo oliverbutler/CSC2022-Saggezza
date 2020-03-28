@@ -22,13 +22,7 @@ const HomeLabel = props => {
       </TouchableOpacity>
 
       <View style={styles.right}>
-        <Text style={styles.number}>
-          {props.number ? (
-            props.number
-          ) : (
-            ""
-          )}
-        </Text>
+        <Text style={styles.number}>{props.number ? props.number : ""}</Text>
         <Text style={styles.text}>{props.title}</Text>
       </View>
     </View>
@@ -42,7 +36,7 @@ const styles = StyleSheet.create({
     padding: 5
   },
   iconContainer: {
-    backgroundColor: "#888888",
+    backgroundColor: "#94D500",
     padding: 10,
     borderRadius: 10
   },

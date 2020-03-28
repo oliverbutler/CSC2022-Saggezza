@@ -37,7 +37,8 @@ const ProjectStack = () => {
           ),
           headerLeftContainerStyle: { paddingLeft: 10 },
           headerRightContainerStyle: { paddingRight: 10 },
-          title: "All Projects"
+          title: "All Projects",
+          headerStyle: { backgroundColor: "#94D500" }
         }}
       />
       <Stack.Screen

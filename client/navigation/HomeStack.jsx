@@ -46,12 +46,21 @@ const HomeStack = () => {
               onPress={() => navigation.navigate("Settings")}
             />
           ),
-          headerLeftContainerStyle: { paddingLeft: 10 },
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: titleA
+          headerLeftContainerStyle: {
+            paddingLeft: 10
+          },
+          headerRightContainerStyle: {
+            paddingRight: 10
+          },
+          title: titleA,
+          headerStyle: { backgroundColor: "#94D500" }
         }}
       />
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{ headerStyle: { backgroundColor: "#94D500" } }}
+      />
       <Stack.Screen
         name="Category"
         component={Category}
@@ -66,8 +75,11 @@ const HomeStack = () => {
               }
             />
           ),
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: "Edit Categories"
+          headerRightContainerStyle: {
+            paddingRight: 10
+          },
+          title: "Edit Categories",
+          headerStyle: { backgroundColor: "#94D500" }
         }}
       />
       <Stack.Screen
@@ -87,8 +99,11 @@ const HomeStack = () => {
               }
             />
           ),
-          headerRightContainerStyle: { paddingRight: 10 },
-          title: "My Account"
+          headerRightContainerStyle: {
+            paddingRight: 10
+          },
+          title: "My Account",
+          headerStyle: { backgroundColor: "#94D500" }
         })}
       />
     </Stack.Navigator>
