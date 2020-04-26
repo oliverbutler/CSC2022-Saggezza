@@ -64,7 +64,8 @@ class RequestListAPI(Resource):
             all_requests = []
             employees = caller["employees"]
             for employee in employees:
-                all_requests.append(employee["request_list"])
+                if len(employee["request_list"]) > 0:
+                    all_requests.append(employee["request_list"])
             return res(
                 "Your employees requests returned",
                 "success",

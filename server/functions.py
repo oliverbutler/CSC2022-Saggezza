@@ -59,6 +59,6 @@ def convert_query(querySet, list=False):
     if list:
         converted = []
         for item in querySet:
-            converted.append(item.to_json())
+            converted.append(item[0].to_json())
         return converted
     return querySet.to_json()
